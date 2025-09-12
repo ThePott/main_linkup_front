@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton.jsx";
+import Skeleton from "../../../package/skeleton/Skeleton.jsx";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
@@ -15,6 +16,7 @@ const ThePottTestPage = () => {
                 width: "300px",
             }}
         >
+            <Skeleton widthInPixel={300} heightInPixel={100} />
             <CustomButton>shape="RECTANGLE" - 기본값</CustomButton>
             <CustomButton isOn={isOn} shape="PILL" onClick={handleClick}>
                 shape="PILL"

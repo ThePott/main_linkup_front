@@ -1,0 +1,21 @@
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-muted) 10%,
+        var(--skeleton-vivid) 50%,
+        var(--skeleton-muted) 90%
+    );
+    background-size: 200% 100%;
+    animation: loading 3s infinite;
+    border-radius: 6px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
