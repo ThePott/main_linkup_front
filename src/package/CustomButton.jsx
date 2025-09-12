@@ -1,62 +1,42 @@
-// import type { ButtonProps } from "../layout/htmlInterfaces";
-//
-// type ButtonShape = "RECTANGLE" | "PILL";
-//
-// export type ButtonColor = "RED" | "BLUE" | "YELLOW" | "MONO";
-//
-// interface AdditionalProps {
-//   shape?: ButtonShape;
-//   isOn?: boolean;
-//   color?: ButtonColor;
-// }
-//
-// export type NeutralButtonProps = ButtonProps & AdditionalProps;
-//
-// const shapeToClassName: Record<ButtonShape, string> = {
-//   PILL: "rounded-full",
-//   RECTANGLE: "rounded-md",
-// };
-//
-// // specify font, bg
-// const colorToClassName: Record<ButtonColor, string> = {
-//   RED: `bg-red text-vivid-inverted`,
-//   YELLOW: `bg-yellow text-vivid-inverted`,
-//   BLUE: `bg-yellow text-vivid-inverted`,
-//   MONO: `bg-vivid text-vivid-inverted`,
-// };
-//
-// const makeButtonClassName = (
-//   shape: ButtonShape,
-//   color: ButtonColor = "MONO",
-//   isOn?: boolean,
-// ) => {
-//   const shapeClassName = shapeToClassName[shape];
-//   const offClassName = "border-1 border-dimdim hover:border-dim";
-//   const onClassName = colorToClassName[color];
-//   const onOffClassName = isOn ? onClassName : offClassName;
-//   const extraClassName = "px-3 py-2";
-//
-//   return `${shapeClassName} ${onOffClassName} ${extraClassName}`;
-// };
+import styles from "./CustomButton.module.css";
 
-// /**
+const shapeToClassName = {
+    PILL: styles.pill,
+    RECTANGLE: styles.rectangle,
+};
 
-const CustomButton = () =>
-    // {
-    // shape = "RECTANGLE",
-    // ...props
-    // },
-    {
-        // const { isOn, color, children, className, ...defaultProps } = props;
-        //
-        // const defaultClassName = makeButtonClassName(shape, color, isOn);
+const colorToClassName = {
+    RED: styles.red,
+    YELLOW: styles.yellow,
+    BLUE: styles.blue,
+    MONO: styles.mono,
+};
 
-        return (
-            <div></div>
-            // <button {...defaultProps} className={`${className} ${defaultClassName}`}>
-            //   {children}
-            // </button>
-        );
-    };
+const makeButtonClassName = (shape, color, isOn) => {
+    const shapeClassName = shapeToClassName[shape];
+    const offClassName = styles.offStyle;
+    const onClassName = colorToClassName[color];
+    const onOffClassName = isOn ? onClassName : offClassName;
+    const defaultClassName = styles.default;
+
+    return `${defaultClassName} ${onOffClassName} ${shapeClassName}`;
+};
+
+const CustomButton = ({
+    shape = "RECTANGLE",
+    isOn,
+    color = "MONO",
+    children,
+    className,
+    ...props
+}) => {
+    const defaultClassName = makeButtonClassName(shape, color, isOn);
+
+    return (
+        <button {...props} className={`${className} ${defaultClassName}`}>
+            {children}
+        </button>
+    );
+};
 
 export default CustomButton;
