@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomButton from "../../../package/CustomButton.jsx";
+import CustomButton from "../../../package/customButton/CustomButton.jsx";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
