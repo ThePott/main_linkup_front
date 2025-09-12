@@ -1,0 +1,12 @@
+.backdrop {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    backdrop-filter: blur(10px);
+    background-color: var(--color-dimdim);
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
