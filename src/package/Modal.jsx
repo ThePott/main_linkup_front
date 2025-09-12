@@ -1,11 +1,20 @@
+import styles from "./Modal.module.css";
+
 const TempRoundBox = ({ children }) => {
     return (
         <div
             style={{
-                // maxWidth: "600px",
                 padding: "12px",
                 borderRadius: "6px",
-                backgroundColor: "green",
+                backgroundColor: "var(--color-bg)",
+
+                minWidth: "500px",
+                maxWidth: "800px",
+                maxHeight: "800px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
             }}
         >
             {children}
@@ -13,24 +22,9 @@ const TempRoundBox = ({ children }) => {
     );
 };
 
-const Background = ({ onBackgroundClick, children }) => {
+const Backdrop = ({ onBackgroundClick, children }) => {
     return (
-        <div
-            onClick={onBackgroundClick}
-            style={{
-                width: "100vw",
-                height: "100vh",
-                position: "fixed",
-                backdropFilter: "blur(10px)",
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                top: 0,
-                left: 0,
-
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
+        <div onClick={onBackgroundClick} className={styles.backdrop}>
             <TempRoundBox>{children}</TempRoundBox>
         </div>
     );
@@ -41,9 +35,7 @@ const Modal = ({ isOn, onBackgroundClick, children }) => {
         return null;
     }
     return (
-        <Background onBackgroundClick={onBackgroundClick}>
-            {children}
-        </Background>
+        <Backdrop onBackgroundClick={onBackgroundClick}>{children}</Backdrop>
     );
 };
 
