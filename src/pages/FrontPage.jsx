@@ -1,5 +1,5 @@
 const FrontPage = () => {
-  return <div></div>;
+    return <div></div>;
 };
 
 export default FrontPage;
