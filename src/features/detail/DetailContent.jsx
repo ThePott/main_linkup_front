@@ -1,7 +1,5 @@
-import styles from "./detailContent.module.css"
-
 const DetailContent = () => {
-  return <div className={styles.box}>detail page</div>;
+  return <div></div>;
 };
 
 export default DetailContent;
