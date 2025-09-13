@@ -1,5 +1,5 @@
-.common {
-    padding: 8px;
+.headerCell {
+    padding: var(--spacing-xs);
 }
 
 .day {
@@ -22,4 +22,18 @@
 
 .dim {
     opacity: 0.3;
+}
+
+.dayCircle {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.today {
+    background-color: var(--color-today);
+    color: var(--color-vivid-inverted);
 }

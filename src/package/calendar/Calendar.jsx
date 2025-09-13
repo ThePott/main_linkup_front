@@ -1,5 +1,6 @@
 import GridContainer from "../gridContainer/GridContainer";
 import DateCell, { HeaderCell } from "./_DateCell";
+import { getIsToday } from "./calendarUtils";
 import useCalendar from "./useCalendar";
 
 const Calendar = () => {
@@ -17,13 +18,23 @@ const Calendar = () => {
                 <HeaderCell weekday={weekday} />
             ))}
             {trailingPrevMonthDateArray.map((date) => (
-                <DateCell key={date} isDim date={date} />
+                <DateCell
+                    key={date}
+                    isDim
+                    date={date}
+                    isToday={getIsToday(date)}
+                />
             ))}
             {selectedMonthDateArray.map((date) => (
-                <DateCell key={date} date={date} />
+                <DateCell key={date} date={date} isToday={getIsToday(date)} />
             ))}
             {leadingNextMonthDateArray.map((date) => (
-                <DateCell key={date} isDim date={date} />
+                <DateCell
+                    key={date}
+                    isDim
+                    date={date}
+                    isToday={getIsToday(date)}
+                />
             ))}
         </GridContainer>
     );

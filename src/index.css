@@ -41,6 +41,7 @@
 
     --color-bg: light-dark(oklch(1 0 0), oklch(0 0 0));
 
+    --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 12px;
     --spacing-lg: 24px;

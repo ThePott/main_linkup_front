@@ -1,3 +1,4 @@
+import { Vstack } from "../layout";
 import styles from "./calendar.module.css";
 
 const getDayType = (date) => {
@@ -29,25 +30,48 @@ const dayTypeToClassName = {
     BUSINESS_DAY: styles.businessDay,
 };
 
+const dayTypeToColor = {
+    SUNDAY: "var(--color-red)",
+    SATURDAY: "var(--color-blue)",
+    BUSINESS_DAY: "var(--color-vivid)",
+};
+
 export const HeaderCell = ({ weekday }) => {
-    const defaultClassName = styles.common;
+    const defaultClassName = styles.headerCell;
     const dayType = getDayTypeFromKorean(weekday);
     const dayTypeClassName = dayTypeToClassName[dayType];
     const className = `${defaultClassName} ${dayTypeClassName}`;
     return <div className={className}>{weekday}</div>;
 };
 
-const DateBox = ({ date, isDim, isToday }) => {
-    const isHolyday = false;
+const DayCircle = ({ date, isHolyday, isToday }) => {
     const dayType = isHolyday ? "HOLYDAY" : getDayType(date);
     const day = date.getDate();
-
-    const defaultClassName = `${styles.common} ${styles.day}`;
-    const opacityClassName = isDim ? styles.dim : "";
     const dayTypeClassName = dayTypeToClassName[dayType];
-    const className = `${defaultClassName} ${opacityClassName} ${dayTypeClassName}`;
+    const defaultClassName = styles.dayCircle;
+    const todayClassName = isToday ? styles.today : "";
+    const className = `${dayTypeClassName} ${defaultClassName} ${todayClassName}`;
 
-    return <div className={className}>{day}</div>;
+    const style = { "--color-today": dayTypeToColor[dayType] };
+    return (
+        <div style={style} className={className}>
+            {day}
+        </div>
+    );
+};
+
+const DateBox = ({ date, isDim, isToday }) => {
+    const isHolyday = false;
+
+    const defaultClassName = `${styles.day}`;
+    const opacityClassName = isDim ? styles.dim : "";
+    const className = `${defaultClassName} ${opacityClassName}`;
+
+    return (
+        <Vstack className={className}>
+            <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
+        </Vstack>
+    );
 };
 
 export default DateBox;
