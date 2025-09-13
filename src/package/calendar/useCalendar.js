@@ -49,9 +49,7 @@ const getMonthDateArrayDict = (date) => {
 };
 
 const useCalendar = () => {
-    const now = new Date();
-    const date = now.setHours(0, 0, 0, 0);
-    const [selectedDate, setSelectedDate] = useState(date);
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const selectedMonth = getMonth(selectedDate);
 
     const {

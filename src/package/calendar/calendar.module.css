@@ -37,3 +37,7 @@
     background-color: var(--color-today);
     color: var(--color-vivid-inverted);
 }
+
+.bold {
+    font-weight: var(--font-weight-semibold);
+}
