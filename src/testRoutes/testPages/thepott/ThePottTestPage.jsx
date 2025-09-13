@@ -2,6 +2,7 @@ import { useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton.jsx";
 import Skeleton from "../../../package/skeleton/Skeleton.jsx";
 import { Vstack } from "../../../package/layout/";
+import Calendar from "../../../package/calendar/Calendar.jsx";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
@@ -10,7 +11,7 @@ const ThePottTestPage = () => {
     };
     return (
         <Vstack center>
-            <Skeleton widthInPixel={300} heightInPixel={100} />
+            <Skeleton widthInPixel={600} heightInPixel={100} />
             <CustomButton>shape="RECTANGLE" - 기본값</CustomButton>
             <CustomButton isOn={isOn} shape="PILL" onClick={handleClick}>
                 shape="PILL"
@@ -27,6 +28,7 @@ const ThePottTestPage = () => {
             <CustomButton isOn={isOn} color="BLUE" onClick={handleClick}>
                 color="BLUE"
             </CustomButton>
+            <Calendar />
         </Vstack>
     );
 };

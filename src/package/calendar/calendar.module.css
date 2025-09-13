@@ -1,0 +1,25 @@
+.common {
+    padding: 8px;
+}
+
+.day {
+    min-height: 100px;
+}
+.businessDay {
+    color: var(--color-vivid);
+}
+.holyday {
+    color: var(--color-red);
+}
+
+.sunday {
+    color: var(--color-red);
+}
+
+.saturday {
+    color: var(--color-blue);
+}
+
+.dim {
+    opacity: 0.3;
+}

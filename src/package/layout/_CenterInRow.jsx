@@ -3,7 +3,7 @@ import Hstack from "./_Hstack";
 
 const CenterInRow = ({ children, ...props }) => {
     return (
-        <Hstack {...props}>
+        <Hstack {...props} gap="none">
             <div className={styles.grow} />
             {children}
             <div className={styles.grow} />
