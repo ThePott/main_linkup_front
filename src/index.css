@@ -38,10 +38,18 @@
     --color-dimdim: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
 
     --color-bg: light-dark(oklch(1 0 0), oklch(0 0 0));
-    --spacing-card: 200px;
 
-    --skeleton-vivid: oklch(0 0 0 / 0.05), oklch(1 0 0 / 0.05);
-    --skeleton-muted: oklch(0 0 0 / 0.03), oklch(1 0 0 / 0.03);
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 24px;
+    --spacing-xl: 48px;
+
+    --text-md: 16px;
+    --text-lg: 20px;
+    --text-xl: 24px;
+
+    --font-weight-regular: 400;
+    --font-weight-semibold: 600;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;

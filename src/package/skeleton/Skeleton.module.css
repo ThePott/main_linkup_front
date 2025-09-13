@@ -1,4 +1,7 @@
 .skeleton {
+    --skeleton-vivid: oklch(0 0 0 / 0.05), oklch(1 0 0 / 0.05);
+    --skeleton-muted: oklch(0 0 0 / 0.03), oklch(1 0 0 / 0.03);
+
     background: linear-gradient(
         90deg,
         var(--skeleton-muted) 10%,
