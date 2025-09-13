@@ -22,12 +22,17 @@ const Calendar = () => {
 
     return (
         <Vstack>
-            <Hstack className={styles.bold}>
-                <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
-                <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
+            <Hstack
+                justify="end"
+                items="center"
+                gap="none"
+                className={styles.bold}
+            >
                 <div>
                     {fullYear}년 {month}월
                 </div>
+                <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
+                <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
             </Hstack>
             <GridContainer cols={7}>
                 {weekDayArray.map((weekday) => (
