@@ -1,5 +1,5 @@
-import MijinTestPage from "./testPages/mijin/MijinTestPage";
+import SearchContent from "../features/front/search/SearchContent.jsx"; 
 
 export const MijinTestRouteArray = [
-  { path: "/test/mijin", element: <MijinTestPage /> },
+  { path: "/test/mijin", element: <SearchContent /> },
 ];
