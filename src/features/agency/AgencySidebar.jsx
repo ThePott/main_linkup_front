@@ -1,7 +1,6 @@
 import CustomButton from "../../package/customButton/CustomButton";
 import { Vstack } from "../../package/layout";
 import RoundBox from "../../package/RoundBox";
-import { dummyAgencyUser } from "../../shared/store/dummyThepott.js";
 import useLinkUpStore from "../../shared/store/store";
 
 const ArtistButton = ({ artist }) => {
@@ -30,9 +29,20 @@ const ArtistButton = ({ artist }) => {
 };
 
 const AgencySidebar = () => {
-    const user = dummyAgencyUser;
-    const groupArtistEntryArray = Object.entries(user.groupToArtistArray);
-    const soloArtistArray = user.soloArtistArray;
+    const user = useLinkUpStore((state) => state.user);
+    if (!user || user.role !== "admin") {
+        return null;
+        // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
+    }
+
+    const soloArtistArray = user.managingArtistArray.filter(
+        (artist) => !artist.is_group,
+    );
+    const groupArtistDict = Object.groupBy(
+        user.managingArtistArray.filter((artist) => artist.is_group),
+        ({ group_name }) => group_name,
+    );
+    const groupArtistEntryArray = Object.entries(groupArtistDict);
 
     return (
         <Vstack>

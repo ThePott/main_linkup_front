@@ -7,9 +7,15 @@ const useLinkUpStore = create((set, get) => ({
         const newSomething = state.something + diff;
         set({ something: newSomething });
     },
+
     user: null,
     setUser(user) {
+        const oldUser = get().user;
+        debugger;
+
         set({ user });
+        const newUser = get().user;
+        debugger;
     },
 
     isModalOn: false,
