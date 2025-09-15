@@ -17,6 +17,7 @@ const ProductRouteArray = [
       { path: "/detail", element: <DetailPage /> },
       { path: "/mypage", element: <MyPage /> },
       { path: "/super-user", element: <SuperUserPage /> },
+       { path: "/agency", element: <AgencyPage /> },
     ],
   },
 ];

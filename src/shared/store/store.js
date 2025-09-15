@@ -7,6 +7,21 @@ const useLinkUpStore = create((set, get) => ({
         const newSomething = state.something + diff;
         set({ something: newSomething });
     },
+
+    user: null,
+    setUser(user) {
+        set({ user });
+    },
+
+    isModalOn: false,
+    setIsModalOn(isModalOn) {
+        set({ isModalOn });
+    },
+
+    selectedArtist: null,
+    setSelectedArtist(selectedArtist) {
+        set({ selectedArtist });
+    },
 }));
 
 export default useLinkUpStore;
