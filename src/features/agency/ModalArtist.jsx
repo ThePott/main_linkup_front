@@ -23,11 +23,6 @@ const ModalArtist = () => {
         newUser.managingArtistArray = newUser.managingArtistArray.filter(
             (artist) => artist.id !== selectedArtist.id,
         );
-        console.log({
-            old: user.managingArtistArray,
-            new: newUser.managingArtistArray,
-            selectedArtist,
-        });
         setUser(newUser);
     };
     if (!selectedArtist) {

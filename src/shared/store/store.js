@@ -10,12 +10,7 @@ const useLinkUpStore = create((set, get) => ({
 
     user: null,
     setUser(user) {
-        const oldUser = get().user;
-        debugger;
-
         set({ user });
-        const newUser = get().user;
-        debugger;
     },
 
     isModalOn: false,

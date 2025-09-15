@@ -9,7 +9,6 @@ const AgencyPage = () => {
     const setUser = useLinkUpStore((state) => state.setUser);
 
     useEffect(() => {
-        console.log("---- fill in dummies");
         setUser(dummyAgencyUser);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
