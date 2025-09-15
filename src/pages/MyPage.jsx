@@ -1,5 +1,6 @@
 import Sidebar from "../package/Sidebar.jsx";
 import CustomInput from "../package/CustomInput.jsx";
+import RoundBox from "../package/RoundBox.jsx";
 import "./MyPage.css";
 
 const cardData = [
@@ -59,11 +60,9 @@ const MyPage = () => {
           {/* 카드 피드 */}
           <div className="card-grid">
             {cardData.map((card) => (
-              <div key={card.id} className="card">
-                <img src={card.image} alt={card.title} />
-                <h3>{card.title}</h3>
-                <p>{card.description}</p>
-              </div>
+              <RoundBox key={card.id}>
+                {card.title}
+              </RoundBox>
             ))}
           </div>
         </div>
