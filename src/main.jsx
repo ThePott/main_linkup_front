@@ -6,16 +6,21 @@ import DetailPage from "./pages/DetailPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import SuperUserPage from "./pages/SuperUserPage.jsx";
 import TestRouteArray from "./testRoutes/";
-import AgencyPage from "./pages/AgencyPage";
+import Layout from "./package/layout/Layout.jsx";
 
 const ProductRouteArray = [
-    { path: "/", element: <FrontPage /> },
-    { path: "/detail", element: <DetailPage /> },
-    { path: "/mypage", element: <MyPage /> },
-    { path: "/super-user", element: <SuperUserPage /> },
-    { path: "/agency", element: <AgencyPage /> },
+  {
+    path: "/", 
+    element: <Layout />,
+    children: [
+      { path: "/", element: <FrontPage /> },
+      { path: "/detail", element: <DetailPage /> },
+      { path: "/mypage", element: <MyPage /> },
+      { path: "/super-user", element: <SuperUserPage /> },
+       { path: "/agency", element: <AgencyPage /> },
+    ],
+  },
 ];
-
 const routeArray = [...ProductRouteArray, ...TestRouteArray];
 
 const router = createBrowserRouter(routeArray);
