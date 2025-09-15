@@ -12,6 +12,7 @@ const ArtistButton = ({ artist }) => {
     const handleClick = () => {
         console.log({ artist });
     };
+
     const handleDoubleClick = () => {
         setIsModalOn(true);
         setSelectedArtist(artist);
@@ -29,7 +30,10 @@ const ArtistButton = ({ artist }) => {
 };
 
 const AgencySidebar = () => {
+    const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
     const user = useLinkUpStore((state) => state.user);
+    const isModalOn = useLinkUpStore((state) => state.isModalOn);
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     if (!user || user.role !== "admin") {
         return null;
         // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
@@ -44,8 +48,18 @@ const AgencySidebar = () => {
     );
     const groupArtistEntryArray = Object.entries(groupArtistDict);
 
+    const handleAdd = () => {
+        setIsModalOn(true);
+    };
+
+    const handleDebugButtonClick = () => {
+        console.log({ isModalOn, selectedArtist });
+        debugger;
+    };
+
     return (
         <Vstack>
+            <CustomButton onClick={handleDebugButtonClick}>DEBUG</CustomButton>
             {groupArtistEntryArray.map((entry) => (
                 <RoundBox key={entry[0]} style={{ textAlign: "start" }}>
                     <Vstack>
@@ -59,6 +73,7 @@ const AgencySidebar = () => {
             {soloArtistArray.map((artist) => (
                 <ArtistButton key={artist.id} artist={artist} />
             ))}
+            <CustomButton onClick={handleAdd}>추가</CustomButton>
         </Vstack>
     );
 };
