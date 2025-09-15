@@ -1,5 +1,5 @@
 import GridContainer from "../gridContainer/GridContainer";
-import { CenterInRow, Hstack, Vstack } from "../layout";
+import { Hstack, Vstack } from "../layout";
 import DateCell, { HeaderCell } from "./_DateCell";
 import { getIsToday } from "./calendarUtils";
 import useCalendar from "./useCalendar";
@@ -9,7 +9,7 @@ import CustomButton from "../customButton/CustomButton";
 const Calendar = () => {
     const {
         selectedDate,
-        setCurrentDate,
+        // setCurrentDate,
         trailingPrevMonthDateArray,
         selectedMonthDateArray,
         leadingNextMonthDateArray,

@@ -1,5 +1,5 @@
 const TotalContent = () => {
-    return <div></div>;
+    return <div>전체 콘텐트</div>;
 };
 
 export default TotalContent;
