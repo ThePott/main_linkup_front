@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
+import Modal from "./modal/Modal.jsx";
 
-// 예시 데이터
+
 const items = [
   { id: 1, title: "항목 A", description: "설명 A" },
   { id: 2, title: "항목 B", description: "설명 B" },
@@ -12,24 +13,19 @@ const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleDeleteClick = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setShowModal(false);
+    alert("탈퇴가 완료되었습니다."); // API 호출 자리
+  };
+
   return (
     <div className="sidebar">
-      {/* 상단 섹션 */}
-      <div className="section">
-        <h2>관심 항목</h2>
-        <div className="item-list">
-          {items.map((item) => (
-            <div key={item.id} className="item">
-              <div className="item-info">
-                <span className="item-title">{item.title}</span>
-                <span className="item-description">{item.description}</span>
-              </div>
-              <button className="action-btn">선택</button>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* 중간 섹션 */}
       <div className="section">
         <h2
@@ -56,10 +52,26 @@ const Sidebar = () => {
         </h2>
         {dangerOpen && (
           <div className="collapsible-content">
-            <button className="danger-btn"> 회원 탈퇴 </button>
+            {/* Modal 열기 */}
+            <button className="danger-btn" onClick={handleDeleteClick}>
+              회원 탈퇴
+            </button>
           </div>
         )}
       </div>
+
+      {/* Modal 활용 */}
+      <Modal isOn={showModal} onBackgroundClick={() => setShowModal(false)}>
+        <h2>정말 탈퇴하시겠습니까?</h2>
+        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          <button className="danger-btn" onClick={handleConfirmDelete}>
+            예
+          </button>
+          <button className="action-btn" onClick={() => setShowModal(false)}>
+            아니오
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
