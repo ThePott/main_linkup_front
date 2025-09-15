@@ -1,0 +1,67 @@
+.mypage-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+.mypage-content {
+  flex: 1;
+  padding: 20px 40px;
+  background-color: white;
+  min-width: 0;
+  color: black;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* 개별 카드 */
+.card {
+  background-color: gray;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  text-align: center;
+  color: black;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.card h3 {
+  margin: 10px 0 5px;
+  font-size: 16px;
+  color: black;
+}
+
+.card p {
+  font-size: 14px;
+  color: black;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .card {
+    width: calc((100% - 40px * 2 - 20px) / 2);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: calc(100% - 40px * 2);
+  }
+}

@@ -1,37 +1,40 @@
-import { Link } from "react-router";
-import CustomInput from "../package/CustomInput";
-import styles from "./FrontPage.module.css";
+import { useState } from "react";
+import { Hstack } from "../package/layout";
+import CustomButton from "../package/customButton/CustomButton";
+import RecommendContent from "../features/front/recommend/RecommendContent";
+import TotalContent from "../features/front/total/TotalContent";
+import SearchContent from "../features/front/search/SearchContent";
 
+/** 임시로 각 콘텐트로 이동시키게 만들었습니다. */
 const FrontPage = () => {
-  const handleSearch = () => {
-    // 검색 처리 로직
-  };
+    const [whatToShow, setWhatToShow] = useState(null);
 
-  return (
-    <div className={styles.container}>
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          <Link to="/">Logo</Link>
-        </div>
+    if (!whatToShow) {
+        return (
+            <Hstack>
+                <CustomButton onClick={() => setWhatToShow("RECOMMEND")}>
+                    추천 콘텐트
+                </CustomButton>
+                <CustomButton onClick={() => setWhatToShow("TOTAL")}>
+                    전체 콘텐트
+                </CustomButton>
+                <CustomButton onClick={() => setWhatToShow("SEARCH")}>
+                    검색 콘텐트
+                </CustomButton>
+            </Hstack>
+        );
+    }
 
-        <div className={styles.search}>
-          <CustomInput
-            placeholder="검색어를 입력해주세요"
-            onEnter={handleSearch}
-            style={{ width: "100%" }}
-          />
-        </div>
-
-        <ul className={styles.navList}>
-          <li>
-            <Link to="/mypage">마이페이지</Link>
-          </li>
-        </ul>
-
-        <button className={styles.loginButton}>로그인</button>
-      </nav>
-    </div>
-  );
+    switch (whatToShow) {
+        case "RECOMMEND":
+            return <RecommendContent />;
+        case "TOTAL":
+            return <TotalContent />;
+        case "SEARCH":
+            return <SearchContent />;
+        default:
+            throw new Error("---- ERROR OCCURRED: Wrong What To Show");
+    }
 };
 
 export default FrontPage;
