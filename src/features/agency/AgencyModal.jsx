@@ -3,6 +3,35 @@ import CustomInput from "../../package/CustomInput";
 import { Vstack } from "../../package/layout";
 import Modal from "../../package/modal/Modal";
 import useLinkUpStore from "../../shared/store/store";
+import { format } from "date-fns";
+
+const inputFieldInfoArray = [
+    ["아티스트 명", "artistName", "text", "name"],
+    ["데뷔일", "debut_date", "date", "debut_date"],
+    ["생일", "birthdate", "date", "birthdate"],
+    ["얼굴 사진", "img_face", "file", "img_face"],
+    ["상반신 사진", "img_torso", "file", "img_torso"],
+    ["배너 사진", "img_banner", "file", "img_banner"],
+];
+
+const ArtistInput = ({ selectedArtist, info }) => {
+    return (
+        <Vstack gap="none">
+            <p>{info[0]}</p>
+            <CustomInput
+                name={info[1]}
+                type={info[2]}
+                defaultValue={
+                    selectedArtist
+                        ? info[2] === "date"
+                            ? format(selectedArtist[info[3]], "yyyy-MM-dd")
+                            : selectedArtist[info[3]]
+                        : undefined
+                }
+            />
+        </Vstack>
+    );
+};
 
 const AgencyModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
@@ -47,56 +76,12 @@ const AgencyModal = () => {
         <Modal isOn={isModalOn} onBackgroundClick={handleDismiss}>
             <form onSubmit={handleSubmit}>
                 <Vstack>
-                    <CustomInput
-                        name="artistName"
-                        placeholder="아티스트 명"
-                        defaultValue={
-                            selectedArtist ? selectedArtist.name : undefined
-                        }
-                    />
-                    <CustomInput
-                        name="debut_date"
-                        type="date"
-                        defaultValue={
-                            selectedArtist
-                                ? selectedArtist.debut_date
-                                : undefined
-                        }
-                    />
-                    <CustomInput
-                        name="birthdate"
-                        type="date"
-                        defaultValue={
-                            selectedArtist
-                                ? selectedArtist.birthdate
-                                : undefined
-                        }
-                    />
-                    <CustomInput
-                        name="img_face"
-                        type="file"
-                        defaultValue={
-                            selectedArtist ? selectedArtist.img_face : undefined
-                        }
-                    />
-                    <CustomInput
-                        name="img_torso"
-                        type="file"
-                        defaultValue={
-                            selectedArtist
-                                ? selectedArtist.img_torso
-                                : undefined
-                        }
-                    />
-                    <CustomInput
-                        name="img_banner"
-                        type="file"
-                        defaultValue={
-                            selectedArtist
-                                ? selectedArtist.img_banner
-                                : undefined
-                        }
-                    />
+                    {inputFieldInfoArray.map((info) => (
+                        <ArtistInput
+                            selectedArtist={selectedArtist}
+                            info={info}
+                        />
+                    ))}
                     <CustomButton>{buttonLabel}</CustomButton>
                     {selectedArtist && (
                         <CustomButton onClick={handleDelete}>삭제</CustomButton>
