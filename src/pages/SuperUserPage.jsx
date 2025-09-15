@@ -1,5 +1,5 @@
 const SuperUserPage = () => {
-  return <div></div>;
+    return <div></div>
 };
 
 export default SuperUserPage;
