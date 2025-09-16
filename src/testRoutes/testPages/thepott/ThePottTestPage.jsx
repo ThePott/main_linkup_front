@@ -1,9 +1,10 @@
 import { useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton.jsx";
 import Skeleton from "../../../package/skeleton/Skeleton.jsx";
-import { Vstack } from "../../../package/layout/";
+import { Hstack, Vstack } from "../../../package/layout/";
 import Calendar from "../../../package/calendar/Calendar.jsx";
 import Modal from "../../../package/modal/Modal.jsx";
+import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer.jsx";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
@@ -34,6 +35,37 @@ const ThePottTestPage = () => {
                 <span>something</span>
                 <span>something</span>
             </Vstack>
+            <Hstack style={{ height: "200px" }}>
+                <div
+                    style={{
+                        width: "200px",
+                        height: "200px",
+                        backgroundColor: "var(--color-red)",
+                    }}
+                >
+                    sidebar
+                </div>
+                <FlexOneContainer
+                    style={{ backgroundColor: "var(--color-blue)" }}
+                    isYScrollable
+                >
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                    <p>여기에 아무거나 있다고 치고</p>
+                </FlexOneContainer>
+            </Hstack>
             <Vstack center>
                 <Skeleton widthInPixel={600} heightInPixel={100} />
                 <CustomButton>shape="RECTANGLE" - 기본값</CustomButton>
