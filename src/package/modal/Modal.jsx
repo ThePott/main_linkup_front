@@ -1,8 +1,13 @@
+import RoundBox from "../RoundBox";
 import styles from "./Modal.module.css";
 
-const TempRoundBox = ({ children }) => {
+const ModalContent = ({ children }) => {
+    const handleClick = (event) => {
+        event.stopPropagation();
+    };
     return (
         <div
+            onClick={handleClick}
             style={{
                 padding: "12px",
                 borderRadius: "6px",
@@ -15,6 +20,7 @@ const TempRoundBox = ({ children }) => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                boxShadow: "var(--drop-shadow-md)",
             }}
         >
             {children}
@@ -22,20 +28,22 @@ const TempRoundBox = ({ children }) => {
     );
 };
 
-const Backdrop = ({ onBackgroundClick, children }) => {
+const ModalBackdrop = ({ onBackgroundClick, children }) => {
     return (
         <div onClick={onBackgroundClick} className={styles.backdrop}>
-            <TempRoundBox>{children}</TempRoundBox>
+            <ModalContent>{children}</ModalContent>
         </div>
     );
 };
 
-const Modal = ({ isOn, onBackgroundClick, children }) => {
+const Modal = ({ isOn, onBackgroundClick, children, ...props }) => {
     if (!isOn) {
         return null;
     }
     return (
-        <Backdrop onBackgroundClick={onBackgroundClick}>{children}</Backdrop>
+        <ModalBackdrop {...props} onBackgroundClick={onBackgroundClick}>
+            {children}
+        </ModalBackdrop>
     );
 };
 

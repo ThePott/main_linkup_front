@@ -7,19 +7,20 @@ import MyPage from "./pages/MyPage.jsx";
 import SuperUserPage from "./pages/SuperUserPage.jsx";
 import TestRouteArray from "./testRoutes/";
 import Layout from "./package/layout/Layout.jsx";
+import AgencyPage from "./pages/AgencyPage";
 
 const ProductRouteArray = [
-  {
-    path: "/", 
-    element: <Layout />,
-    children: [
-      { path: "/", element: <FrontPage /> },
-      { path: "/detail", element: <DetailPage /> },
-      { path: "/mypage", element: <MyPage /> },
-      { path: "/super-user", element: <SuperUserPage /> },
-       { path: "/agency", element: <AgencyPage /> },
-    ],
-  },
+    {
+        path: "/",
+        element: <Layout />,
+        children: [
+            { path: "/", element: <FrontPage /> },
+            { path: "/detail", element: <DetailPage /> },
+            { path: "/mypage", element: <MyPage /> },
+            { path: "/super-user", element: <SuperUserPage /> },
+            { path: "/agency", element: <AgencyPage /> },
+        ],
+    },
 ];
 const routeArray = [...ProductRouteArray, ...TestRouteArray];
 

@@ -3,6 +3,7 @@ import CustomButton from "../../../package/customButton/CustomButton.jsx";
 import Skeleton from "../../../package/skeleton/Skeleton.jsx";
 import { Vstack } from "../../../package/layout/";
 import Calendar from "../../../package/calendar/Calendar.jsx";
+import Modal from "../../../package/modal/Modal.jsx";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
@@ -11,6 +12,21 @@ const ThePottTestPage = () => {
     };
     return (
         <div>
+            <Modal isOn={isOn} onBackgroundClick={handleClick}>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <p>anything here yayayay</p>
+                <CustomButton onClick={handleClick}>close</CustomButton>
+            </Modal>
             <Vstack items="center">
                 <span>something</span>
                 <span>something</span>
