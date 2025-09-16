@@ -65,7 +65,25 @@ const AgencyModal = () => {
     };
 
     const handleSubmit = (event) => {
+        event.preventDefault();
         console.log({ event });
+
+        const target = event.target;
+        const name = target.artistName.value;
+        const debut_date = target.debut_date.value;
+        const birthdate = target.birthdate.value;
+        const img_face = target.img_face.value;
+        const img_torso = target.img_torso.value;
+        const img_banner = target.img_banner.value;
+
+        console.log({
+            name,
+            debut_date,
+            birthdate,
+            img_face,
+            img_torso,
+            img_banner,
+        });
         debugger;
         handleDismiss();
     };
