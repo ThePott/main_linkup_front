@@ -1,5 +1,9 @@
 import styles from "./FlexOneContainer.module.css";
 
+/**
+ * @param {boolean} isYScrollable - `isYScrollable` === `isYScrollable={true}`
+ * @param {boolean} isXScrollable - `isXScrollable` === `isXScrollable={true}`
+ */
 const FlexOneContainer = ({
     isYScrollable,
     isXScrollable,
