@@ -3,7 +3,6 @@ import CustomInput from "../../package/CustomInput";
 import { Vstack } from "../../package/layout";
 import Modal from "../../package/modal/Modal";
 import useLinkUpStore from "../../shared/store/store";
-import { format } from "date-fns";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "artistName", "text", "name"],
@@ -85,15 +84,36 @@ const AgencyModal = () => {
         const img_torso = target.img_torso.value;
         const img_banner = target.img_banner.value;
 
-        console.log({
+        const body = {
             name,
             debut_date,
             birthdate,
             img_face,
             img_torso,
             img_banner,
-        });
+        };
+        console.log({ body });
         handleDismiss();
+
+        const newUser = { ...user };
+        if (!selectedArtist) {
+            // TODO: POST 요청 보내고서 해당 객체 받아와야
+            // 그래야 이미지 url 적용하고 id도 스토어에 저정함
+            newUser.managingArtistArray.push({
+                id: Date.now(),
+                ...body,
+            });
+            // TODO: 실제로는 store에 추가하기 전에 reponse에 맞게 User 수정해야 함
+        } else {
+            // TODO: 실제론 PUT 요청도 같이 보내야 함
+            newUser.managingArtistArray = newUser.managingArtistArray.map(
+                (el) =>
+                    el.id === selectedArtist.id
+                        ? { ...selectedArtist, ...body }
+                        : el,
+            );
+        }
+        setUser(newUser);
     };
 
     const buttonLabel = selectedArtist ? "수정" : "추가";
@@ -104,6 +124,7 @@ const AgencyModal = () => {
                 <Vstack>
                     {inputFieldInfoArray.map((info) => (
                         <ArtistInput
+                            key={info}
                             selectedArtist={selectedArtist}
                             info={info}
                         />
