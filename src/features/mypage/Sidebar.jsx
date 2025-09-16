@@ -61,9 +61,6 @@ const Sidebar = () => {
         </h2>
         {personalOpen && (
           <div className="collapsible-content">
-            <CustomButton color="MONO" shape="RECTANGLE" >
-              이메일 변경
-            </CustomButton>
             <CustomButton color="MONO" shape="RECTANGLE" onClick={handlePasswordChangeClick}>
               비밀번호 변경
             </CustomButton>
