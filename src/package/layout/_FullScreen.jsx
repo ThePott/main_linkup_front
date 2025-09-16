@@ -1,8 +1,12 @@
 import styles from "./_FullScreen.module.css";
 
-const FullScreen = ({ children, className, ...props }) => {
+const FullScreen = ({ center, children, className, ...props }) => {
+    const additionalClassName = center ? styles.center : "";
     return (
-        <div {...props} className={`${styles.fullScreen} ${className}`}>
+        <div
+            {...props}
+            className={`${styles.fullScreen} ${additionalClassName} ${className}`}
+        >
             {children}
         </div>
     );

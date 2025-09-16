@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RoundBox from "../package/RoundBox";
 import CustomInput from "../package/CustomInput";
-import { Hstack, Vstack } from "../package/layout";
+import { FullScreen, Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
 
 const inputPropsDict = {
@@ -87,43 +87,40 @@ const SignupPage = () => {
     };
 
     return (
-        <RoundBox>
-            <Vstack center>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <p>이게 뭘까</p>
-                <Hstack>
-                    <CustomButton
-                        isOn={!isForAgency}
-                        onClick={() => setIsForAgency(false)}
-                    >
-                        팬
-                    </CustomButton>
-                    <CustomButton
-                        isOn={isForAgency}
-                        onClick={() => setIsForAgency(true)}
-                    >
-                        소속사
-                    </CustomButton>
-                </Hstack>
-                <form onSubmit={handleSubmit}>
-                    <Vstack style={{ width: "400px" }}>
-                        {inputPropsEntryArray.map((entry) => (
-                            <CustomInputWithLabel
-                                key={entry[0]}
-                                label={entry[0]}
-                                {...entry[1]}
-                            />
-                        ))}
-                        <CustomButton>회원가입</CustomButton>
-                    </Vstack>
-                </form>
-            </Vstack>
-        </RoundBox>
+        <FullScreen center>
+            <RoundBox padding="LG">
+                <Vstack center>
+                    <Hstack gap="none">
+                        <CustomButton
+                            isOn={!isForAgency}
+                            style={{ flexGrow: 1 }}
+                            onClick={() => setIsForAgency(false)}
+                        >
+                            팬
+                        </CustomButton>
+                        <CustomButton
+                            isOn={isForAgency}
+                            style={{ flexGrow: 1 }}
+                            onClick={() => setIsForAgency(true)}
+                        >
+                            소속사
+                        </CustomButton>
+                    </Hstack>
+                    <form onSubmit={handleSubmit}>
+                        <Vstack style={{ width: "400px" }}>
+                            {inputPropsEntryArray.map((entry) => (
+                                <CustomInputWithLabel
+                                    key={entry[0]}
+                                    label={entry[0]}
+                                    {...entry[1]}
+                                />
+                            ))}
+                            <CustomButton>회원가입</CustomButton>
+                        </Vstack>
+                    </form>
+                </Vstack>
+            </RoundBox>
+        </FullScreen>
     );
 };
 
