@@ -6,23 +6,12 @@
   background-color: white;
 }
 
-.navbar {
+.search-top {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: white;
+  padding: 15px 20px;
   border-bottom: 1px solid #ccc;
-  padding: 10px 20px;
-  position: relative;
-  height: 60px;
-}
-
-.logo {
-  position: absolute;
-  left: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
+  background: white;
 }
 
 .search-box {

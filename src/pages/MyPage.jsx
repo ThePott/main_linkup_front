@@ -1,4 +1,4 @@
-import Sidebar from "../package/Sidebar.jsx";
+import Sidebar from "../features/mypage/Sidebar.jsx";
 import CustomInput from "../package/CustomInput.jsx";
 import RoundBox from "../package/RoundBox.jsx";
 import "./MyPage.css";
@@ -30,13 +30,9 @@ const MyPage = () => {
 
   return (
     <div className="mypage-wrapper">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo">로고</div>
-        <div className="search-box">
+        <div className="search-box search-top">
           <CustomInput placeholder="키워드 검색" onChange={(e) => handleSearch(e.target.value)} />
         </div>
-      </nav>
 
       {/* 사용자 프로필 */}
       <div className="profile-feed">

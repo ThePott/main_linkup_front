@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
-import Modal from "./modal/Modal.jsx"; // 모달 컴포넌트
-import CustomButton from "./customButton/CustomButton.jsx"; // 커스텀 버튼
+import Modal from "../../package/modal/Modal.jsx"; // 모달 컴포넌트
+import CustomButton from "../../package/customButton/CustomButton.jsx"; // 커스텀 버튼
 
 // 예시 데이터
 const items = [
