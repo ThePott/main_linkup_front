@@ -1,0 +1,6 @@
+.flexOne {
+    flex: 1;
+    overflow-x: var(--overflow-x);
+    overflow-y: var(--overflow-y);
+    padding-right: var(--pr);
+}
