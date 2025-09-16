@@ -39,6 +39,10 @@
     );
     --color-dim: light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3));
     --color-dimdim: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+    --color-dimdimdim: light-dark(
+        rgba(0, 0, 0, 0.05),
+        rgba(255, 255, 255, 0.05)
+    );
 
     --color-bg: light-dark(oklch(1 0 0), oklch(0 0 0));
 
@@ -55,6 +59,15 @@
     --font-weight-regular: 400;
     --font-weight-semibold: 600;
 
+    --rounded-md: 6px;
+
+    --drop-shadow-md:
+        0px 0px 0px 1px rgb(0 0 0 / 0.06), 0px 1px 1px -0.5px rgb(0 0 0 / 0.06),
+        0px 3px 3px -1.5px rgb(0 0 0 / 0.06),
+        0px 6px 6px -3px rgb(0 0 0 / 0.06),
+        0px 12px 12px -6px rgb(0 0 0 / 0.06),
+        0px 24px 24px -12px rgb(0 0 0 / 0.06);
+
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
@@ -67,4 +80,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.drop-shadow {
 }
