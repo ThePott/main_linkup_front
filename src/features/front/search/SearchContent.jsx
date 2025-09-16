@@ -1,31 +1,31 @@
-import useLinkUpStore from "../../../shared/store/Mijindummy.js";
+import useLinkUpStore from "../../../shared/store/dummyMijin.js";
 import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
 
 const SearchContent = () => {
-  const artists = useLinkUpStore((state) => state.artists);
+  const groupArray = useLinkUpStore((state) => state.groupArray);
   const searchStatus = useLinkUpStore((state) => state.searchStatus);
-  const recommendedGroups = useLinkUpStore((state) => state.recommendedGroups);
+  const recommendedGroupArray = useLinkUpStore(
+    (state) => state.recommendedGroupArray
+  );
   const navigate = useNavigate();
-  const groups = artists.filter((a) => a.artist_is_group);
-  const members = artists.filter((a) => !a.artist_is_group);
 
   // 검색 실패 화면
   if (searchStatus === "fail") {
     return (
-      <div>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <h2>검색 결과</h2>
         <p>일치하는 결과를 찾지 못했어요.</p>
         <h3>찾으시는 그룹이 이 그룹이신가요?</h3>
         <div style={{ display: "flex", gap: "1rem" }}>
-          {recommendedGroups.slice(0, 2).map((group) => (
+          {recommendedGroupArray.slice(0, 2).map((group) => (
             <RoundBox
-              key={group.artist_id}
+              key={group.id}
               style={{ cursor: "pointer" }}
-              onClick={() => navigate(`/detail/${group.artist_id}`)}
+              onClick={() => navigate(`/detail/${group.id}`)}
             >
-              <img src={group.img_face} alt={group.artist_name} width={80} />
-              <div>{group.artist_name}</div>
+              <img src={group.imgFace} alt={group.name} width={80} />
+              <div>{group.name}</div>
             </RoundBox>
           ))}
         </div>
@@ -35,76 +35,84 @@ const SearchContent = () => {
 
   // 검색 성공 화면
   return (
-    <div>
+    <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
       <h2>검색 결과</h2>
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          overflowX: "auto",
-          padding: "0.5rem 0",
-        }}
-      >
-        {/* 그룹 */}
-        {groups.map((group) => (
-          <RoundBox
-            key={group.artist_id}
-            style={{ cursor: "pointer", flex: "0 0 auto" }}
-            onClick={() => navigate(`/detail/${group.artist_id}`)}
-          >
-            <img
-              src={group.img_face}
-              alt={group.group_name}
-              width={80}
-              style={{ display: "block", margin: "0 auto" }}
-            />
-            <div>{group.group_name}</div>
-          </RoundBox>
-        ))}
 
-        {/* 멤버 */}
-        {members.map((member) => (
-          <RoundBox
-            key={member.artist_id}
-            style={{ cursor: "pointer", flex: "0 0 auto" }}
-            onClick={() => navigate(`/detail/${member.artist_id}`)}
-          >
-            <img
-              src={member.img_face}
-              alt={member.group_member_name}
-              width={80}
-              style={{ display: "block", margin: "0 auto" }}
-            />
-            <div>{member.group_member_name}</div>
-          </RoundBox>
-        ))}
-      </div>
+      {groupArray.map((group) => {
+        const combinedSchedules = [
+          ...group.groupScheduleArray.map((s) => ({
+            ...s,
+            owner: group.name, // 그룹
+          })),
+          ...group.memberArray.flatMap((member) =>
+            member.scheduleArray.map((ms) => ({
+              ...ms,
+              owner: member.name, // 멤버
+            }))
+          ),
+        ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
 
-      {/* 일정 3개 */}
-      <h3>최근 일정</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {groups[0]?.schedules.slice(0, 3).map((s, i) => (
-          <RoundBox key={i}>
-            {s.title} - {s.sttime}
-          </RoundBox>
-        ))}
-      </div>
+        const topSchedules = combinedSchedules.slice(0, 3);
 
-      {/* 팬포스트 */}
-      <h3>팬포스트</h3>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1rem",
-        }}
-      >
-        {groups[0]?.posts.slice(0, 36).map((post) => (
-          <RoundBox key={post.post_id} style={{ textAlign: "left" }}>
-            {post.content}
-          </RoundBox>
-        ))}
-      </div>
+        return (
+          <div key={group.id} style={{ marginBottom: "2rem" }}>
+            {/* 그룹 + 멤버 */}
+            <div style={{ display: "flex", gap: "1rem", overflowX: "auto" }}>
+              <RoundBox
+                style={{ cursor: "pointer", flex: "0 0 auto" }}
+                onClick={() => navigate(`/detail/${group.id}`)}
+              >
+                <img src={group.imgFace} alt={group.name} width={80} />
+                <div>{group.name}</div>
+              </RoundBox>
+
+              {group.memberArray.map((member) => (
+                <RoundBox
+                  key={member.id}
+                  style={{ cursor: "pointer", flex: "0 0 auto" }}
+                  onClick={() => navigate(`/detail/${member.id}`)}
+                >
+                  <img src={member.imgFace} alt={member.name} width={80} />
+                  <div>{member.name}</div>
+                </RoundBox>
+              ))}
+            </div>
+
+            {/* 일정 (그룹+멤버 통합 최신 3개) */}
+            <h4>일정</h4>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
+              {topSchedules.map((s, i) => (
+                <RoundBox key={i}>
+                  {s.owner} {s.title} - {s.sttime}
+                </RoundBox>
+              ))}
+            </div>
+
+            {/* 그룹 팬포스트 */}
+            <h4>그룹 팬포스트</h4>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "1rem",
+                marginTop: "1rem",
+              }}
+            >
+              {group.groupPostArray.slice(0, 36).map((post) => (
+                <RoundBox key={post.postId} style={{ textAlign: "left" }}>
+                  {post.content}
+                </RoundBox>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
