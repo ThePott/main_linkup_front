@@ -6,6 +6,7 @@ import useLinkUpStore from "../../shared/store/store";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "artistName", "text", "name"],
+    ["그룹 이름", "group_name", "text", "group_name"],
     ["데뷔일", "debut_date", "date", "debut_date"],
     ["생일", "birthdate", "date", "birthdate"],
     ["얼굴 사진", "img_face", "file", "img_face"],
@@ -78,14 +79,20 @@ const AgencyModal = () => {
 
         const target = event.target;
         const name = target.artistName.value;
+        const group_name = target.group_name.value;
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
         const img_face = target.img_face.value;
         const img_torso = target.img_torso.value;
         const img_banner = target.img_banner.value;
 
+        const groupInfo = group_name
+            ? { is_group: true, group_name }
+            : { is_group: false, group_name: undefined };
+
         const body = {
             name,
+            ...groupInfo,
             debut_date,
             birthdate,
             img_face,
