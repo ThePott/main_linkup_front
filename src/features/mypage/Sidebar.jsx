@@ -13,12 +13,22 @@ const items = [
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const handleDeleteClick = () => setShowModal(true);
   const handleConfirmDelete = () => {
     setShowModal(false);
     alert("탈퇴가 완료되었습니다."); // API 호출 자리
+  };
+
+  const handlePasswordChangeClick = () => {
+    console.log("비밀번호 변경 버튼 클릭됨");
+    setShowPasswordModal(true);
+  };
+  const handleConfirmPasswordChange = () => {
+    setShowPasswordModal(false);
+    alert("비밀번호 변경 기능 실행");
   };
 
   return (
@@ -51,10 +61,10 @@ const Sidebar = () => {
         </h2>
         {personalOpen && (
           <div className="collapsible-content">
-            <CustomButton color="MONO" shape="RECTANGLE">
+            <CustomButton color="MONO" shape="RECTANGLE" >
               이메일 변경
             </CustomButton>
-            <CustomButton color="MONO" shape="RECTANGLE">
+            <CustomButton color="MONO" shape="RECTANGLE" onClick={handlePasswordChangeClick}>
               비밀번호 변경
             </CustomButton>
           </div>
@@ -78,8 +88,33 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* 모달창 */}
-      <Modal isOn={showModal} onBackgroundClick={() => setShowModal(false)}>
+      {/* 🔹 비밀번호 변경 모달 */}
+      <Modal isOn={showPasswordModal} onBackgroundClick={() => setShowPasswordModal(false)}>
+        <h2>비밀번호 변경</h2>
+        <p>새 비밀번호를 입력하세요.</p>
+        <input
+          type="password"
+          placeholder="새 비밀번호"
+          style={{
+            marginTop: "10px",
+            padding: "8px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
+        />
+        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          <CustomButton color="BLUE" shape="RECTANGLE" onClick={handleConfirmPasswordChange}>
+            확인
+          </CustomButton>
+          <CustomButton color="MONO" shape="RECTANGLE" onClick={() => setShowPasswordModal(false)}>
+            취소
+          </CustomButton>
+        </div>
+      </Modal>
+
+      {/* 회원 탈퇴 모달창 */}
+      <Modal isOn={showDeleteModal} onBackgroundClick={() => setShowDeleteModal(false)}>
         <h2>정말 탈퇴하시겠습니까?</h2>
         <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
           <CustomButton color="RED" shape="RECTANGLE" onClick={handleConfirmDelete}>
