@@ -3,7 +3,7 @@
     height: 100vh;
     position: fixed;
     backdrop-filter: blur(10px);
-    background-color: var(--color-dimdim);
+    background-color: var(--color-dimdimdim);
     top: 0;
     left: 0;
     display: flex;

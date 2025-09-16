@@ -1,0 +1,43 @@
+.headerCell {
+    padding: var(--spacing-xs);
+}
+
+.day {
+    min-height: 100px;
+}
+.businessDay {
+    color: var(--color-vivid);
+}
+.holyday {
+    color: var(--color-red);
+}
+
+.sunday {
+    color: var(--color-red);
+}
+
+.saturday {
+    color: var(--color-blue);
+}
+
+.dim {
+    opacity: 0.3;
+}
+
+.dayCircle {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.today {
+    background-color: var(--color-today);
+    color: var(--color-vivid-inverted);
+}
+
+.bold {
+    font-weight: var(--font-weight-semibold);
+}
