@@ -14,6 +14,21 @@ const inputFieldInfoArray = [
     ["배너 사진", "img_banner", "file", "img_banner"],
 ];
 
+const makeDefaultValue = (selectedArtist, info) => {
+    if (!selectedArtist) {
+        return undefined;
+    }
+
+    const artistProp = selectedArtist[info[3]];
+
+    if (info[2] !== "date") {
+        return artistProp;
+    }
+
+    const ymdForInput = `${artistProp.slice(0, 4)}-${artistProp.slice(4, 6)}-${artistProp.slice(6, 8)}`;
+    return ymdForInput;
+};
+
 const ArtistInput = ({ selectedArtist, info }) => {
     return (
         <Vstack gap="none">
@@ -21,13 +36,7 @@ const ArtistInput = ({ selectedArtist, info }) => {
             <CustomInput
                 name={info[1]}
                 type={info[2]}
-                defaultValue={
-                    selectedArtist
-                        ? info[2] === "date"
-                            ? format(selectedArtist[info[3]], "yyyy-MM-dd")
-                            : selectedArtist[info[3]]
-                        : undefined
-                }
+                defaultValue={makeDefaultValue(selectedArtist, info)}
             />
         </Vstack>
     );
@@ -84,7 +93,6 @@ const AgencyModal = () => {
             img_torso,
             img_banner,
         });
-        debugger;
         handleDismiss();
     };
 
@@ -100,9 +108,11 @@ const AgencyModal = () => {
                             info={info}
                         />
                     ))}
-                    <CustomButton>{buttonLabel}</CustomButton>
+                    <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (
-                        <CustomButton onClick={handleDelete}>삭제</CustomButton>
+                        <CustomButton type="button" onClick={handleDelete}>
+                            삭제
+                        </CustomButton>
                     )}
                 </Vstack>
             </form>
