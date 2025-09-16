@@ -24,15 +24,8 @@ const currentUser = {
 };
 
 const MyPage = () => {
-  const handleSearch = (value) => {
-    console.log("검색어:", value); // 카드 필터링이나 API 호출 가능
-  };
-
   return (
     <div className="mypage-wrapper">
-        <div className="search-box search-top">
-          <CustomInput placeholder="키워드 검색" onChange={(e) => handleSearch(e.target.value)} />
-        </div>
 
       {/* 사용자 프로필 */}
       <div className="profile-feed">
