@@ -1,3 +1,4 @@
+import styles from "./SignupPage.module.css";
 import { useState } from "react";
 import RoundBox from "../package/RoundBox";
 import { FullScreen, Hstack, Vstack } from "../package/layout";
@@ -74,6 +75,8 @@ const SignupPage = () => {
         refetchSignup();
     };
 
+    const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";
+
     return (
         <FullScreen center>
             <RoundBox padding="LG">
@@ -81,14 +84,14 @@ const SignupPage = () => {
                     <Hstack gap="none">
                         <CustomButton
                             isOn={!isForAgency}
-                            style={{ flexGrow: 1 }}
+                            className={styles.grow}
                             onClick={() => setIsForAgency(false)}
                         >
                             팬
                         </CustomButton>
                         <CustomButton
                             isOn={isForAgency}
-                            style={{ flexGrow: 1 }}
+                            className={styles.grow}
                             onClick={() => setIsForAgency(true)}
                         >
                             소속사
@@ -100,7 +103,7 @@ const SignupPage = () => {
                             <Hstack style={{ width: "100%" }} items="end">
                                 <CustomInputLabeled
                                     label="이메일"
-                                    vstackProps={{ style: { flexGrow: 1 } }}
+                                    vstackProps={{ className: styles.grow }}
                                     inputProps={{
                                         ref: emailRef,
                                         ...inputPropsDict["이메일"],
@@ -110,7 +113,7 @@ const SignupPage = () => {
                                     type="button"
                                     onClick={handleVerificationClick}
                                 >
-                                    이메일 인증
+                                    {verifyEmailButtonLabel}
                                 </CustomButton>
                             </Hstack>
                             {inputPropsEntryArray.slice(1).map((entry) => (
