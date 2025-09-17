@@ -21,6 +21,10 @@ const inputPropsEntryArray = Object.entries(inputPropsDict);
 const LoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
+        const { email, password } = event.target;
+        const body = { email: email.value, password: password.value };
+        // TODO: 실제로 여기에서 요청 보내야 함
+        console.log({ body });
     };
 
     return (
