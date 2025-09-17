@@ -3,6 +3,10 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import { FullScreen, Vstack } from "../../../package/layout";
 import RoundBox from "../../../package/RoundBox";
 import axiosInstance from "../../../shared/services/axiosInstance";
+import {
+    getThenLog,
+    postThenLog,
+} from "../../../package/commonServices/fetchVariants";
 
 const getHome = () => axiosInstance.get("/");
 const getHealth = () => axiosInstance.get("/health");
@@ -19,44 +23,26 @@ const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
 };
 
 const ThePottApiTestPage = () => {
-    const { data: homeData, refetch: refetchHome } = useQuery({
-        queryKey: ["getHome"],
-        queryFn: getHome,
-        refetchOnWindowFocus: false,
-        enabled: false,
-    });
-    const { data: healthData, refetch: refetchHealth } = useQuery({
-        queryKey: ["getHealth"],
-        queryFn: getHealth,
-        refetchOnWindowFocus: false,
-        enabled: false,
-    });
-    const handleClick = () => {
-        fetch("http://3.39.239.114:8000/")
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((error) => console.error("Error:", error));
-    };
+    const baseURL = "http://3.39.239.114:8000";
+    const getHome = () => getThenLog(`${baseURL}`);
+    const getHealth = () => getThenLog(`${baseURL}/health`);
+    const postEmailVerification = () =>
+        postThenLog(`${baseURL}/api/auth/send-verification-email`, {
+            email: "nusilite@gmail.com",
+        });
 
     return (
         <FullScreen center>
             <RoundBoxGlobalShadow padding="XL">
                 <Vstack gap="xl">
-                    <CustomButton onClick={handleClick}>
-                        fetch home
+                    <RoundBoxGlobalShadow padding="XL">
+                        개벌자 도구(Cmd + Alt + I) {"->"} Console 탭
+                    </RoundBoxGlobalShadow>
+                    <CustomButton onClick={getHome}>get home</CustomButton>
+                    <CustomButton onClick={getHealth}>get health</CustomButton>
+                    <CustomButton onClick={postEmailVerification}>
+                        send email verification
                     </CustomButton>
-                    <RoundBoxGlobalShadow padding="MD" onClick={refetchHome}>
-                        <CustomButton>/</CustomButton>
-                        <p>{JSON.stringify(homeData)}</p>
-                    </RoundBoxGlobalShadow>
-                    <RoundBoxGlobalShadow padding="MD">
-                        <CustomButton onClick={refetchHealth}>
-                            /health
-                        </CustomButton>
-                        <p>{JSON.stringify(healthData)}</p>
-                    </RoundBoxGlobalShadow>
                 </Vstack>
             </RoundBoxGlobalShadow>
         </FullScreen>
