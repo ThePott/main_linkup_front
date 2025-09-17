@@ -3,7 +3,6 @@
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
-  background-color: white;
 }
 
 .search-top {
@@ -11,7 +10,6 @@
   justify-content: center;
   padding: 15px 20px;
   border-bottom: 1px solid #ccc;
-  background: white;
 }
 
 .search-box {
@@ -24,7 +22,6 @@
   padding: 0.5rem 1rem;
   border-radius: 6px;
   border: 1px solid #ccc;
-  background-color: #f5f5f5;
   color: #333;
   font-size: 14px;
   outline: none;
@@ -41,7 +38,7 @@
   display: flex;
   justify-content: center;
   padding: 20px;
-  background-color: #f9f9f9;
+  margin-top: 70px; /*Layout.jsx navbar와 안겹치게 하기 위한 마진 */
 }
 
 .profile-box {
@@ -49,7 +46,6 @@
   align-items: center;
   gap: 15px;
   padding: 15px 20px;
-  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
@@ -84,13 +80,11 @@
   display: flex;
   flex: 1;
   width: 100%;
-  background-color: white;
 }
 
 .mypage-content {
   flex: 1;
   padding: 20px 40px;
-  background-color: white;
   min-width: 0;
   color: black;
 }
@@ -104,11 +98,9 @@
 }
 
 .card {
-  background-color: gray;
   aspect-ratio: 1 / 1;
   border-radius: 8px;
   text-align: center;
-  color: black;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 

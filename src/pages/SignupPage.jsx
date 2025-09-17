@@ -106,6 +106,7 @@ const SignupPage = () => {
                             소속사
                         </CustomButton>
                     </Hstack>
+
                     <form onSubmit={handleSubmit}>
                         <Vstack style={{ width: "400px" }}>
                             {inputPropsEntryArray.map((entry) => (

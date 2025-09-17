@@ -52,6 +52,7 @@
     --spacing-lg: 24px;
     --spacing-xl: 48px;
 
+    --text-sm: 14px;
     --text-md: 16px;
     --text-lg: 20px;
     --text-xl: 24px;
@@ -80,7 +81,4 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-.drop-shadow {
 }

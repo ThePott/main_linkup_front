@@ -51,18 +51,19 @@ class Group {
 }
 
 const dummyGroupArray = [
+  // 블랙핑크
   new Group(
     1,
     "블랙핑크",
     "/images/bp_face.jpg",
     "/images/bp_banner.jpg",
     [
-      { id: 101, title: "컴백 무대", sttime: "2025-10-05" },
-      { id: 102, title: "팬미팅", sttime: "2025-10-15" },
+      { id: 101, title: "3집 미니앨범 컴백 무대", sttime: "2025-10-05" },
+      { id: 102, title: "북미 투어 티켓팅 안내", sttime: "2025-10-15" },
     ],
     Array.from({ length: 27 }, (_, i) => ({
       postId: i + 1,
-      content: `테스트용 더미 포스트 ${i + 1}`,
+      content: `블랙핑크 더미 포스트 ${i + 1}`,
     })),
     [
       new Member(
@@ -76,9 +77,8 @@ const dummyGroupArray = [
         "/images/jennie_banner.jpg",
         [
           { id: 304, title: "솔로 앨범 발매", sttime: "2025-10-20" },
-          { id: 305, title: "북미 투어 시작", sttime: "2025-12-03" },
-        ],
-        []
+          { id: 305, title: "솔로 앨범 팬싸인회", sttime: "2025-12-03" },
+        ]
       ),
       new Member(
         3,
@@ -91,10 +91,38 @@ const dummyGroupArray = [
         "/images/jisoo_banner.jpg",
         [
           { id: 301, title: "솔로 앨범 발매", sttime: "2025-11-10" },
-          { id: 302, title: "팬미팅 개최", sttime: "2025-11-12" },
-          { id: 303, title: "컴백 무대", sttime: "2025-11-11" },
-        ],
-        []
+          { id: 302, title: "아시아 콘서트 시작", sttime: "2025-11-12" },
+          { id: 303, title: "솔로 앨범 컴백 무대", sttime: "2025-11-11" },
+        ]
+      ),
+    ]
+  ),
+
+  // BTS 추가
+  new Group(
+    4,
+    "방탄소년단",
+    "/images/bts_face.jpg",
+    "/images/bts_banner.jpg",
+    [
+      { id: 201, title: "LA 콘서트 개최", sttime: "2025-09-30" },
+      { id: 202, title: "팬사인회 공식 일정", sttime: "2025-10-10" },
+    ],
+    Array.from({ length: 15 }, (_, i) => ({
+      postId: i + 1,
+      content: `BTS 더미 포스트 ${i + 1}`,
+    })),
+    [
+      new Member(
+        5,
+        "RM",
+        false,
+        "방탄소년단",
+        "2013-06-13",
+        "1994-09-12",
+        "/images/rm_face.jpg",
+        "/images/rm_banner.jpg",
+        [{ id: 401, title: "영화 시사회 참여", sttime: "2025-09-15" }]
       ),
     ]
   ),
@@ -117,7 +145,16 @@ const useLinkUpStore = create((set) => ({
   groupArray: dummyGroupArray,
   recommendedGroupArray: dummyRecommendedGroupArray,
   searchStatus: "success",
+  subscribedArtistIdArray: [1, 4], // (예시)블랙핑크, BTS 구독 중
   setSearchStatus: (status) => set({ searchStatus: status }),
+
+  toggleSubscribe: (artistId) =>
+    set((state) => {
+      const current = state.subscribedArtistIdArray;
+      return current.includes(artistId)
+        ? { subscribedArtistIdArray: current.filter((id) => id !== artistId) }
+        : { subscribedArtistIdArray: [...current, artistId] };
+    }),
 }));
 
 export default useLinkUpStore;

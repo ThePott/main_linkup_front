@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
-import Modal from "../../package/modal/Modal.jsx"; // 모달 컴포넌트
-import CustomButton from "../../package/customButton/CustomButton.jsx"; // 커스텀 버튼
+import CustomButton from "../../package/customButton/CustomButton.jsx";
+import PasswordChangeModal from "./PasswordChangeModal.jsx";
+import DeleteAccountModal from "./DeleteAccountModal.jsx";
 
 // 예시 데이터
 const items = [
@@ -13,13 +14,16 @@ const items = [
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  const handleDeleteClick = () => setShowModal(true);
+  const handleDeleteClick = () => setShowDeleteModal(true);
   const handleConfirmDelete = () => {
-    setShowModal(false);
+    setShowDeleteModal(false);
     alert("탈퇴가 완료되었습니다."); // API 호출 자리
   };
+
+  const handlePasswordChangeClick = () => setShowPasswordModal(true);
 
   return (
     <div className="sidebar">
@@ -51,10 +55,11 @@ const Sidebar = () => {
         </h2>
         {personalOpen && (
           <div className="collapsible-content">
-            <CustomButton color="MONO" shape="RECTANGLE">
-              이메일 변경
-            </CustomButton>
-            <CustomButton color="MONO" shape="RECTANGLE">
+            <CustomButton
+              color="MONO"
+              shape="RECTANGLE"
+              onClick={handlePasswordChangeClick}
+            >
               비밀번호 변경
             </CustomButton>
           </div>
@@ -71,25 +76,27 @@ const Sidebar = () => {
         </h2>
         {dangerOpen && (
           <div className="collapsible-content">
-            <CustomButton color="RED" shape="RECTANGLE" onClick={handleDeleteClick}>
+            <CustomButton
+              color="RED"
+              shape="RECTANGLE"
+              onClick={handleDeleteClick}
+            >
               회원 탈퇴
             </CustomButton>
           </div>
         )}
       </div>
 
-      {/* 모달창 */}
-      <Modal isOn={showModal} onBackgroundClick={() => setShowModal(false)}>
-        <h2>정말 탈퇴하시겠습니까?</h2>
-        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-          <CustomButton color="RED" shape="RECTANGLE" onClick={handleConfirmDelete}>
-            예
-          </CustomButton>
-          <CustomButton color="MONO" shape="RECTANGLE" onClick={() => setShowModal(false)}>
-            아니오
-          </CustomButton>
-        </div>
-      </Modal>
+      {/* 모달들 */}
+      <PasswordChangeModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+      />
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };
