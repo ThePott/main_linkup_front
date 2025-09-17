@@ -1,4 +1,4 @@
-import GoogleLoginButton from "../features/login/GoogleLoginButton";
+import SocialLoginButton from "../features/login/SocialLoginButton";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { FullScreen, Vstack } from "../package/layout";
@@ -26,20 +26,27 @@ const LoginPage = () => {
     return (
         <FullScreen center>
             <RoundBox padding="LG">
-                <Vstack style={{ width: "400px" }}>
-                    <form onSubmit={handleSubmit}>
-                        <Vstack>
-                            {inputPropsEntryArray.map((entry) => (
-                                <CustomInputLabeled
-                                    key={entry[0]}
-                                    label={entry[0]}
-                                    {...entry[1]}
-                                />
-                            ))}
-                            <CustomButton>이메일로 로그인</CustomButton>
-                        </Vstack>
-                    </form>
-                    <GoogleLoginButton />
+                <Vstack gap="xl">
+                    <Vstack style={{ width: "400px" }}>
+                        <form onSubmit={handleSubmit}>
+                            <Vstack>
+                                {inputPropsEntryArray.map((entry) => (
+                                    <CustomInputLabeled
+                                        key={entry[0]}
+                                        label={entry[0]}
+                                        {...entry[1]}
+                                    />
+                                ))}
+                                <CustomButton>이메일로 로그인</CustomButton>
+                            </Vstack>
+                        </form>
+                    </Vstack>
+
+                    <Vstack>
+                        <SocialLoginButton provider={"GOOGLE"} />
+                        <SocialLoginButton provider={"KAKAO"} />
+                        <SocialLoginButton provider={"FACEBOOK"} />
+                    </Vstack>
                 </Vstack>
             </RoundBox>
         </FullScreen>
