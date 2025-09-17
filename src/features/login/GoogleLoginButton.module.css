@@ -1,0 +1,13 @@
+.google {
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--rounded-md);
+    border: 1px solid var(--color-dimdim);
+    transition-property: border-color;
+}
+
+.google:hover {
+    border-color: var(--color-dim);
+}

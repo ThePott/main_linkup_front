@@ -9,6 +9,7 @@ import TestRouteArray from "./testRoutes/";
 import Layout from "./package/layout/Layout.jsx";
 import AgencyPage from "./pages/AgencyPage";
 import SignupPage from "./pages/SignupPage.jsx";
+import LoginPage from "./pages/LoginPage";
 
 const ProductRouteArray = [
     {
@@ -21,6 +22,7 @@ const ProductRouteArray = [
             { path: "/super-user", element: <SuperUserPage /> },
             { path: "/agency", element: <AgencyPage /> },
             { path: "/signup", element: <SignupPage /> },
+            { path: "/login", element: <LoginPage /> },
         ],
     },
 ];
