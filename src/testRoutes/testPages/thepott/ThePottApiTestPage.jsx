@@ -7,6 +7,17 @@ import axiosInstance from "../../../shared/services/axiosInstance";
 const getHome = () => axiosInstance.get("/");
 const getHealth = () => axiosInstance.get("/health");
 
+const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
+    return (
+        <RoundBox
+            style={{ boxShadow: "var(--drop-shadow-md)", ...style }}
+            {...props}
+        >
+            {children}
+        </RoundBox>
+    );
+};
+
 const ThePottApiTestPage = () => {
     const { data: homeData, refetch: refetchHome } = useQuery({
         queryKey: ["getHome"],
@@ -31,23 +42,23 @@ const ThePottApiTestPage = () => {
 
     return (
         <FullScreen center>
-            <RoundBox padding="XL">
+            <RoundBoxGlobalShadow padding="XL">
                 <Vstack gap="xl">
                     <CustomButton onClick={handleClick}>
                         fetch home
                     </CustomButton>
-                    <RoundBox padding="MD" onClick={refetchHome}>
+                    <RoundBoxGlobalShadow padding="MD" onClick={refetchHome}>
                         <CustomButton>/</CustomButton>
                         <p>{JSON.stringify(homeData)}</p>
-                    </RoundBox>
-                    <RoundBox padding="MD">
+                    </RoundBoxGlobalShadow>
+                    <RoundBoxGlobalShadow padding="MD">
                         <CustomButton onClick={refetchHealth}>
                             /health
                         </CustomButton>
                         <p>{JSON.stringify(healthData)}</p>
-                    </RoundBox>
+                    </RoundBoxGlobalShadow>
                 </Vstack>
-            </RoundBox>
+            </RoundBoxGlobalShadow>
         </FullScreen>
     );
 };
