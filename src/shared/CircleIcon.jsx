@@ -1,23 +1,31 @@
 import React from "react";
-import styles from "./CircleIcon.module.css";
 import { useNavigate } from "react-router";
+import ArtistCard from "./ArtistCard";
 
-const CircleIcon = ({ artist }) => {
-  const { id, name, img_face } = artist;
-  const navigate = useNavigate();
+const CircleIcon = ({ artist, type, imgWidth, borderRadius, ...props }) => {
+    const navigate = useNavigate();
+    const { id: artistId } = artist;
 
-  return (
-    <li
-      key={id}
-      className={styles.container}
-      onClick={() => {
-        navigate(`/detail/${id}`);
-        console.log(id);
-      }}
-    >
-      <img className={styles.image} src={img_face} alt={name} />
-    </li>
-  );
+    return (
+        <li
+            onClick={() => {
+                navigate(`/detail/${artistId}`);
+                console.log(artistId);
+            }}
+            style={{
+                display: "inline-block",
+                margin: "var(--spacing-sm)",
+            }}
+        >
+            <ArtistCard
+                artist={artist}
+                type={type}
+                imgWidth={imgWidth}
+                borderRadius={borderRadius}
+                {...props}
+            />
+        </li>
+    );
 };
 
 export default CircleIcon;

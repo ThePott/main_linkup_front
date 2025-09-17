@@ -1,20 +1,21 @@
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import SuggestedCard from "../../../package/SuggestedCard";
 
-const RecommendContent = ({ artists }) => {
-  return (
-    <GridContainer cols="auto" colMinWidth={200}>
-      {artists.map((artist) => (
-        <li key={artist.id}>
-          <SuggestedCard
-            artistImg={artist.img_face}
-            artistName={artist.name}
-            artistId={artist.id}
-          />
-        </li>
-      ))}
-    </GridContainer>
-  );
+const RecommendContent = ({ artists, type, imgWidth, borderRadius }) => {
+    return (
+        <GridContainer cols="auto" colMinWidth={130}>
+            {artists.map((artist) => (
+                <li key={artist.id}>
+                    <SuggestedCard
+                        artist={artist}
+                        type={type}
+                        imgWidth={imgWidth}
+                        borderRadius={borderRadius}
+                    />
+                </li>
+            ))}
+        </GridContainer>
+    );
 };
 
 export default RecommendContent;

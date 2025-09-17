@@ -1,42 +1,58 @@
 [
-  {
-    "id": "123",
-    "name": "아이유",
-    "img_face": "https://images.unsplash.com/photo-1471478331149-c72f17e33c73?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "124",
-    "name": "아이브",
-    "img_face": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "1235",
-    "name": "뉴진스",
-    "img_face": "https://plus.unsplash.com/premium_photo-1726198234612-1f9d571012cb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "12455",
-    "name": "블랙핑크",
-    "img_face": "https://images.unsplash.com/photo-1663366416840-95a489b61d2c?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "1236666",
-    "name": "트와이스",
-    "img_face": "https://images.unsplash.com/photo-1471478331149-c72f17e33c73?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "1233333334",
-    "name": "에스파",
-    "img_face": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "12355555555",
-    "name": "아일릿",
-    "img_face": "https://plus.unsplash.com/premium_photo-1726198234612-1f9d571012cb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
-  {
-    "id": "124556666666",
-    "name": "르세라핌",
-    "img_face": "https://images.unsplash.com/photo-1663366416840-95a489b61d2c?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  }
+    {
+        "id": "123",
+        "name": "아이유",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "124",
+        "name": "아이브",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "1235",
+        "name": "뉴진스",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "12455",
+        "name": "블랙핑크",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "1236666",
+        "name": "트와이스",
+        "img_face": "https://images.unsplash.com/photo-1471478331149-c72f17e33c73?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "1233333334",
+        "name": "에스파",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "12355555555",
+        "name": "아일릿",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    },
+    {
+        "id": "124556666666",
+        "name": "르세라핌",
+        "img_face": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "img_torso": "https://images.unsplash.com/photo-1735898363789-3cb8816fe1bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww",
+        "img_banner": "https://images.unsplash.com/photo-1736860928537-d791e01485bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVCJUI4JTk0JUVCJTlFJTk5JUVEJTk1JTkxJUVEJTgxJUFDfGVufDB8fDB8fHww"
+    }
 ]
