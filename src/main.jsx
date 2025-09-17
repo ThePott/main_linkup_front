@@ -15,7 +15,7 @@ const ProductRouteArray = [
         element: <Layout />,
         children: [
             { path: "/", element: <FrontPage /> },
-            { path: "/detail/:artistId", element: <DetailPage /> },
+            { path: "/detail/:type/:id", element: <DetailPage /> },               
             { path: "/mypage", element: <MyPage /> },
             { path: "/super-user", element: <SuperUserPage /> },
             { path: "/agency", element: <AgencyPage /> },
