@@ -5,12 +5,14 @@ import { Hstack, Vstack } from "../../../package/layout/";
 import Calendar from "../../../package/calendar/Calendar.jsx";
 import Modal from "../../../package/modal/Modal.jsx";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer.jsx";
+import axiosInstance from "../../../shared/services/axiosInstance.js";
 
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
     const handleClick = () => {
         setIsOn(!isOn);
     };
+
     return (
         <div>
             <Modal isOn={isOn} onBackgroundClick={handleClick}>
@@ -35,6 +37,10 @@ const ThePottTestPage = () => {
                 <span>something</span>
                 <span>something</span>
             </Vstack>
+
+            <CustomButton>/</CustomButton>
+            <CustomButton>/health</CustomButton>
+
             <Hstack style={{ height: "200px" }}>
                 <div
                     style={{
