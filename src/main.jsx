@@ -10,6 +10,8 @@ import Layout from "./package/layout/Layout.jsx";
 import AgencyPage from "./pages/AgencyPage";
 import SignupPage from "./pages/SignupPage.jsx";
 import LoginPage from "./pages/LoginPage";
+import queryClient from "./shared/services/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 const ProductRouteArray = [
     {
@@ -17,7 +19,7 @@ const ProductRouteArray = [
         element: <Layout />,
         children: [
             { path: "/", element: <FrontPage /> },
-            { path: "/detail/:type/:id", element: <DetailPage /> },               
+            { path: "/detail/:type/:id", element: <DetailPage /> },
             { path: "/mypage", element: <MyPage /> },
             { path: "/super-user", element: <SuperUserPage /> },
             { path: "/agency", element: <AgencyPage /> },
@@ -31,5 +33,7 @@ const routeArray = [...ProductRouteArray, ...TestRouteArray];
 const router = createBrowserRouter(routeArray);
 
 createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />,
+    <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />,
+    </QueryClientProvider>,
 );
