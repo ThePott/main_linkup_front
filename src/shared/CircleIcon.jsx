@@ -9,7 +9,7 @@ const CircleIcon = ({ artist, type, imgWidth, borderRadius, ...props }) => {
     return (
         <li
             onClick={() => {
-                navigate(`/detail/${artistId}`);
+                navigate(`/detail/artist/${artistId}`);
                 console.log(artistId);
             }}
             style={{

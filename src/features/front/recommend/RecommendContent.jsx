@@ -1,5 +1,5 @@
 import GridContainer from "../../../package/gridContainer/GridContainer";
-import SuggestedCard from "../../../package/SuggestedCard";
+import SuggestedCard from "../../../shared/SuggestedCard";
 
 const RecommendContent = ({ artists, type, imgWidth, borderRadius }) => {
     return (

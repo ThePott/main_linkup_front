@@ -1,15 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import RoundBox from "./RoundBox";
-import ArtistCard from "../shared/ArtistCard";
+import RoundBox from "../package/RoundBox";
+import ArtistCard from "./ArtistCard";
 
 const SuggestedCard = ({ artist, type, imgWidth, borderRadius }) => {
     const navigate = useNavigate();
     const { id: artistId } = artist;
 
     const handleClick = () => {
-        navigate(`/detail${artistId}`);
-        console.log(artistId);
+        navigate(`/detail/artist/${artistId}`);
     };
 
     return (
