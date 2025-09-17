@@ -1,7 +1,8 @@
 import GoogleLoginButton from "../features/login/GoogleLoginButton";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
-import { Vstack } from "../package/layout";
+import { FullScreen, Vstack } from "../package/layout";
+import RoundBox from "../package/RoundBox";
 
 const inputPropsDict = {
     이메일: {
@@ -23,21 +24,25 @@ const LoginPage = () => {
     };
 
     return (
-        <Vstack style={{ width: "400px" }}>
-            <form onSubmit={handleSubmit}>
-                <Vstack>
-                    {inputPropsEntryArray.map((entry) => (
-                        <CustomInputLabeled
-                            key={entry[0]}
-                            label={entry[0]}
-                            {...entry[1]}
-                        />
-                    ))}
-                    <CustomButton>이메일로 로그인</CustomButton>
+        <FullScreen center>
+            <RoundBox padding="LG">
+                <Vstack style={{ width: "400px" }}>
+                    <form onSubmit={handleSubmit}>
+                        <Vstack>
+                            {inputPropsEntryArray.map((entry) => (
+                                <CustomInputLabeled
+                                    key={entry[0]}
+                                    label={entry[0]}
+                                    {...entry[1]}
+                                />
+                            ))}
+                            <CustomButton>이메일로 로그인</CustomButton>
+                        </Vstack>
+                    </form>
+                    <GoogleLoginButton />
                 </Vstack>
-            </form>
-            <GoogleLoginButton />
-        </Vstack>
+            </RoundBox>
+        </FullScreen>
     );
 };
 
