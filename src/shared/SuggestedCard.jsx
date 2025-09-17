@@ -1,20 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import RoundBox from "../package/RoundBox";
 import ArtistCard from "./ArtistCard";
 
-const CircleIcon = ({ artist, type, imgWidth, borderRadius, ...props }) => {
+const SuggestedCard = ({ artist, type, imgWidth, borderRadius }) => {
     const navigate = useNavigate();
     const { id: artistId } = artist;
 
+    const handleClick = () => {
+        navigate(`/detail/artist/${artistId}`);
+    };
+
     return (
-        <li
-            onClick={() => {
-                navigate(`/detail/artist/${artistId}`);
-                console.log(artistId);
-            }}
+        <RoundBox
+            onClick={handleClick}
             style={{
-                display: "inline-block",
-                margin: "var(--spacing-sm)",
+                width: "fit-content",
+                overflow: "hidden",
+                cursor: "pointer",
             }}
         >
             <ArtistCard
@@ -22,10 +25,9 @@ const CircleIcon = ({ artist, type, imgWidth, borderRadius, ...props }) => {
                 type={type}
                 imgWidth={imgWidth}
                 borderRadius={borderRadius}
-                {...props}
             />
-        </li>
+        </RoundBox>
     );
 };
 
-export default CircleIcon;
+export default SuggestedCard;

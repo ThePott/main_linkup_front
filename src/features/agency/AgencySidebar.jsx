@@ -32,7 +32,13 @@ const ArtistButton = ({ artist }) => {
 const AgencySidebar = () => {
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
     const user = useLinkUpStore((state) => state.user);
-    if (!user || user.role !== "admin") {
+    if (!user) {
+        console.error("---- null user");
+        return null;
+    }
+
+    if (user.role !== "admin") {
+        console.log("---- not admin");
         return null;
         // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
     }
