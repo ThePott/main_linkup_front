@@ -40,7 +40,7 @@ const ThePottApiTestPage = () => {
                         <CustomButton>/</CustomButton>
                         <p>{JSON.stringify(homeData)}</p>
                     </RoundBox>
-                    <RoundBox>
+                    <RoundBox padding="MD">
                         <CustomButton onClick={refetchHealth}>
                             /health
                         </CustomButton>
