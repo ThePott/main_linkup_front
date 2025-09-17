@@ -1,9 +1,9 @@
 import CustomInput from "./CustomInput";
 import { Vstack } from "./layout";
 
-const CustomInputLabeled = ({ label, ...inputProps }) => {
+const CustomInputLabeled = ({ label, vstackProps, inputProps }) => {
     return (
-        <Vstack gap="none">
+        <Vstack gap="none" {...vstackProps}>
             <p
                 style={{
                     fontWeight: "var(--font-weight-semibold)",
