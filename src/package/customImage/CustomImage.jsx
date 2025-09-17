@@ -7,7 +7,7 @@
  * @returns {JSX.Element}
  */
 const CustomImage = ({ url, shape, height }) => {
-    return <div></div>;
+    return <image src={url} className={} />
 };
 
 export default CustomImage;
