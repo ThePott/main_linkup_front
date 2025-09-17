@@ -1,11 +1,9 @@
 .sidebar {
   width: 250px;
-  background-color: white;
   padding: 16px;
   overflow-y: auto;
   max-height: 100vh;
   font-family: Arial, sans-serif;
-  color: black;
 }
 
 .section {
