@@ -1,7 +1,7 @@
 import CustomImage from "../../package/customImage/CustomImage.jsx";
 
-const CustomImageIcon = ({ url, height = "MD", shape = "CIRCLE", ...props }) => {
-  return <CustomImage url={url} height={height} shape={shape} {...props} />;
+const CustomImageIcon = ({ url, ...props }) => {
+  return <CustomImage {...props} url={url} height="MD" shape="CIRCLE"  />;
 };
 
 export default CustomImageIcon;
