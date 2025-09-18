@@ -38,6 +38,6 @@ const router = createBrowserRouter(routeArray);
 
 createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />,
+        <RouterProvider router={router} />
     </QueryClientProvider>,
 );

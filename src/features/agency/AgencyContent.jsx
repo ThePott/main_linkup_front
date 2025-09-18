@@ -18,9 +18,9 @@ const AgencyContent = () => {
     }, []);
 
     return (
-        <FullScreen>
+        <>
             <AgencyModal />
-            <Hstack gap="none">
+            <Hstack gap="none" style={{ height: "100%", overflow: "hidden" }}>
                 <AgencySidebar />
                 <FlexOneContainer>
                     <Vstack items="center">
@@ -30,7 +30,7 @@ const AgencyContent = () => {
                     </Vstack>
                 </FlexOneContainer>
             </Hstack>
-        </FullScreen>
+        </>
     );
 };
 

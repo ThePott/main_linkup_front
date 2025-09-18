@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer";
-import { FullScreen } from "../package/layout";
 import Navbar from "../features/layout/Navbar";
+import { FullScreen } from "../package/layout";
 
 const Layout = () => {
     return (
