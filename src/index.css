@@ -76,6 +76,9 @@
     --sizing-lg: 400px;
     --sizing-xl: 500px;
 
+    --container-md: 700px;
+    --container-lg: 1200px;
+
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;

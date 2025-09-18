@@ -6,12 +6,12 @@ import DetailPage from "./pages/DetailPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import SuperUserPage from "./pages/SuperUserPage.jsx";
 import TestRouteArray from "./testRoutes/";
-import Layout from "./package/layout/Layout.jsx";
 import AgencyPage from "./pages/AgencyPage";
 import SignupPage from "./pages/SignupPage.jsx";
 import LoginPage from "./pages/LoginPage";
 import queryClient from "./shared/services/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
+import Layout from "./pages/Layout";
 
 const ProductRouteArray = [
     {
