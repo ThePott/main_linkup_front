@@ -60,7 +60,7 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
     );
 };
 
-const DateBox = ({ date, isDim, isToday }) => {
+const DateCell = ({ date, eventArray, isDim, isToday }) => {
     const isHolyday = false;
 
     const defaultClassName = `${styles.day}`;
@@ -70,8 +70,9 @@ const DateBox = ({ date, isDim, isToday }) => {
     return (
         <Vstack className={className}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
+            <p>{JSON.stringify(eventArray)}</p>
         </Vstack>
     );
 };
 
-export default DateBox;
+export default DateCell;

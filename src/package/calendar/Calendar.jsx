@@ -7,11 +7,12 @@ import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
 import { format } from "date-fns";
 
+const formatToYmd = (date) => format(date, "yyyyMMdd");
+
 const groupEventArrayBySttime = (eventArray) => {
     const groupedEvent = Object.groupBy(eventArray, (event) =>
-        format(event.sttime, "yyyyMMdd"),
+        formatToYmd(event.sttime),
     );
-    console.log({ groupedEvent });
     return groupedEvent;
 };
 
@@ -54,6 +55,7 @@ const Calendar = ({ eventArray }) => {
                         key={date}
                         isDim
                         date={date}
+                        eventArray={groupedEvent[formatToYmd(date)]}
                         isToday={getIsToday(date)}
                     />
                 ))}
@@ -61,6 +63,7 @@ const Calendar = ({ eventArray }) => {
                     <DateCell
                         key={date}
                         date={date}
+                        eventArray={groupedEvent[formatToYmd(date)]}
                         isToday={getIsToday(date)}
                     />
                 ))}
@@ -69,6 +72,7 @@ const Calendar = ({ eventArray }) => {
                         key={date}
                         isDim
                         date={date}
+                        eventArray={groupedEvent[formatToYmd(date)]}
                         isToday={getIsToday(date)}
                     />
                 ))}
