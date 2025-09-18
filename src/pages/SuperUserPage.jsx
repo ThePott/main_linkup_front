@@ -20,7 +20,7 @@ const SuperUserPage = () => {
   };
 
   const handleEdit = (id) => {
-    alert(`유저 ${id} 정보 수정`);
+    alert(`유저 ${id} 차단을 해제합니다.`);
   };
 
   const handleDelete = (id) => {
@@ -79,7 +79,7 @@ const SuperUserPage = () => {
                   shape="RECTANGLE"
                   onClick={() => handleEdit(user.id)}
                 >
-                  edit
+                  Unban
                 </CustomButton>
                 <CustomButton
                   color="MONO"
