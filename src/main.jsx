@@ -21,11 +21,15 @@ const ProductRouteArray = [
             { path: "/", element: <FrontPage /> },
             { path: "/detail/:type/:id", element: <DetailPage /> },
             { path: "/mypage", element: <MyPage /> },
-            { path: "/super-user", element: <SuperUserPage /> },
             { path: "/agency", element: <AgencyPage /> },
             { path: "/signup", element: <SignupPage /> },
             { path: "/login", element: <LoginPage /> },
         ],
+    },
+
+    {
+        path: "/super-user",
+        element: <SuperUserPage />, // Navbar superuserpage에서 분리
     },
 ];
 const routeArray = [...ProductRouteArray, ...TestRouteArray];
