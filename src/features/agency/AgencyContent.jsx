@@ -1,6 +1,7 @@
+import styles from "./AgencyContent.module.css";
 import { useEffect } from "react";
 import Calendar from "../../package/calendar/Calendar";
-import { CenterInRow, FullScreen, Hstack, Vstack } from "../../package/layout";
+import { Hstack, Vstack } from "../../package/layout";
 import RoundBox from "../../package/RoundBox";
 import useLinkUpStore from "../../shared/store/store";
 import AgencyModal from "./AgencyModal";
@@ -20,17 +21,11 @@ const AgencyContent = () => {
     return (
         <>
             <AgencyModal />
-            <Hstack gap="none" style={{ height: "100%", overflow: "hidden" }}>
+            <Hstack gap="none" className={styles.agencyScreen}>
                 <AgencySidebar />
                 <FlexOneContainer>
-                    <Vstack items="center" style={{ height: "100%" }}>
-                        <RoundBox
-                            style={{
-                                maxWidth: "1200px",
-                                width: "100%",
-                                height: "100%",
-                            }}
-                        >
+                    <Vstack items="center" className={styles.fullHeight}>
+                        <RoundBox clssName={styles.agencyRoundBoxForCalender}>
                             <Calendar eventArray={eventArray} />
                         </RoundBox>
                     </Vstack>

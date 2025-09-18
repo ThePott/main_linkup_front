@@ -26,7 +26,8 @@ const GridContainer = ({
     gridStyle["--gap"] =
         lowerCasedGap === "none" ? 0 : `var(--spacing-${lowerCasedGap})`;
     if (rows) {
-        gridStyle["grid-rows"] = `repeat(${rows})`;
+        gridStyle["--grid-rows"] = `repeat(${rows})`;
+        gridStyle["--height"] = "100%";
     }
 
     return (
