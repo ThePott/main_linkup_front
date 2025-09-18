@@ -1,5 +1,7 @@
 .grid {
     display: grid;
     grid-template-columns: var(--grid-cols);
+    grid-template-rows: repeat(6, 1fr);
+    height: 100%;
     gap: var(--gap);
 }

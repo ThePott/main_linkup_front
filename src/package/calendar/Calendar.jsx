@@ -22,7 +22,7 @@ const groupEventArrayBySttime = (eventArray) => {
  * @param {"SM" | "MD" | "LG"} props.size
  * @param {boolean} props.isSmall
  */
-const Calendar = ({ eventArray, isSmall }) => {
+const Calendar = ({ eventArray = [], isSmall }) => {
     const {
         selectedDate,
         // setCurrentDate,

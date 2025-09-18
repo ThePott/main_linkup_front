@@ -23,8 +23,14 @@ const AgencyContent = () => {
             <Hstack gap="none" style={{ height: "100%", overflow: "hidden" }}>
                 <AgencySidebar />
                 <FlexOneContainer>
-                    <Vstack items="center">
-                        <RoundBox>
+                    <Vstack items="center" style={{ height: "100%" }}>
+                        <RoundBox
+                            style={{
+                                maxWidth: "1200px",
+                                width: "100%",
+                                height: "100%",
+                            }}
+                        >
                             <Calendar eventArray={eventArray} />
                         </RoundBox>
                     </Vstack>
