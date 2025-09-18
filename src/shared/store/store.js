@@ -8,6 +8,11 @@ const useLinkUpStore = create((set, get) => ({
         set({ something: newSomething });
     },
 
+    token: null,
+    setToken(token) {
+        set({ token });
+    },
+
     user: null,
     setUser(user) {
         set({ user });
