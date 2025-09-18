@@ -62,7 +62,7 @@ const Calendar = ({ eventArray }) => {
                         key={date}
                         isDim={isDim}
                         date={date}
-                        eventArray={groupedEvent[formatToYmd(date)]}
+                        eventArray={groupedEvent[formatToYmd(date)] ?? []}
                         isToday={getIsToday(date)}
                     />
                 ))}

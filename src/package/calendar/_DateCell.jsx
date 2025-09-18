@@ -1,4 +1,5 @@
 import { Vstack } from "../layout";
+import EventBox from "./_EventBox";
 import styles from "./calendar.module.css";
 
 const getDayType = (date) => {
@@ -70,7 +71,9 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     return (
         <Vstack className={className}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
-            <p>{JSON.stringify(eventArray)}</p>
+            {eventArray.map((event) => (
+                <EventBox event={event} />
+            ))}
         </Vstack>
     );
 };
