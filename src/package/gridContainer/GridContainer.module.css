@@ -1,12 +1,5 @@
 .grid {
     display: grid;
     grid-template-columns: var(--grid-cols);
-}
-
-.gridFixed {
-    grid-template-columns:;
-}
-
-.gridAuto {
-    grid-template-columns:;
+    gap: var(--gap);
 }

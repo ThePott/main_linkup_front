@@ -8,6 +8,7 @@ import styles from "./CustomImage.module.css";
  * @returns {JSX.Element}
  */
 const CustomImage = ({ url, shape, height, style, className, ...props }) => {
+    const lowerCasedHeight = height.toLocaleLowerCase();
     const customImageStyle = {};
     switch (shape) {
         case "CIRCLE":
@@ -20,17 +21,9 @@ const CustomImage = ({ url, shape, height, style, className, ...props }) => {
             break;
     }
 
-    switch (height) {
-        case "SM":
-            customImageStyle["--height"] = "var(--sizing-sm)";
-            break;
-        case "MD":
-            customImageStyle["--height"] = "var(--sizing-md)";
-            break;
-        case "LG":
-            customImageStyle["--height"] = "var(--sizing-lg)";
-            break;
-    }
+    customImageStyle["--height"] = `var(--sizing-${lowerCasedHeight})`;
+    customImageStyle["--width"] =
+        shape === "CIRCLE" ? `var(--sizing-${lowerCasedHeight})` : "100%";
 
     return (
         <img

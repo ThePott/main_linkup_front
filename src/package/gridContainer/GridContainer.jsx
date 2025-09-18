@@ -1,6 +1,7 @@
 import styles from "./GridContainer.module.css";
 
 const GridContainer = ({
+    gap = "MD",
     cols,
     colMinWidth,
     style,
@@ -9,6 +10,8 @@ const GridContainer = ({
     ...props
 }) => {
     const isAutoFit = cols === "auto";
+
+    const lowerCasedGap = gap.toLocaleLowerCase();
 
     const gridStyle = {};
     if (isAutoFit) {
@@ -19,6 +22,8 @@ const GridContainer = ({
     } else {
         gridStyle["--grid-cols"] = `repeat(${cols}, 1fr)`;
     }
+    gridStyle["--gap"] =
+        lowerCasedGap === "none" ? 0 : `var(--spacing-${lowerCasedGap})`;
 
     return (
         <div
