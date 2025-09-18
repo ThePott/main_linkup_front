@@ -64,9 +64,8 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
 const DateCell = ({ date, eventArray, isDim, isToday }) => {
     const isHolyday = false;
 
-    const defaultClassName = `${styles.day}`;
     const opacityClassName = isDim ? styles.dim : "";
-    const className = `${defaultClassName} ${opacityClassName}`;
+    const className = `${opacityClassName}`;
 
     return (
         <Vstack className={className}>

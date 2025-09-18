@@ -4,6 +4,7 @@ const GridContainer = ({
     gap = "MD",
     cols,
     colMinWidth,
+    rows,
     style,
     className,
     children,
@@ -24,6 +25,9 @@ const GridContainer = ({
     }
     gridStyle["--gap"] =
         lowerCasedGap === "none" ? 0 : `var(--spacing-${lowerCasedGap})`;
+    if (rows) {
+        gridStyle["grid-rows"] = `repeat(${rows})`;
+    }
 
     return (
         <div

@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import Calendar from "../../package/calendar/Calendar";
-import { FullScreen, Hstack } from "../../package/layout";
+import { CenterInRow, FullScreen, Hstack, Vstack } from "../../package/layout";
 import RoundBox from "../../package/RoundBox";
 import useLinkUpStore from "../../shared/store/store";
 import AgencyModal from "./AgencyModal";
 import AgencySidebar from "./AgencySidebar";
 import { dummyEventArray } from "../../shared/store/dummyThepott";
+import FlexOneContainer from "../../package/flexOneContainer/FlexOneContainer";
 
 const AgencyContent = () => {
     const eventArray = useLinkUpStore((state) => state.eventArray);
@@ -21,9 +22,13 @@ const AgencyContent = () => {
             <AgencyModal />
             <Hstack gap="none">
                 <AgencySidebar />
-                <RoundBox>
-                    <Calendar eventArray={eventArray} />
-                </RoundBox>
+                <FlexOneContainer>
+                    <Vstack items="center">
+                        <RoundBox>
+                            <Calendar eventArray={eventArray} />
+                        </RoundBox>
+                    </Vstack>
+                </FlexOneContainer>
             </Hstack>
         </FullScreen>
     );

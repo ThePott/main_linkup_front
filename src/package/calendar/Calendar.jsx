@@ -16,7 +16,13 @@ const groupEventArrayBySttime = (eventArray) => {
     return groupedEvent;
 };
 
-const Calendar = ({ eventArray }) => {
+/**
+ * @param {object} props
+ * @param {Event[]} props.eventArray
+ * @param {"SM" | "MD" | "LG"} props.size
+ * @param {boolean} props.isSmall
+ */
+const Calendar = ({ eventArray, isSmall }) => {
     const {
         selectedDate,
         // setCurrentDate,
@@ -40,7 +46,7 @@ const Calendar = ({ eventArray }) => {
     const groupedEvent = groupEventArrayBySttime(eventArray);
 
     return (
-        <Vstack>
+        <Vstack className={styles.calendar}>
             <Hstack
                 justify="end"
                 items="center"
@@ -53,7 +59,7 @@ const Calendar = ({ eventArray }) => {
                 <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
                 <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
             </Hstack>
-            <GridContainer cols={7}>
+            <GridContainer cols={7} rows={isSmall ? undefined : 5}>
                 {weekDayArray.map((weekday) => (
                     <HeaderCell key={weekday} weekday={weekday} />
                 ))}

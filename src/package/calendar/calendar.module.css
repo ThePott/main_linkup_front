@@ -1,10 +1,12 @@
+.calendar {
+    max-width: var(--container-lg);
+    width: 100%;
+}
+
 .headerCell {
     padding: var(--spacing-xs);
 }
 
-.day {
-    min-height: 100px;
-}
 .businessDay {
     color: var(--color-vivid);
 }
