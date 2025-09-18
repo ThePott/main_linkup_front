@@ -1,32 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SuperUserPage.css";
 import CustomButton from "../package/customButton/CustomButton.jsx";
+import { fetchUsers, banUser, unbanUser, deleteUser, } from "../features/super-user/SuperuserApi"
 
 const SuperUserPage = () => {
   const [emailSearch, setEmailSearch] = useState("");
   const [nicknameSearch, setNicknameSearch] = useState("");
+  const [users, setUsers] = useState([]);
 
-  // 임시 유저 데이터 (나중에 API 연동 가능)
-  const [users, setUsers] = useState([
-    { id: 1, nickname: "OOO", email: "OOO123@naver.com", role: "유저" },
-    { id: 2, nickname: "OOO", email: "OOO123@gmail.com", role: "유저" },
-    { id: 3, nickname: "xxx", email: "OOO123@naver.com", role: "유저" },
-    { id: 4, nickname: "OOO", email: "OOO456@gmail.com", role: "소속사" },
-    { id: 5, nickname: "OOO", email: "OOO789@gmail.com", role: "소속사" },
-  ]);
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data = await fetchUsers();
+        setUsers(data);
+      } catch (error) {
+        console.error(error);
+        alert("유저 목록을 불러오지 못했습니다.");
+      }
+    };
+    loadUsers();
+  }, []);
 
-  const handleBan = (id) => {
-    alert(`유저 ${id}을(를) 차단합니다.`);
+  // 차단
+  const handleBan = async (id) => {
+    try {
+      await banUser(id);
+      alert(`유저 ${id}을(를) 차단했습니다.`);
+      setUsers(users.map((u) => (u.id === id ? { ...u, banned: true } : u)));
+    } catch (error) {
+      alert("차단 실패");
+    }
   };
 
-  const handleEdit = (id) => {
-    alert(`유저 ${id} 차단을 해제합니다.`);
+  // 차단 해제
+  const handleUnban = async (id) => {
+    try {
+      await unbanUser(id);
+      alert(`유저 ${id} 차단을 해제했습니다.`);
+      setUsers(users.map((u) => (u.id === id ? { ...u, banned: false } : u)));
+    } catch (error) {
+      alert("차단 해제 실패");
+    }
   };
 
-  const handleDelete = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
+  // 삭제
+  const handleDelete = async (id) => {
+    try {
+      await deleteUser(id);
+      alert(`유저 ${id}을(를) 삭제했습니다.`);
+      setUsers(users.filter((user) => user.id !== id));
+    } catch (error) {
+      alert("삭제 실패");
+    }
   };
 
+  // 검색 필터링
   const filteredUsers = users.filter(
     (user) =>
       user.email.includes(emailSearch) && user.nickname.includes(nicknameSearch)
@@ -66,6 +94,7 @@ const SuperUserPage = () => {
               <td>{user.nickname}</td>
               <td>{user.email}</td>
               <td>{user.role}</td>
+              <td>{user.banned ? "차단됨" : "정상"}</td>
               <td style={{ display: "flex", gap: "8px" }}>
                 <CustomButton
                   color="RED"
