@@ -4,12 +4,13 @@ import axiosInstance from "../../shared/services/axiosInstance";
 
 const sendVerificationEmail = async (emailRef) => {
     const email = emailRef.current.value;
-    const { message, email: verifiedEmail } = await axiosInstance.post(
+    const response = await axiosInstance.post(
         "/api/auth/send-verification-email",
         {
             email,
         },
     );
+    const { message, email: verifiedEmail } = response.data;
     console.log({ message });
     return verifiedEmail;
 };
@@ -46,7 +47,14 @@ const useRequestVerifyEmail = () => {
     return { verifiedEmail, setVerifiedEmail, emailRef, refetchVerification };
 };
 
-const signup = (body) => axiosInstance.post("/api/auth/signup", body);
+const signup = async (body) => {
+    debugger;
+    const response = await axiosInstance.post("/api/auth/signup", body);
+    const { message, email } = response;
+    console.log({ message });
+    debugger;
+    return email;
+};
 
 const useRequestSignup = (verifiedEmail) => {
     const [body, setBody] = useState(null);
@@ -62,18 +70,24 @@ const useRequestSignup = (verifiedEmail) => {
     });
 
     useEffect(() => {
+        refetchSignup();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [body]);
+
+    useEffect(() => {
         if (signupError) {
             console.error(signupError);
             return;
         }
 
-        if (!verifiedEmail) {
+        if (!verifiedEmail || !signupData) {
             return;
         }
 
         // TODO: handle signup success
         console.log({ signupData });
         debugger;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signupData, signupError]);
 
     return { setBody, refetchSignup };

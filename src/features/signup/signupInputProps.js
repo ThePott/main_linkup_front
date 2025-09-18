@@ -6,6 +6,11 @@ export const inputPropsDict = {
         maxLength: 200,
         style: { width: "100%" },
     },
+    "인증 번호": {
+        name: "verification_code",
+        type: "text",
+        autoComplete: "off",
+    },
     비밀번호: {
         name: "password",
         type: "password",
