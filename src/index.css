@@ -64,10 +64,12 @@
     --rounded-full: 999px;
 
     --drop-shadow-md:
-        0px 0px 0px 1px var(--color-dim), 0px 1px 1px -0.5px var(--color-dim),
-        0px 3px 3px -1.5px var(--color-dim), 0px 6px 6px -3px var(--color-dim),
-        0px 12px 12px -6px var(--color-dim),
-        0px 24px 24px -12px var(--color-dim);
+        0px 0px 0px 1px var(--color-dimdimdim),
+        0px 1px 1px -0.5px var(--color-dimdimdim),
+        0px 3px 3px -1.5px var(--color-dimdimdim),
+        0px 6px 6px -3px var(--color-dimdimdim),
+        0px 12px 12px -6px var(--color-dimdimdim),
+        0px 24px 24px -12px var(--color-dimdimdim);
 
     --sizing-sm: 200px;
     --sizing-md: 300px;
