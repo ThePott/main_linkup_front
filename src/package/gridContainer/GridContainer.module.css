@@ -1,14 +1,12 @@
 .grid {
     display: grid;
+    grid-template-columns: var(--grid-cols);
 }
 
 .gridFixed {
-    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-columns:;
 }
 
 .gridAuto {
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(var(--min-width), var(--max-width))
-    );
+    grid-template-columns:;
 }

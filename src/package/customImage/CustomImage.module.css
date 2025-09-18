@@ -1,0 +1,6 @@
+.customImage {
+    border-radius: var(--rounded);
+    height: var(--height);
+    width: 100%;
+    object-fit: cover;
+}

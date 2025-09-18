@@ -61,6 +61,7 @@
     --font-weight-semibold: 600;
 
     --rounded-md: 6px;
+    --rounded-full: 999px;
 
     --drop-shadow-md:
         0px 0px 0px 1px var(--color-dim), 0px 1px 1px -0.5px var(--color-dim),
@@ -68,9 +69,10 @@
         0px 12px 12px -6px var(--color-dim),
         0px 24px 24px -12px var(--color-dim);
 
-    --sizing-sm: 100px;
-    --sizing-md: 200px;
-    --sizing-lg: 300px;
+    --sizing-sm: 200px;
+    --sizing-md: 300px;
+    --sizing-lg: 400px;
+    --sizing-xl: 500px;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
