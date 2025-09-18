@@ -5,12 +5,13 @@ import { getIsToday } from "./calendarUtils";
 import useCalendar from "./useCalendar";
 import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 const groupEventArrayBySttime = (eventArray) => {
     const groupedEvent = Object.groupBy(eventArray, (event) =>
-        format(parseISO(event.sttime), "yyyyMMdd"),
+        format(event.sttime, "yyyyMMdd"),
     );
+    console.log({ groupedEvent });
     return groupedEvent;
 };
 

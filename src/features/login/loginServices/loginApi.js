@@ -6,7 +6,6 @@ import axiosInstance from "../../../shared/services/axiosInstance";
  * @param {string} body.password
  */
 export const login = async (body) => {
-    debugger;
     const response = await axiosInstance.post(
         "/api/auth/send-verification-email",
         body,
