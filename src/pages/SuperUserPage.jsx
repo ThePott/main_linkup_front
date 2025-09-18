@@ -56,7 +56,7 @@ const SuperUserPage = () => {
           <tr>
             <th>닉네임</th>
             <th>이메일 or 아이디</th>
-            <th>역할</th>
+            <th>권한</th>
             <th>기능</th>
           </tr>
         </thead>
