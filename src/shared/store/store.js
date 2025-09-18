@@ -27,6 +27,11 @@ const useLinkUpStore = create((set, get) => ({
     setSelectedArtist(selectedArtist) {
         set({ selectedArtist });
     },
+
+    eventArray: [],
+    setEventArray(eventArray) {
+        set({ eventArray });
+    },
 }));
 
 export default useLinkUpStore;

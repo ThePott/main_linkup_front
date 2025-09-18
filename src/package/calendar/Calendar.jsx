@@ -5,8 +5,16 @@ import { getIsToday } from "./calendarUtils";
 import useCalendar from "./useCalendar";
 import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
+import { format, parseISO } from "date-fns";
 
-const Calendar = () => {
+const groupEventArrayBySttime = (eventArray) => {
+    const groupedEvent = Object.groupBy(eventArray, (event) =>
+        format(parseISO(event.sttime), "yyyyMMdd"),
+    );
+    return groupedEvent;
+};
+
+const Calendar = ({ eventArray }) => {
     const {
         selectedDate,
         // setCurrentDate,
@@ -19,6 +27,8 @@ const Calendar = () => {
     const weekDayArray = ["일", "월", "화", "수", "목", "금", "토"];
     const fullYear = selectedDate.getFullYear();
     const month = selectedDate.getMonth();
+
+    const groupedEvent = groupEventArrayBySttime(eventArray);
 
     return (
         <Vstack>
