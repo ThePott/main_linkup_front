@@ -26,6 +26,13 @@ const Calendar = ({ eventArray }) => {
         goToPrevMonth,
         goToNextMonth,
     } = useCalendar();
+
+    const dateWithIsDimArray = [
+        ...trailingPrevMonthDateArray.map((date) => ({ date, isDim: true })),
+        ...selectedMonthDateArray.map((date) => ({ date, isDim: false })),
+        ...leadingNextMonthDateArray.map((date) => ({ date, isDim: true })),
+    ];
+
     const weekDayArray = ["일", "월", "화", "수", "목", "금", "토"];
     const fullYear = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
@@ -50,27 +57,10 @@ const Calendar = ({ eventArray }) => {
                 {weekDayArray.map((weekday) => (
                     <HeaderCell key={weekday} weekday={weekday} />
                 ))}
-                {trailingPrevMonthDateArray.map((date) => (
+                {dateWithIsDimArray.map(({ date, isDim }) => (
                     <DateCell
                         key={date}
-                        isDim
-                        date={date}
-                        eventArray={groupedEvent[formatToYmd(date)]}
-                        isToday={getIsToday(date)}
-                    />
-                ))}
-                {selectedMonthDateArray.map((date) => (
-                    <DateCell
-                        key={date}
-                        date={date}
-                        eventArray={groupedEvent[formatToYmd(date)]}
-                        isToday={getIsToday(date)}
-                    />
-                ))}
-                {leadingNextMonthDateArray.map((date) => (
-                    <DateCell
-                        key={date}
-                        isDim
+                        isDim={isDim}
                         date={date}
                         eventArray={groupedEvent[formatToYmd(date)]}
                         isToday={getIsToday(date)}
