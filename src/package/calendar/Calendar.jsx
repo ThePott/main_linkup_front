@@ -28,7 +28,7 @@ const Calendar = ({ eventArray }) => {
     } = useCalendar();
     const weekDayArray = ["일", "월", "화", "수", "목", "금", "토"];
     const fullYear = selectedDate.getFullYear();
-    const month = selectedDate.getMonth();
+    const month = selectedDate.getMonth() + 1;
 
     const groupedEvent = groupEventArrayBySttime(eventArray);
 
