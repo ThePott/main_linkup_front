@@ -37,15 +37,19 @@ const SocialLoginButtonLabel = ({ children, ...props }) => {
 };
 
 const SocialLoginButton = ({ provider }) => {
-    const { error, isLoading, refetch } = useSocialLogin(provider);
+    // const { error, isLoading, refetch } = useSocialLogin(provider);
     const props = providerToProps[provider];
     const Icon = providerToIcon[provider];
 
+    const lowerCasedHref = `http://3.35.210.2:8000/api/auth/${provider.toLowerCase()}/login`;
+    const handleClick = () => {
+        window.location.href = lowerCasedHref;
+    };
     return (
         <CustomButton
             style={props.buttonStyle}
             className={styles.socialLoginButton}
-            onClick={refetch}
+            onClick={handleClick}
         >
             <Hstack>
                 {Icon}
