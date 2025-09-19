@@ -39,17 +39,3 @@ export async function unbanUser(id) {
     throw error;
   }
 }
-
-// 유저 삭제
-export async function deleteUser(id) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) throw new Error("유저 삭제 실패");
-    return await response.json();
-  } catch (error) {
-    console.error("❌ deleteUser Error:", error);
-    throw error;
-  }
-}
