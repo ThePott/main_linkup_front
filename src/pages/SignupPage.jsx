@@ -40,7 +40,6 @@ const SignupPage = () => {
     };
 
     const handleSubmit = (event) => {
-        debugger;
         event.preventDefault();
         const {
             email,

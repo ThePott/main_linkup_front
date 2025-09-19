@@ -1,5 +1,5 @@
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
-import { loginInputPropsEntryArray } from "../features/login/loginServices/LoginInputProps";
+import { loginInputPropsEntryArray } from "../features/login/loginServices/loginInputProps";
 import { useLogin } from "../features/login/loginServices/useLogin";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";

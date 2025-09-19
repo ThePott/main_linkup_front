@@ -36,5 +36,14 @@ export const useLogin = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
+    useEffect(() => {
+        if (!error) {
+            return;
+        }
+        console.error(error);
+        debugger;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error]);
+
     return { setBody, error, isLoading };
 };

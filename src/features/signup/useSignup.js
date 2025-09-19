@@ -48,11 +48,10 @@ const useRequestVerifyEmail = () => {
 };
 
 const signup = async (body) => {
-    debugger;
     const response = await axiosInstance.post("/api/auth/signup", body);
     const { message, email } = response;
     console.log({ message });
-    debugger;
+
     return email;
 };
 
@@ -86,7 +85,7 @@ const useRequestSignup = (verifiedEmail) => {
 
         // TODO: handle signup success
         console.log({ signupData });
-        debugger;
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signupData, signupError]);
 
