@@ -1,4 +1,5 @@
 import { Vstack } from "../layout";
+import EventBox from "./_EventBox";
 import styles from "./calendar.module.css";
 
 const getDayType = (date) => {
@@ -60,18 +61,20 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
     );
 };
 
-const DateBox = ({ date, isDim, isToday }) => {
+const DateCell = ({ date, eventArray, isDim, isToday }) => {
     const isHolyday = false;
 
-    const defaultClassName = `${styles.day}`;
     const opacityClassName = isDim ? styles.dim : "";
-    const className = `${defaultClassName} ${opacityClassName}`;
+    const className = `${opacityClassName}`;
 
     return (
         <Vstack className={className}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
+            {eventArray.map((event) => (
+                <EventBox event={event} />
+            ))}
         </Vstack>
     );
 };
 
-export default DateBox;
+export default DateCell;

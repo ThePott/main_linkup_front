@@ -41,8 +41,14 @@ const SignupPage = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const { email, password, passwordConfirm, phone_number, nickname } =
-            event.target;
+        const {
+            email,
+            verification_code,
+            password,
+            passwordConfirm,
+            phone_number,
+            nickname,
+        } = event.target;
 
         const isEmailValid = checkAdditionalEmailValidity(
             verifiedEmail,
@@ -59,20 +65,18 @@ const SignupPage = () => {
             phone_number: phone_number.value,
             nickname: nickname.value,
             user_type: "fan",
-            verification_code: "some-random-string",
+            verification_code: verification_code.value,
         };
 
         const isPasswordValid = checkAdditionalPasswordValidity(
             password,
             passwordConfirm,
         );
-        if (isPasswordValid) {
+        if (!isPasswordValid) {
             return;
         }
 
         setBody(tempBody);
-
-        refetchSignup();
     };
 
     const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";

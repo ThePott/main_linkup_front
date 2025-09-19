@@ -1,0 +1,19 @@
+.navbar {
+    max-width: var(--container-lg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: 100%;
+}
+
+.sideSection {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-weight: bold;
+    color: var(--color-vivid);
+}
+
+.searchbar {
+    width: 100%;
+}

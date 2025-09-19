@@ -23,12 +23,17 @@ const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
 };
 
 const ThePottApiTestPage = () => {
-    const baseURL = "http://3.39.239.114:8000";
+    const baseURL = "http://3.35.210.2:8000";
     const getHome = () => getThenLog(`${baseURL}`);
     const getHealth = () => getThenLog(`${baseURL}/health`);
     const postEmailVerification = () =>
         postThenLog(`${baseURL}/api/auth/send-verification-email`, {
             email: "nusilite@gmail.com",
+        });
+    const postLogin = () =>
+        postThenLog(`${baseURL}/api/auth/login`, {
+            email: "fan_dummy_1@gmail.com",
+            password: "fan123!",
         });
 
     return (
@@ -43,6 +48,7 @@ const ThePottApiTestPage = () => {
                     <CustomButton onClick={postEmailVerification}>
                         send email verification
                     </CustomButton>
+                    <CustomButton onClick={postLogin}>login</CustomButton>
                 </Vstack>
             </RoundBoxGlobalShadow>
         </FullScreen>

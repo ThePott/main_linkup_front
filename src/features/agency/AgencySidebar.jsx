@@ -57,7 +57,7 @@ const AgencySidebar = () => {
     };
 
     return (
-        <Vstack>
+        <Vstack style={{ height: "100%", overflow: "scroll" }}>
             {groupArtistEntryArray.map((entry) => (
                 <RoundBox key={entry[0]} style={{ textAlign: "start" }}>
                     <Vstack>

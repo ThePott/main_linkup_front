@@ -1,5 +1,5 @@
-import CustomButton from "../../package/customButton/CustomButton";
-import { Hstack } from "../../package/layout";
+import CustomButton from "../../../package/customButton/CustomButton";
+import { Hstack } from "../../../package/layout";
 import FacebookIcon from "./FacebookIcon";
 import GoogleIcon from "./GoogleIcon";
 import KakaoIcon from "./KakaoIcon";

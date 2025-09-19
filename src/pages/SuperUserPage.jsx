@@ -47,6 +47,7 @@ const SuperUserPage = () => {
       );
     } catch (error) {
       alert("처리 실패");
+
     }
   };
 

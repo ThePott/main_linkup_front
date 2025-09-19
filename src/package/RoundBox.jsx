@@ -9,12 +9,12 @@ const paddingSize = {
     XL: "var(--spacing-xl)",
 };
 
-const RoundBox = ({ padding, children, style, ...rest }) => {
+const RoundBox = ({ padding, children, style, className, ...rest }) => {
     const paddingValue = padding ? paddingSize[padding.toUpperCase()] : null;
 
     return (
         <div
-            className={styles.container}
+            className={[styles.container, className].filter(Boolean).join(" ")}
             style={{
                 padding: paddingValue,
                 ...style,

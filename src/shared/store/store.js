@@ -8,6 +8,11 @@ const useLinkUpStore = create((set, get) => ({
         set({ something: newSomething });
     },
 
+    access_token: null,
+    setAccessToken(access_token) {
+        set({ access_token });
+    },
+
     user: null,
     setUser(user) {
         set({ user });
@@ -21,6 +26,11 @@ const useLinkUpStore = create((set, get) => ({
     selectedArtist: null,
     setSelectedArtist(selectedArtist) {
         set({ selectedArtist });
+    },
+
+    eventArray: [],
+    setEventArray(eventArray) {
+        set({ eventArray });
     },
 }));
 
