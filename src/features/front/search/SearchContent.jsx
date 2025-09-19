@@ -3,13 +3,12 @@ import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostCard from "../../../shared/FanpostCard.jsx";
 
-
 const SearchContent = () => {
-  const groupArray = useLinkUpStore((state) => state.groupArray);
   const searchStatus = useLinkUpStore((state) => state.searchStatus);
   const recommendedGroupArray = useLinkUpStore(
     (state) => state.recommendedGroupArray
   );
+  const searchResultArray = useLinkUpStore((state) => state.searchResultArray); 
   const navigate = useNavigate();
 
   // 검색 실패 화면
@@ -24,7 +23,7 @@ const SearchContent = () => {
             <RoundBox
               key={group.id}
               style={{ cursor: "pointer" }}
-              onClick={() => navigate(`/detail/${group.id}`)}
+              onClick={() => navigate(`/detail/group/${group.id}`)} 
             >
               <img src={group.imgFace} alt={group.name} width={80} />
               <div>{group.name}</div>
@@ -35,21 +34,28 @@ const SearchContent = () => {
     );
   }
 
+  const groupArrayToShow =
+    searchResultArray.length > 0
+      ? searchResultArray
+      : useLinkUpStore.getState().groupArray;
+
+
+
   // 검색 성공 화면
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
       <h2>검색 결과</h2>
 
-      {groupArray.map((group) => {
+      {groupArrayToShow.map((group) => { 
         const combinedSchedules = [
           ...group.groupScheduleArray.map((s) => ({
             ...s,
-            owner: group.name, // 그룹
+            owner: group.name,
           })),
           ...group.memberArray.flatMap((member) =>
             member.scheduleArray.map((ms) => ({
               ...ms,
-              owner: member.name, // 멤버
+              owner: member.name,
             }))
           ),
         ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
@@ -62,7 +68,7 @@ const SearchContent = () => {
             <div style={{ display: "flex", gap: "1rem", overflowX: "auto" }}>
               <RoundBox
                 style={{ cursor: "pointer", flex: "0 0 auto" }}
-                onClick={() => navigate(`/detail/${group.id}`)}
+                onClick={() => navigate(`/detail/group/${group.id}`)} 
               >
                 <img src={group.imgFace} alt={group.name} width={80} />
                 <div>{group.name}</div>
@@ -72,7 +78,7 @@ const SearchContent = () => {
                 <RoundBox
                   key={member.id}
                   style={{ cursor: "pointer", flex: "0 0 auto" }}
-                  onClick={() => navigate(`/detail/${member.id}`)}
+                  onClick={() => navigate(`/detail/artist/${member.id}`)} 
                 >
                   <img src={member.imgFace} alt={member.name} width={80} />
                   <div>{member.name}</div>
@@ -80,7 +86,7 @@ const SearchContent = () => {
               ))}
             </div>
 
-            {/* 일정 (그룹+멤버 통합 최신 3개) */}
+            {/* 일정 */}
             <h4>일정</h4>
             <div
               style={{
@@ -95,6 +101,7 @@ const SearchContent = () => {
                 </RoundBox>
               ))}
             </div>
+
             {/* 그룹 팬포스트 */}
             <h4>그룹 팬포스트</h4>
             <FanPostCard

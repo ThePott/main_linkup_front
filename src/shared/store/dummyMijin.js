@@ -145,7 +145,11 @@ const useLinkUpStore = create((set) => ({
   groupArray: dummyGroupArray,
   recommendedGroupArray: dummyRecommendedGroupArray,
   searchStatus: "success",
-  subscribedArtistIdArray: [1, 4], // (예시)블랙핑크, BTS 구독 중
+  subscribedArtistIdArray: [1, 4],
+
+  searchResultArray: [], 
+  setSearchResultArray: (arr) => set({ searchResultArray: arr }),
+
   setSearchStatus: (status) => set({ searchStatus: status }),
 
   toggleSubscribe: (artistId) =>
