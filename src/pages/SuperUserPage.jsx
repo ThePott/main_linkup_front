@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./SuperUserPage.css";
 import CustomButton from "../package/customButton/CustomButton.jsx";
-import { fetchUsers, banUser, unbanUser, deleteUser, } from "../features/super-user/SuperuserApi"
+/* import { fetchUsers, banUser, unbanUser, deleteUser, } from "../features/super-user/SuperuserApi"*/
+
+const dummyUsers = [
+  { id: 1, nickname: "Alice", email: "alice@test.com", role: "user", banned: false },
+  { id: 2, nickname: "Bob", email: "bob@test.com", role: "admin", banned: true },
+  { id: 3, nickname: "Charlie", email: "charlie@test.com", role: "user", banned: false },
+];
 
 const SuperUserPage = () => {
   const [emailSearch, setEmailSearch] = useState("");
@@ -9,6 +15,10 @@ const SuperUserPage = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    setUsers(dummyUsers); // 더미데이터 사용
+  }, []);
+
+  /* useEffect(() => {
     const loadUsers = async () => {
       try {
         const data = await fetchUsers();
@@ -19,27 +29,25 @@ const SuperUserPage = () => {
       }
     };
     loadUsers();
-  }, []);
+  }, []); */ //api 연동 부분
 
-  // 차단
-  const handleBan = async (id) => {
+  //차단, 차단 해제 병합
+  const handleToggleBan = async (id, banned) => {
     try {
-      await banUser(id);
-      alert(`유저 ${id}을(를) 차단했습니다.`);
-      setUsers(users.map((u) => (u.id === id ? { ...u, banned: true } : u)));
-    } catch (error) {
-      alert("차단 실패");
-    }
-  };
+      if (banned) {
+        alert(`유저 ${id} 차단을 해제했습니다.`);
+      } else {
+        alert(`유저 ${id}을(를) 차단했습니다.`);
+      }
 
-  // 차단 해제
-  const handleUnban = async (id) => {
-    try {
-      await unbanUser(id);
-      alert(`유저 ${id} 차단을 해제했습니다.`);
-      setUsers(users.map((u) => (u.id === id ? { ...u, banned: false } : u)));
+      setUsers(
+        users.map((u) =>
+          u.id === id ? { ...u, banned: !banned } : u
+        )
+      );
     } catch (error) {
-      alert("차단 해제 실패");
+      alert("처리 실패");
+
     }
   };
 
@@ -85,6 +93,7 @@ const SuperUserPage = () => {
             <th>닉네임</th>
             <th>이메일 or 아이디</th>
             <th>권한</th>
+            <th>상태</th>
             <th>기능</th>
           </tr>
         </thead>
@@ -97,25 +106,11 @@ const SuperUserPage = () => {
               <td>{user.banned ? "차단됨" : "정상"}</td>
               <td style={{ display: "flex", gap: "8px" }}>
                 <CustomButton
-                  color="RED"
+                  color={user.banned ? "BLUE" : "RED"}
                   shape="RECTANGLE"
-                  onClick={() => handleBan(user.id)}
+                  onClick={() => handleToggleBan(user.id, user.banned)}
                 >
-                  ban
-                </CustomButton>
-                <CustomButton
-                  color="BLUE"
-                  shape="RECTANGLE"
-                  onClick={() => handleEdit(user.id)}
-                >
-                  Unban
-                </CustomButton>
-                <CustomButton
-                  color="MONO"
-                  shape="RECTANGLE"
-                  onClick={() => handleDelete(user.id)}
-                >
-                  delete
+                  {user.banned ? "Unban" : "Ban"}
                 </CustomButton>
               </td>
             </tr>
