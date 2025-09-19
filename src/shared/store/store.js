@@ -8,9 +8,9 @@ const useLinkUpStore = create((set, get) => ({
         set({ something: newSomething });
     },
 
-    token: null,
-    setToken(token) {
-        set({ token });
+    access_token: null,
+    setAccessToken(access_token) {
+        set({ access_token });
     },
 
     user: null,

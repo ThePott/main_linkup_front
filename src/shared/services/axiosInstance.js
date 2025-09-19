@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
     const token = useLinkUpStore.getState().token;
     if (!token) {
-        return;
+        return config;
     }
 
     config.headers.Autorization = token;

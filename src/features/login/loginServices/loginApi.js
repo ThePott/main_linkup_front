@@ -6,11 +6,8 @@ import axiosInstance from "../../../shared/services/axiosInstance";
  * @param {string} body.password
  */
 export const login = async (body) => {
-    console.log({ body });
     const response = await axiosInstance.post("/api/auth/login", body);
-    debugger;
-    const { message, token } = response.data;
-    debugger;
-    console.log({ message });
-    return token;
+    const { token_type, access_token } = response.data;
+    console.log({ token_type });
+    return access_token;
 };

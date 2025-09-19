@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { login } from "./loginApi";
 import { useQuery } from "@tanstack/react-query";
-import useLinkUpStore from "../../../shared/store/dummyMijin";
 import { useNavigate } from "react-router";
+import useLinkUpStore from "../../../shared/store/store";
 
 export const useLogin = () => {
     const [body, setBody] = useState(null);
-    const setToken = useLinkUpStore((state) => state.setToken);
+    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
     const navigate = useNavigate();
 
     // data: token
@@ -31,7 +31,7 @@ export const useLogin = () => {
         if (!data) {
             return;
         }
-        setToken(data);
+        setAccessToken(data);
         navigate("/");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
