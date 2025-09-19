@@ -59,10 +59,12 @@ const Calendar = ({ eventArray = [], isSmall }) => {
                 <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
                 <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
             </Hstack>
-            <GridContainer cols={7} rows={isSmall ? undefined : 5}>
+            <GridContainer cols={7}>
                 {weekDayArray.map((weekday) => (
-                    <HeaderCell key={weekday} weekday={weekday} />
+                    <HeaderCell weekday={weekday} />
                 ))}
+            </GridContainer>
+            <GridContainer cols={7} rows={isSmall ? undefined : 5}>
                 {dateWithIsDimArray.map(({ date, isDim }) => (
                     <DateCell
                         key={date}
