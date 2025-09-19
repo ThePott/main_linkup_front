@@ -2,10 +2,11 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .center {
-    display: flex;
     justify-content: center;
     align-items: center;
 }

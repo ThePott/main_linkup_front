@@ -1,0 +1,16 @@
+.agencyScreen {
+    height: 100%;
+    overflow: hidden;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+.agencyRoundBoxForCalender {
+    width: 100%;
+    height: 100%;
+    max-width: var(--container-lg);
+    padding: var(--spacing-md);
+    background-color: red;
+}

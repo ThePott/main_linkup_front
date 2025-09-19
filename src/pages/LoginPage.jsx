@@ -1,30 +1,23 @@
-import SocialLoginButton from "../features/login/SocialLoginButton";
+import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
+import { loginInputPropsEntryArray } from "../features/login/loginServices/LoginInputProps";
+import { useLogin } from "../features/login/loginServices/useLogin";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { FullScreen, Vstack } from "../package/layout";
 import RoundBox from "../package/RoundBox";
 
-const inputPropsDict = {
-    이메일: {
-        name: "email",
-        type: "email",
-        autoComplete: "email",
-    },
-    비밀번호: {
-        name: "password",
-        type: "password",
-        autoComplete: "new-password",
-    },
-};
-const inputPropsEntryArray = Object.entries(inputPropsDict);
-
 const LoginPage = () => {
+    const { error, isLoading, setBody } = useLogin();
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        const { email, password } = event.target;
-        const body = { email: email.value, password: password.value };
-        // TODO: 실제로 여기에서 요청 보내야 함
-        console.log({ body });
+        const { emailHTMLElement, passwordHTMLElement } = event.target;
+        const body = {
+            email: emailHTMLElement.value,
+            password: passwordHTMLElement.value,
+        };
+
+        setBody(body);
     };
 
     return (
@@ -34,11 +27,11 @@ const LoginPage = () => {
                     <Vstack style={{ width: "400px" }}>
                         <form onSubmit={handleSubmit}>
                             <Vstack>
-                                {inputPropsEntryArray.map((entry) => (
+                                {loginInputPropsEntryArray.map((entry) => (
                                     <CustomInputLabeled
                                         key={entry[0]}
                                         label={entry[0]}
-                                        {...entry[1]}
+                                        inputProps={entry[1]}
                                     />
                                 ))}
                                 <CustomButton>이메일로 로그인</CustomButton>

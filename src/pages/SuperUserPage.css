@@ -1,0 +1,49 @@
+.superuser-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  display: block;
+  width: 200px;
+  text-align: center;
+  padding: 10px;
+  background: #999;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 300px;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.user-table th {
+  background: #666;
+  color: white;
+}
+
+.user-table button:hover {
+  background: #aaa;
+  color: white;
+}

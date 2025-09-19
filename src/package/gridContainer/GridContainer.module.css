@@ -1,14 +1,7 @@
 .grid {
     display: grid;
-}
-
-.gridFixed {
-    grid-template-columns: repeat(var(--cols), 1fr);
-}
-
-.gridAuto {
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(var(--min-width), var(--max-width))
-    );
+    grid-template-columns: var(--grid-cols);
+    grid-template-rows: var(--grid-rows);
+    height: var(--height);
+    gap: var(--gap);
 }

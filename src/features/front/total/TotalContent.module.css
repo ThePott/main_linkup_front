@@ -1,0 +1,38 @@
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.subscribeBtn {
+    margin-right: var(--spacing-lg);
+}
+
+.subscribeCancelBtn {
+    margin-top: var(--spacing-lg);
+}
+
+.text {
+    margin-top: var(--spacing-lg);
+    font-weight: bold;
+}
+
+.calendarContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendar {
+    width: 100%;
+}
+
+.dailySchedule {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: var(--spacing-xl);
+    font-size: 1.3rem;
+}
+
+.scheduleLocation {
+    padding-right: calc(var(--spacing-xl) * 1.5);
+}

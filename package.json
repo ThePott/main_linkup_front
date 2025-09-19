@@ -9,7 +9,6 @@
         "lint": "eslint .",
         "lint:strict": "eslint . --config eslint.config.strict.js",
         "preview": "vite preview",
-        "prepare": "husky",
         "format": "prettier --write --cache ."
     },
     "dependencies": {

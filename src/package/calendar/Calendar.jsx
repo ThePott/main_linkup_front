@@ -5,8 +5,24 @@ import { getIsToday } from "./calendarUtils";
 import useCalendar from "./useCalendar";
 import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
+import { format } from "date-fns";
 
-const Calendar = () => {
+const formatToYmd = (date) => format(date, "yyyyMMdd");
+
+const groupEventArrayBySttime = (eventArray) => {
+    const groupedEvent = Object.groupBy(eventArray, (event) =>
+        formatToYmd(event.sttime),
+    );
+    return groupedEvent;
+};
+
+/**
+ * @param {object} props
+ * @param {Event[]} props.eventArray
+ * @param {"SM" | "MD" | "LG"} props.size
+ * @param {boolean} props.isSmall
+ */
+const Calendar = ({ eventArray = [], isSmall }) => {
     const {
         selectedDate,
         // setCurrentDate,
@@ -16,12 +32,21 @@ const Calendar = () => {
         goToPrevMonth,
         goToNextMonth,
     } = useCalendar();
+
+    const dateWithIsDimArray = [
+        ...trailingPrevMonthDateArray.map((date) => ({ date, isDim: true })),
+        ...selectedMonthDateArray.map((date) => ({ date, isDim: false })),
+        ...leadingNextMonthDateArray.map((date) => ({ date, isDim: true })),
+    ];
+
     const weekDayArray = ["일", "월", "화", "수", "목", "금", "토"];
     const fullYear = selectedDate.getFullYear();
-    const month = selectedDate.getMonth();
+    const month = selectedDate.getMonth() + 1;
+
+    const groupedEvent = groupEventArrayBySttime(eventArray);
 
     return (
-        <Vstack>
+        <Vstack className={styles.calendar}>
             <Hstack
                 justify="end"
                 items="center"
@@ -36,28 +61,16 @@ const Calendar = () => {
             </Hstack>
             <GridContainer cols={7}>
                 {weekDayArray.map((weekday) => (
-                    <HeaderCell key={weekday} weekday={weekday} />
+                    <HeaderCell weekday={weekday} />
                 ))}
-                {trailingPrevMonthDateArray.map((date) => (
+            </GridContainer>
+            <GridContainer cols={7} rows={isSmall ? undefined : 5}>
+                {dateWithIsDimArray.map(({ date, isDim }) => (
                     <DateCell
                         key={date}
-                        isDim
+                        isDim={isDim}
                         date={date}
-                        isToday={getIsToday(date)}
-                    />
-                ))}
-                {selectedMonthDateArray.map((date) => (
-                    <DateCell
-                        key={date}
-                        date={date}
-                        isToday={getIsToday(date)}
-                    />
-                ))}
-                {leadingNextMonthDateArray.map((date) => (
-                    <DateCell
-                        key={date}
-                        isDim
-                        date={date}
+                        eventArray={groupedEvent[formatToYmd(date)] ?? []}
                         isToday={getIsToday(date)}
                     />
                 ))}

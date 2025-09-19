@@ -1,6 +1,8 @@
 import useLinkUpStore from "../../../shared/store/dummyMijin.js";
 import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
+import FanPostCard from "../../../shared/FanpostCard.jsx";
+
 
 const SearchContent = () => {
   const groupArray = useLinkUpStore((state) => state.groupArray);
@@ -93,23 +95,14 @@ const SearchContent = () => {
                 </RoundBox>
               ))}
             </div>
-
             {/* 그룹 팬포스트 */}
             <h4>그룹 팬포스트</h4>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1rem",
-                marginTop: "1rem",
-              }}
-            >
-              {group.groupPostArray.slice(0, 36).map((post) => (
-                <RoundBox key={post.postId} style={{ textAlign: "left" }}>
-                  {post.content}
-                </RoundBox>
-              ))}
-            </div>
+            <FanPostCard
+              posts={group.groupPostArray}
+              limit={12}
+              cols={3}
+              onClickPost={(postId) => navigate(`/post/${postId}`)}
+            />
           </div>
         );
       })}
