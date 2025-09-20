@@ -3,6 +3,8 @@
 // 2. 함수를 작성할 땐 모든 메소드의 경우를 포함합니다
 // 3. 함수를 작성한 이후엔 jsdoc을 작성합니다
 
+import axiosInstance from "./axiosInstance";
+
 /**
  * @param {"GET" | "PUT" | "DELETE"} method
  * @param {object} body
@@ -14,9 +16,14 @@ export const apiAuthMe = async (method, body) => {
     let response;
     switch (method) {
         case "GET":
-            response = await axiosInstance.get(ADDITIONAL_URL);
+            try {
+                response = await axiosInstance.get(ADDITIONAL_URL);
+                console.log({ response });
+            } catch (error) {
+                console.error(error);
+                debugger;
+            }
             break;
-
         case "PUT":
             if (!body) {
                 throw new Error(

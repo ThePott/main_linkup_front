@@ -13,7 +13,6 @@ export const login = async (body) => {
 };
 
 export const socialLogin = async (provider) => {
-    debugger;
     const response = await axiosInstance.get(`/api/auth/${provider}/login`);
     const access_token = response.data;
     console.log({ access_token });

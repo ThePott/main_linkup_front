@@ -23,7 +23,7 @@ const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
 };
 
 const ThePottApiTestPage = () => {
-    const baseURL = "http://3.35.210.2:8000";
+    const baseURL = import.meta.env.VITE_BASE_URL;
     const getHome = () => getThenLog(`${baseURL}`);
     const getHealth = () => getThenLog(`${baseURL}/health`);
     const postEmailVerification = () =>
