@@ -16,14 +16,7 @@ export const apiAuthMe = async (method, body) => {
     let response;
     switch (method) {
         case "GET":
-            try {
-                response = await axiosInstance.get(ADDITIONAL_URL);
-                console.log({ response });
-                debugger;
-            } catch (error) {
-                console.error(error);
-                debugger;
-            }
+            response = await axiosInstance.get(ADDITIONAL_URL);
             break;
         case "PUT":
             if (!body) {

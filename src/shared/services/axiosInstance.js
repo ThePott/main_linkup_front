@@ -6,12 +6,14 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    const token = useLinkUpStore.getState().token;
-    if (!token) {
+    const state = useLinkUpStore.getState();
+    const access_token = state.access_token;
+
+    if (!access_token) {
         return config;
     }
 
-    config.headers.Autorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${access_token}`;
     return config;
 });
 
