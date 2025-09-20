@@ -1,15 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { FullScreen, Vstack } from "../../../package/layout";
 import RoundBox from "../../../package/RoundBox";
-import axiosInstance from "../../../shared/services/axiosInstance";
 import {
     getThenLog,
     postThenLog,
 } from "../../../package/commonServices/fetchVariants";
-
-const getHome = () => axiosInstance.get("/");
-const getHealth = () => axiosInstance.get("/health");
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
