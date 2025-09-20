@@ -1,13 +1,21 @@
-export const getThenLog = (url) => {
-    fetch(url)
+export const getThenLog = (url, callback, access_token) => {
+    const init = {
+        method: "GET",
+    };
+    if (access_token) {
+        init.headers = { Authorization: `Bearer ${access_token}` };
+    }
+
+    fetch(url, init)
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            callback(data);
         })
         .catch((error) => console.error("Error:", error));
 };
 
-export const postThenLog = (url, body) => {
+export const postThenLog = (url, body, callback) => {
     const init = {
         method: "POST", // Specify the method as POST
         headers: {
@@ -20,6 +28,7 @@ export const postThenLog = (url, body) => {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            callback(data);
         })
         .catch((error) => console.error("Error:", error));
 };

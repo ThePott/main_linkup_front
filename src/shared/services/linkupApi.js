@@ -19,6 +19,7 @@ export const apiAuthMe = async (method, body) => {
             try {
                 response = await axiosInstance.get(ADDITIONAL_URL);
                 console.log({ response });
+                debugger;
             } catch (error) {
                 console.error(error);
                 debugger;

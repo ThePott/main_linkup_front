@@ -5,6 +5,7 @@ import {
     getThenLog,
     postThenLog,
 } from "../../../package/commonServices/fetchVariants";
+import { useState } from "react";
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
@@ -17,19 +18,37 @@ const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     );
 };
 
-const ThePottApiTestPage = () => {
-    const baseURL = import.meta.env.VITE_BASE_URL;
-    const getHome = () => getThenLog(`${baseURL}`);
-    const getHealth = () => getThenLog(`${baseURL}/health`);
-    const postEmailVerification = () =>
-        postThenLog(`${baseURL}/api/auth/send-verification-email`, {
-            email: "nusilite@gmail.com",
-        });
-    const postLogin = () =>
-        postThenLog(`${baseURL}/api/auth/login`, {
+const baseURL = import.meta.env.VITE_BASE_URL;
+const getHome = () => getThenLog(`${baseURL}`);
+const getHealth = () => getThenLog(`${baseURL}/health`);
+const postEmailVerification = () =>
+    postThenLog(`${baseURL}/api/auth/send-verification-email`, {
+        email: "nusilite@gmail.com",
+    });
+const postLogin = (callback) =>
+    postThenLog(
+        `${baseURL}/api/auth/login`,
+        {
             email: "fan_dummy_1@gmail.com",
             password: "fan123!",
-        });
+        },
+        callback,
+    );
+
+const ThePottApiTestPage = () => {
+    const [accessToken, setAccessToken] = useState(null);
+    const [user, setUser] = useState(null);
+
+    const getMe = (callback) =>
+        getThenLog(`${baseURL}/api/auth/me`, callback, accessToken);
+
+    const callbackLogin = (data) => {
+        setAccessToken(data.access_token);
+    };
+
+    const callbackMe = (data) => {
+        setUser(data);
+    };
 
     return (
         <FullScreen center>
@@ -43,7 +62,14 @@ const ThePottApiTestPage = () => {
                     <CustomButton onClick={postEmailVerification}>
                         send email verification
                     </CustomButton>
-                    <CustomButton onClick={postLogin}>login</CustomButton>
+                    <CustomButton onClick={() => postLogin(callbackLogin)}>
+                        <p>login</p>
+                        <p>{accessToken}</p>
+                    </CustomButton>
+                    <CustomButton onClick={() => getMe(callbackMe)}>
+                        <p>get me</p>
+                        <p>{JSON.stringify(user)}</p>
+                    </CustomButton>
                 </Vstack>
             </RoundBoxGlobalShadow>
         </FullScreen>
