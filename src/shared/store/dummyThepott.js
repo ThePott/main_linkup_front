@@ -146,6 +146,7 @@ export const dummyAgencyUser = {
 };
 
 const makeDummyEvent = (
+    id,
     artistId,
     artistName,
     sttime,
@@ -153,6 +154,7 @@ const makeDummyEvent = (
     title,
     description,
 ) => ({
+    id,
     artistId,
     artistName,
     sttime,
@@ -164,6 +166,7 @@ const makeDummyEvent = (
 export const dummyEventArray = [
     // September 5th - Multiple events
     makeDummyEvent(
+        1,
         2,
         "아이유",
         new Date("2025-09-05T14:00:00"),
@@ -172,6 +175,7 @@ export const dummyEventArray = [
         "Love wins all 투어 서울 공연",
     ),
     makeDummyEvent(
+        2,
         8,
         "BLACKPINK",
         new Date("2025-09-05T19:00:00"),
@@ -183,6 +187,7 @@ export const dummyEventArray = [
     // September 12th - Multiple events
     makeDummyEvent(
         3,
+        3,
         "BTS",
         new Date("2025-09-12T15:30:00"),
         new Date("2025-09-12T17:30:00"),
@@ -190,6 +195,7 @@ export const dummyEventArray = [
         "ARMY와 함께하는 특별한 시간",
     ),
     makeDummyEvent(
+        4,
         4,
         "NewJeans",
         new Date("2025-09-12T19:00:00"),
@@ -201,6 +207,7 @@ export const dummyEventArray = [
     // September 15th
     makeDummyEvent(
         5,
+        5,
         "이승기",
         new Date("2025-09-15T20:00:00"),
         new Date("2025-09-15T22:00:00"),
@@ -211,6 +218,7 @@ export const dummyEventArray = [
     // September 20th - Busy day with 4 events
     makeDummyEvent(
         6,
+        6,
         "에스파",
         new Date("2025-09-20T10:00:00"),
         new Date("2025-09-20T12:00:00"),
@@ -219,6 +227,7 @@ export const dummyEventArray = [
     ),
     makeDummyEvent(
         7,
+        7,
         "박보검",
         new Date("2025-09-20T14:30:00"),
         new Date("2025-09-20T16:00:00"),
@@ -226,6 +235,7 @@ export const dummyEventArray = [
         "드라마 촬영 후기 공유",
     ),
     makeDummyEvent(
+        8,
         12,
         "레드벨벳",
         new Date("2025-09-20T17:30:00"),
@@ -234,6 +244,7 @@ export const dummyEventArray = [
         "새 앨범 'Feel My Rhythm' 공개",
     ),
     makeDummyEvent(
+        9,
         13,
         "차은우",
         new Date("2025-09-20T20:00:00"),
@@ -244,6 +255,7 @@ export const dummyEventArray = [
     
     // September 25th - Multiple events
     makeDummyEvent(
+        10,
         9,
         "임영웅",
         new Date("2025-09-25T18:00:00"),
@@ -252,6 +264,7 @@ export const dummyEventArray = [
         "IM HERO 전국투어 서울 공연",
     ),
     makeDummyEvent(
+        11,
         10,
         "트와이스",
         new Date("2025-09-25T15:00:00"),
@@ -262,6 +275,7 @@ export const dummyEventArray = [
     
     // September 28th - Weekend events
     makeDummyEvent(
+        12,
         11,
         "강다니엘",
         new Date("2025-09-28T16:30:00"),
@@ -270,6 +284,7 @@ export const dummyEventArray = [
         "글로벌 팬들과의 화상 만남",
     ),
     makeDummyEvent(
+        13,
         14,
         "스트레이 키즈",
         new Date("2025-09-28T19:30:00"),
@@ -280,6 +295,7 @@ export const dummyEventArray = [
     
     // September 30th
     makeDummyEvent(
+        14,
         15,
         "송혜교",
         new Date("2025-09-30T14:00:00"),

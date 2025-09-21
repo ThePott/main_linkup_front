@@ -71,7 +71,7 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
         <Vstack className={className}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
             {eventArray.map((event) => (
-                <EventBox event={event} />
+                <EventBox key={event.id} event={event} />
             ))}
         </Vstack>
     );
