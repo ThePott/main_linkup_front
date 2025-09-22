@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { useBulkMutation } from "../../../package/commonServices/tanstackQueryVariants";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
@@ -6,6 +7,7 @@ import GridContainer from "../../../package/gridContainer/GridContainer";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -51,9 +53,20 @@ const AgencyModal = () => {
     const user = useLinkUpStore((state) => state.user);
     const setUser = useLinkUpStore((state) => state.setUser);
 
-    const { postMutation, putMutation, deleteMutation } = useBulkMutation(
-        "/api/companies/artists",
-    );
+    const postMutation = useMutation({
+        mutationFn: (body) => {
+            return axiosReturnsData("POST", "/api/companies/artists", body);
+        },
+    });
+    const putMutation = useMutation({
+        mutationFn: ({ body, id }) => {
+            return axiosReturnsData(
+                "PUT",
+                `/api/companies/artists/${id}`,
+                body,
+            );
+        },
+    });
 
     const handleDismiss = () => {
         setSelectedArtist(null);
@@ -80,7 +93,7 @@ const AgencyModal = () => {
         console.log({ event });
 
         const target = event.target;
-        const stage_name = target.artistName.value;
+        const stage_name = target.stage_name.value;
         const group_name = target.group_name.value;
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
@@ -97,14 +110,17 @@ const AgencyModal = () => {
             birthdate,
             artist_type,
             parent_group_id,
-            email: "whyneedthis@dont.understand",
-            body: "",
+            email: `${Date.now()}@dont.understand`,
         };
         console.log({ body });
         handleDismiss();
 
         if (selectedArtist) {
-            putMutation.mutate(body);
+            // HACK: birthdate도 소속사에서 처음부터 받아오면 아래 삭제해야
+            if (!birthdate) {
+                body.birthdate = "2025-01-01";
+            }
+            putMutation.mutate({ body, id: selectedArtist.id });
         } else {
             postMutation.mutate(body);
         }
