@@ -4,7 +4,7 @@ import CustomButton from "../../package/customButton/CustomButton.jsx";
 import { deleteAccount } from "./UserApi.js";
 
 const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
-    const [resultModal, setResultModal] = useState({
+  const [resultModal, setResultModal] = useState({
     open: false,
     message: "",
     onConfirm: null,
@@ -48,14 +48,24 @@ const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
         </div>
       </Modal>
 
-      {/* 결과 모달 (성공/실패 공통) */}
+      {/* 결과 모달 */}
       <Modal
         isOn={resultModal.open}
         onBackgroundClick={resultModal.onConfirm}
       >
         <h2>{resultModal.message}</h2>
-        <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-          <CustomButton color="MONO" shape="RECTANGLE" onClick={resultModal.onConfirm}>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <CustomButton
+            color="MONO"
+            shape="RECTANGLE"
+            onClick={resultModal.onConfirm}
+          >
             확인
           </CustomButton>
         </div>
