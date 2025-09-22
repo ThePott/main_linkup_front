@@ -6,25 +6,9 @@ const ModalContent = ({ children }) => {
         event.stopPropagation();
     };
     return (
-        <div
-            onClick={handleClick}
-            style={{
-                padding: "12px",
-                borderRadius: "6px",
-                backgroundColor: "var(--color-bg)",
-
-                minWidth: "500px",
-                maxWidth: "800px",
-                maxHeight: "800px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                boxShadow: "var(--drop-shadow-md)",
-            }}
-        >
+        <RoundBox padding="LG" onClick={handleClick}>
             {children}
-        </div>
+        </RoundBox>
     );
 };
 
