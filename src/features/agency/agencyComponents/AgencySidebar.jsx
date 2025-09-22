@@ -58,8 +58,8 @@ const AgencySidebar = () => {
     const groupArray = artistArray.filter(
         (artist) => artist.artist_type === "group",
     );
-    const indivisualArray = artistArray.filter(
-        (artist) => artist.artist_type === "indivisual",
+    const individualArray = artistArray.filter(
+        (artist) => artist.artist_type === "individual",
     );
 
     // const soloArtistArray = user.managingArtistArray.filter(
@@ -80,8 +80,8 @@ const AgencySidebar = () => {
             {groupArray.map((group) => (
                 <ArtistButton artist={group} />
             ))}
-            {indivisualArray.map((indivisual) => (
-                <ArtistButton artist={indivisual} />
+            {individualArray.map((individual) => (
+                <ArtistButton artist={individual} />
             ))}
             {/* {groupArtistEntryArray.map((entry) => ( */}
             {/*     <RoundBox */}
