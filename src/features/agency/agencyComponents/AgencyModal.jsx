@@ -73,7 +73,6 @@ const AgencyModal = () => {
     });
 
     const handleDismiss = () => {
-        setSelectedArtist(null);
         setIsModalOn(false);
     };
 

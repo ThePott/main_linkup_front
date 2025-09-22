@@ -22,12 +22,11 @@ const ArtistButton = ({ artist }) => {
     const name = artist.stage_name ?? artist.group_name;
 
     const handleClick = () => {
-        console.log({ artist });
+        setSelectedArtist(artist);
     };
 
     const handleDoubleClick = () => {
         setIsModalOn(true);
-        setSelectedArtist(artist);
     };
 
     return (
@@ -43,6 +42,9 @@ const ArtistButton = ({ artist }) => {
 
 const AgencySidebar = () => {
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
+    const setSelectedArtist = useLinkUpStore(
+        (state) => state.setSelectedArtist,
+    );
     const artistArray = useLinkUpStore((state) => state.artistArray);
     const groupArray = artistArray.filter(
         (artist) => artist.artist_type === "group",
@@ -52,13 +54,17 @@ const AgencySidebar = () => {
     );
 
     const handleAdd = () => {
+        setSelectedArtist(null);
         setIsModalOn(true);
     };
 
     return (
         <Vstack className={styles.sidebar}>
             {groupArray.map((group) => (
-                <ArtistButton key={group.group_name} artist={group} />
+                <ArtistButton
+                    key={`${group.group_name}__${group.stage_name}`}
+                    artist={group}
+                />
             ))}
             {individualArray.map((individual) => (
                 <ArtistButton key={individual.stage_name} artist={individual} />
