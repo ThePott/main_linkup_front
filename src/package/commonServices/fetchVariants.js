@@ -10,6 +10,9 @@ export const getThenLog = (url, callback, access_token) => {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            if (!callback) {
+                return;
+            }
             callback(data);
         })
         .catch((error) => console.error("Error:", error));
@@ -28,6 +31,9 @@ export const postThenLog = (url, body, callback) => {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            if (!callback) {
+                return;
+            }
             callback(data);
         })
         .catch((error) => console.error("Error:", error));

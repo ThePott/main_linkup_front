@@ -25,7 +25,7 @@ const postEmailVerification = () =>
     postThenLog(`${baseURL}/api/auth/send-verification-email`, {
         email: "nusilite@gmail.com",
     });
-const postLogin = (callback) =>
+const postFanLogin = (callback) =>
     postThenLog(
         `${baseURL}/api/auth/login`,
         {
@@ -34,6 +34,16 @@ const postLogin = (callback) =>
         },
         callback,
     );
+const postCompanyLogin = (callback) =>
+    postThenLog(
+        `${baseURL}/api/auth/login`,
+        {
+            email: "sm_dummy@company.com",
+            password: "company123!",
+        },
+        callback,
+    );
+const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
 
 const ThePottApiTestPage = () => {
     const [accessToken, setAccessToken] = useState(null);
@@ -41,6 +51,15 @@ const ThePottApiTestPage = () => {
 
     const getMe = (callback) =>
         getThenLog(`${baseURL}/api/auth/me`, callback, accessToken);
+    const getFanSubscription = (callback) =>
+        getThenLog(`${baseURL}/api/subscriptions`, callback, accessToken);
+    const getEvents = (callback) =>
+        getThenLog(
+            // `${baseURL}/events/?artist_parent_group=1`,
+            `${baseURL}/events/`,
+            callback,
+            accessToken,
+        );
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
@@ -48,6 +67,18 @@ const ThePottApiTestPage = () => {
 
     const callbackMe = (data) => {
         setUser(data);
+    };
+    const callbackEvents = (data) => {
+        console.log({ data });
+        debugger;
+    };
+    const callbackSubscriptions = (data) => {
+        console.log({ data });
+        debugger;
+    };
+    const callbackIdol = (data) => {
+        console.log({ data });
+        debugger;
     };
 
     return (
@@ -62,13 +93,32 @@ const ThePottApiTestPage = () => {
                     <CustomButton onClick={postEmailVerification}>
                         send email verification
                     </CustomButton>
-                    <CustomButton onClick={() => postLogin(callbackLogin)}>
-                        <p>login</p>
+                    <CustomButton onClick={() => postFanLogin(callbackLogin)}>
+                        <p>fan login</p>
+                        <p>{accessToken}</p>
+                    </CustomButton>
+                    <CustomButton
+                        onClick={() => postCompanyLogin(callbackLogin)}
+                    >
+                        <p>company login</p>
                         <p>{accessToken}</p>
                     </CustomButton>
                     <CustomButton onClick={() => getMe(callbackMe)}>
                         <p>get me</p>
                         <p>{JSON.stringify(user)}</p>
+                    </CustomButton>
+                    <CustomButton onClick={() => getEvents(callbackEvents)}>
+                        <p>get events</p>
+                    </CustomButton>
+                    <CustomButton
+                        onClick={() =>
+                            getFanSubscription(callbackSubscriptions)
+                        }
+                    >
+                        <p>get subscription</p>
+                    </CustomButton>
+                    <CustomButton onClick={() => getIdol(callbackIdol)}>
+                        <p>get idol</p>
                     </CustomButton>
                 </Vstack>
             </RoundBoxGlobalShadow>
