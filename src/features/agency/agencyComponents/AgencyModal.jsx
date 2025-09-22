@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { useBulkMutation } from "../../../package/commonServices/tanstackQueryVariants";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
 import FileInput from "../../../package/FileInput";
@@ -67,6 +66,11 @@ const AgencyModal = () => {
             );
         },
     });
+    const deleteMutation = useMutation({
+        mutationFn: (id) => {
+            return axiosReturnsData("DELETE", `/api/companies/artists/${id}`);
+        },
+    });
 
     const handleDismiss = () => {
         setSelectedArtist(null);
@@ -80,12 +84,13 @@ const AgencyModal = () => {
             );
         }
 
-        const newUser = { ...user };
-        newUser.managingArtistArray = newUser.managingArtistArray.filter(
-            (artist) => artist.id !== selectedArtist.id,
-        );
-        setUser(newUser);
-        handleDismiss();
+        deleteMutation.mutate(selectedArtist.id);
+        // const newUser = { ...user };
+        // newUser.managingArtistArray = newUser.managingArtistArray.filter(
+        //     (artist) => artist.id !== selectedArtist.id,
+        // );
+        // setUser(newUser);
+        // handleDismiss();
     };
 
     const handleSubmit = (event) => {
