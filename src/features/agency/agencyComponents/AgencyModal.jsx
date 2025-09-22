@@ -1,3 +1,4 @@
+import { useBulkMutation } from "../../../package/commonServices/tanstackQueryVariants";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
 import FileInput from "../../../package/FileInput";
@@ -53,9 +54,12 @@ const AgencyModal = () => {
     const setSelectedArtist = useLinkUpStore(
         (state) => state.setSelectedArtist,
     );
-
     const user = useLinkUpStore((state) => state.user);
     const setUser = useLinkUpStore((state) => state.setUser);
+
+    const { postMutation, putMutation, deleteMutation } = useBulkMutation(
+        "/api/companies/artists",
+    );
 
     const handleDismiss = () => {
         setSelectedArtist(null);
@@ -82,49 +86,54 @@ const AgencyModal = () => {
         console.log({ event });
 
         const target = event.target;
-        const name = target.artistName.value;
+        const stage_name = target.artistName.value;
         const group_name = target.group_name.value;
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
+        const artist_type = group_name ? "group" : "individual";
+        const parent_group_id = 0;
         // const img_face = target.img_face.value;
         // const img_torso = target.img_torso.value;
         // const img_banner = target.img_banner.value;
 
-        const groupInfo = group_name
-            ? { is_group: true, group_name }
-            : { is_group: false, group_name: undefined };
-
         const body = {
-            name,
-            ...groupInfo,
+            stage_name,
+            group_name,
             debut_date,
             birthdate,
-            // img_face,
-            // img_torso,
-            // img_banner,
+            artist_type,
+            parent_group_id,
+            email: "whyneedthis@dont.understand",
+            body: "",
         };
         console.log({ body });
         handleDismiss();
 
-        const newUser = { ...user };
-        if (!selectedArtist) {
-            // TODO: POST 요청 보내고서 해당 객체 받아와야
-            // 그래야 이미지 url 적용하고 id도 스토어에 저정함
-            newUser.managingArtistArray.push({
-                id: Date.now(),
-                ...body,
-            });
-            // TODO: 실제로는 store에 추가하기 전에 reponse에 맞게 User 수정해야 함
+        if (selectedArtist) {
+            putMutation.mutate(body);
         } else {
-            // TODO: 실제론 PUT 요청도 같이 보내야 함
-            newUser.managingArtistArray = newUser.managingArtistArray.map(
-                (el) =>
-                    el.id === selectedArtist.id
-                        ? { ...selectedArtist, ...body }
-                        : el,
-            );
+            postMutation.mutate(body);
         }
-        setUser(newUser);
+
+        // const newUser = { ...user };
+        // if (!selectedArtist) {
+        //     // TODO: POST 요청 보내고서 해당 객체 받아와야
+        //     // 그래야 이미지 url 적용하고 id도 스토어에 저정함
+        //     newUser.managingArtistArray.push({
+        //         id: Date.now(),
+        //         ...body,
+        //     });
+        //     // TODO: 실제로는 store에 추가하기 전에 reponse에 맞게 User 수정해야 함
+        // } else {
+        //     // TODO: 실제론 PUT 요청도 같이 보내야 함
+        //     newUser.managingArtistArray = newUser.managingArtistArray.map(
+        //         (el) =>
+        //             el.id === selectedArtist.id
+        //                 ? { ...selectedArtist, ...body }
+        //                 : el,
+        //     );
+        // }
+        // setUser(newUser);
     };
 
     const buttonLabel = selectedArtist ? "수정" : "추가";

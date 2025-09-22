@@ -17,8 +17,6 @@ axiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
-export default axiosInstance;
-
 /**
  * @param {"GET" | "POST" | "PUT" | "PATCH" | "DELETE"} method
  * @param {any} body
