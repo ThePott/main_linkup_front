@@ -31,10 +31,15 @@ export const useAgencyCalendar = () => {
         queryFn: async () => {
             const data = await axiosReturnsData(
                 "GET",
-                `/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
+                `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
             );
             debugger;
-            useLinkUpStore.setState({ eventArray: data });
+            const eventArray = data.map((event) => ({
+                ...event,
+                start_time: new Date(event.start_time),
+                end_time: new Date(event.end_time),
+            }));
+            useLinkUpStore.setState({ eventArray });
         },
         refetchOnWindowFocus: false,
         enabled: false,

@@ -65,6 +65,12 @@ const ThePottApiTestPage = () => {
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
     const getCompaniesEvents = (callback) =>
         getThenLog(`${baseURL}/api/companies/events`, callback, accessToken);
+    const getCompaniesEventsAespa = (callback) =>
+        getThenLog(
+            `${baseURL}/api/companies/events?artist_id=6`,
+            callback,
+            accessToken,
+        );
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
@@ -126,6 +132,11 @@ const ThePottApiTestPage = () => {
                         </CustomButton>
                         <CustomButton
                             onClick={() => getCompaniesEvents(callbackLog)}
+                        >
+                            <p>get companies events</p>
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => getCompaniesEventsAespa(callbackLog)}
                         >
                             <p>get companies events</p>
                         </CustomButton>

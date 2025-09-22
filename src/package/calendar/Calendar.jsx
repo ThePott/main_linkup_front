@@ -11,7 +11,7 @@ const formatToYmd = (date) => format(date, "yyyyMMdd");
 
 const groupEventArrayBySttime = (eventArray) => {
     const groupedEvent = Object.groupBy(eventArray, (event) =>
-        formatToYmd(event.sttime),
+        formatToYmd(event.start_time),
     );
     return groupedEvent;
 };
