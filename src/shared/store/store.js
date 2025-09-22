@@ -35,6 +35,11 @@ const useLinkUpStore = create()(
             setEventArray(eventArray) {
                 set({ eventArray });
             },
+
+            artistArray: [],
+            setArtistArray(artistArray) {
+                set({ artistArray });
+            },
         }),
         {
             name: "linkup-session-storage", // Name for your storage item

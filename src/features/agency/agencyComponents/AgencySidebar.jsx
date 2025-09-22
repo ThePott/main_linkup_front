@@ -35,60 +35,62 @@ const ArtistButton = ({ artist }) => {
 
 const AgencySidebar = () => {
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
-    const user = useLinkUpStore((state) => state.user);
-    if (!user) {
-        console.error("---- null user");
-        return null;
-    }
+    // const user = useLinkUpStore((state) => state.user);
+    // if (!user) {
+    //     console.error("---- null user");
+    //     return null;
+    // }
+    //
+    // if (user.user_type !== "company") {
+    //     console.log("---- not admin");
+    //     return null;
+    //     // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
+    // }
+    const artistArray = useLinkUpStore((state) => state.artistArray);
 
-    if (user.role !== "admin") {
-        console.log("---- not admin");
-        return null;
-        // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
-    }
-
-    const soloArtistArray = user.managingArtistArray.filter(
-        (artist) => !artist.is_group,
-    );
-    const groupArtistDict = Object.groupBy(
-        user.managingArtistArray.filter((artist) => artist.is_group),
-        ({ group_name }) => group_name,
-    );
-    const groupArtistEntryArray = Object.entries(groupArtistDict);
-
-    const handleAdd = () => {
-        setIsModalOn(true);
-    };
+    // const soloArtistArray = user.managingArtistArray.filter(
+    //     (artist) => !artist.is_group,
+    // );
+    // const groupArtistDict = Object.groupBy(
+    //     user.managingArtistArray.filter((artist) => artist.is_group),
+    //     ({ group_name }) => group_name,
+    // );
+    // const groupArtistEntryArray = Object.entries(groupArtistDict);
+    //
+    // const handleAdd = () => {
+    //     setIsModalOn(true);
+    // };
 
     return (
         <Vstack className={styles.sidebar}>
-            {groupArtistEntryArray.map((entry) => (
-                <RoundBox
-                    key={entry[0]}
-                    style={{ textAlign: "start", margin: 0 }}
-                    padding="MD"
-                >
-                    <Vstack gap="none">
-                        <ArtistLabel>{entry[0]}</ArtistLabel>
-                        <Vstack>
-                            {entry[1].map((artist) => (
-                                <ArtistButton key={artist.id} artist={artist} />
-                            ))}
-                        </Vstack>
-                    </Vstack>
-                </RoundBox>
-            ))}
-            <Vstack gap="none">
-                <GroupLabel>Solo Artists</GroupLabel>
-                <Vstack>
-                    {soloArtistArray.map((artist) => (
-                        <ArtistButton key={artist.id} artist={artist} />
-                    ))}
-                </Vstack>
-            </Vstack>
-            <CustomButton isOn={true} onClick={handleAdd}>
-                추가
-            </CustomButton>
+            {JSON.stringify(artistArray)}
+            {/* {groupArtistEntryArray.map((entry) => ( */}
+            {/*     <RoundBox */}
+            {/*         key={entry[0]} */}
+            {/*         style={{ textAlign: "start", margin: 0 }} */}
+            {/*         padding="MD" */}
+            {/*     > */}
+            {/*         <Vstack gap="none"> */}
+            {/*             <ArtistLabel>{entry[0]}</ArtistLabel> */}
+            {/*             <Vstack> */}
+            {/*                 {entry[1].map((artist) => ( */}
+            {/*                     <ArtistButton key={artist.id} artist={artist} /> */}
+            {/*                 ))} */}
+            {/*             </Vstack> */}
+            {/*         </Vstack> */}
+            {/*     </RoundBox> */}
+            {/* ))} */}
+            {/* <Vstack gap="none"> */}
+            {/*     <GroupLabel>Solo Artists</GroupLabel> */}
+            {/*     <Vstack> */}
+            {/*         {soloArtistArray.map((artist) => ( */}
+            {/*             <ArtistButton key={artist.id} artist={artist} /> */}
+            {/*         ))} */}
+            {/*     </Vstack> */}
+            {/* </Vstack> */}
+            {/* <CustomButton isOn={true} onClick={handleAdd}> */}
+            {/*     추가 */}
+            {/* </CustomButton> */}
         </Vstack>
     );
 };
