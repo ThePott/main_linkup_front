@@ -1,0 +1,30 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.recommendedContainer {
+    display: flex;
+    gap: 1rem;
+}
+
+.groupMemberRow {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+}
+
+.clickable {
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.scheduleList {
+    display: flex;
+    lex-direction: column;
+    gap: 1rem;
+}
+
+.groupBlock {
+    margin-bottom: 2rem;
+}
