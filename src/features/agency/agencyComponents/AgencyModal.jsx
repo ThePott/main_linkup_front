@@ -8,15 +8,15 @@ import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
 
 const inputFieldInfoArray = [
-    ["아티스트 명", "artistName", "text", "name"],
-    ["그룹 이름", "group_name", "text", "group_name"],
-    ["데뷔일", "debut_date", "date", "debut_date"],
-    ["생일", "birthdate", "date", "birthdate"],
+    ["아티스트 명", "stage_name", "text"],
+    ["그룹 이름", "group_name", "text"],
+    ["데뷔일", "debut_date", "date"],
+    ["생일", "birthdate", "date"],
 ];
 const fileInputFieldInfoArray = [
-    ["얼굴 사진", "img_face", "file", "img_face"],
-    ["상반신 사진", "img_torso", "file", "img_torso"],
-    ["배너 사진", "img_banner", "file", "img_banner"],
+    ["얼굴 사진", "img_face", "file"],
+    ["상반신 사진", "img_torso", "file"],
+    ["배너 사진", "img_banner", "file"],
 ];
 
 const makeDefaultValue = (selectedArtist, info) => {
@@ -24,14 +24,8 @@ const makeDefaultValue = (selectedArtist, info) => {
         return undefined;
     }
 
-    const artistProp = selectedArtist[info[3]];
-
-    if (info[2] !== "date") {
-        return artistProp;
-    }
-
-    const ymdForInput = `${artistProp.slice(0, 4)}-${artistProp.slice(4, 6)}-${artistProp.slice(6, 8)}`;
-    return ymdForInput;
+    const artistProp = selectedArtist[info[1]];
+    return artistProp ?? undefined;
 };
 
 const ArtistInput = ({ selectedArtist, info }) => {

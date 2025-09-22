@@ -43,17 +43,6 @@ const ArtistButton = ({ artist }) => {
 
 const AgencySidebar = () => {
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
-    // const user = useLinkUpStore((state) => state.user);
-    // if (!user) {
-    //     console.error("---- null user");
-    //     return null;
-    // }
-    //
-    // if (user.user_type !== "company") {
-    //     console.log("---- not admin");
-    //     return null;
-    //     // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
-    // }
     const artistArray = useLinkUpStore((state) => state.artistArray);
     const groupArray = artistArray.filter(
         (artist) => artist.artist_type === "group",
@@ -62,15 +51,6 @@ const AgencySidebar = () => {
         (artist) => artist.artist_type === "individual",
     );
 
-    // const soloArtistArray = user.managingArtistArray.filter(
-    //     (artist) => !artist.is_group,
-    // );
-    // const groupArtistDict = Object.groupBy(
-    //     user.managingArtistArray.filter((artist) => artist.is_group),
-    //     ({ group_name }) => group_name,
-    // );
-    // const groupArtistEntryArray = Object.entries(groupArtistDict);
-    //
     const handleAdd = () => {
         setIsModalOn(true);
     };
@@ -78,10 +58,10 @@ const AgencySidebar = () => {
     return (
         <Vstack className={styles.sidebar}>
             {groupArray.map((group) => (
-                <ArtistButton artist={group} />
+                <ArtistButton key={group.group_name} artist={group} />
             ))}
             {individualArray.map((individual) => (
-                <ArtistButton artist={individual} />
+                <ArtistButton key={individual.stage_name} artist={individual} />
             ))}
             {/* {groupArtistEntryArray.map((entry) => ( */}
             {/*     <RoundBox */}
