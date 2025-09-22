@@ -25,7 +25,6 @@ const MyPage = () => {
   const accessToken = useLinkUpStore((state) => state.access_token);
   const storeUser = useLinkUpStore((state) => state.user);
 
-  // 로그인 정보가 store에 있는 경우 바로 표시
   useEffect(() => {
     if (!accessToken) return;
 
@@ -38,7 +37,6 @@ const MyPage = () => {
       }
     };
 
-    // store에 user가 없으면 서버에서 가져오기, 있으면 바로 사용
     if (!storeUser) {
       fetchUserInfo();
     } else {
@@ -46,15 +44,9 @@ const MyPage = () => {
     }
   }, [accessToken, storeUser]);
 
-  if (!accessToken) {
-    return <div>로그인이 필요합니다.</div>;
-  }
+  if (!accessToken) return <div>로그인이 필요합니다.</div>;
+  if (!userInfo) return <div>로딩 중...</div>;
 
-  if (!userInfo) {
-    return <div>로딩 중...</div>;
-  }
-
-  // 통계 (나중에 API 연동 가능)
   const userStats = {
     following: userInfo.following ?? 0,
     likes: userInfo.likes ?? 0,
@@ -85,7 +77,6 @@ const MyPage = () => {
       {/* 본문 영역 */}
       <div className="mypage-container">
         <div className="mypage-content">
-          {/* 카드 피드 */}
           <div className="card-grid">
             {cardData.map((card) => (
               <RoundBox key={card.id}>{card.title}</RoundBox>
@@ -94,7 +85,7 @@ const MyPage = () => {
         </div>
 
         {/* 오른쪽 사이드바 */}
-        <Sidebar />
+        <Sidebar setIsModalOpen={setIsModalOpen} />
       </div>
 
       {/* 회원 탈퇴 모달 */}
