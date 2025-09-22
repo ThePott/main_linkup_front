@@ -2,6 +2,7 @@ import useLinkUpStore from "../../shared/store/store";
 import { apiAuthMe } from "../../shared/services/linkupApi";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
 
 const useGetMe = () => {
     const access_token = useLinkUpStore((state) => state.access_token);
@@ -35,8 +36,21 @@ const useGetMe = () => {
     }, [user]);
 };
 
-const useParseTokenFromRedirectedUrl = () => {};
+const useParseTokenFromRedirectedUrl = () => {
+    const [searchParams, _setSearchParams] = useSearchParams();
+    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
+
+    useEffect(() => {
+        const access_token = searchParams.get("access_token");
+        if (!access_token) {
+            return;
+        }
+        console.log({ access_token });
+        setAccessToken(access_token);
+    }, []);
+};
 
 export const useFront = () => {
     useGetMe();
+    useParseTokenFromRedirectedUrl();
 };
