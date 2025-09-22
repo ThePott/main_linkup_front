@@ -1,5 +1,5 @@
 import axios from "axios";
-import useLinkUpStore from "../store/store";
+import useLinkUpStore from "../../shared/store/store";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,

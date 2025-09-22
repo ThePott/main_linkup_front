@@ -1,11 +1,12 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCompaniesArtists } from "./agencyApi";
 import { useEffect } from "react";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
+import useLinkUpStore from "../../../shared/store/store";
 
 export const useAgency = () => {
     // data is stored right after fetch
-    const { isLoading, error } = useQuery({
+    const { isPending, error } = useQuery({
         queryKey: ["companiesArtists"],
         queryFn: () => getCompaniesArtists(),
     });
@@ -19,30 +20,31 @@ export const useAgency = () => {
 
     return {
         error,
-        isLoading,
+        isPending,
     };
 };
 
-export const useArtistSidebar = () => {
-    const postArtistMutation = useMutation({
-        mutationFn: (body) => {
-            return axiosReturnsData("POST", "/api/companies/artists", body);
+export const useAgencyCalendar = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const { isPending, error, refetch } = useQuery({
+        queryKey: ["companiesEvent", selectedArtist?.id ?? -1],
+        queryFn: async () => {
+            const data = await axiosReturnsData(
+                "GET",
+                `/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
+            );
+            debugger;
+            useLinkUpStore.setState({ eventArray: data });
         },
+        refetchOnWindowFocus: false,
+        enabled: false,
     });
-    const putArtistMutation = useMutation({
-        mutationFn: (body) => {
-            return axiosReturnsData("PUT", "/api/companies/artists", body);
-        },
-    });
-    const deleteArtistMutation = useMutation({
-        mutationFn: (body) => {
-            return axiosReturnsData("DELETE", "/api/companies/artists", body);
-        },
-    });
+    useEffect(() => {
+        if (!selectedArtist) {
+            return;
+        }
+        refetch();
+    }, [selectedArtist]);
 
-    return {
-        postArtistMutation,
-        putArtistMutation,
-        deleteArtistMutation,
-    };
+    return { isPending, error };
 };
