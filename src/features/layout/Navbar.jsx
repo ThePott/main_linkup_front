@@ -5,7 +5,7 @@ import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/dummyMijin";
-
+import useRealLinkupStore from "../../shared/store/store";
 const SideSection = ({ justify, children, ...props }) => {
     return (
         <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -15,36 +15,47 @@ const SideSection = ({ justify, children, ...props }) => {
 };
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const groupArray = useLinkUpStore((state) => state.groupArray);
-  const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
-  const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
-
-  const handleSearch = (keyword) => {
-    const trimmed = keyword.trim();
-    if (trimmed === "") {
-      setSearchResultArray([]);
-      setSearchStatus("fail");
-      navigate("/test/mijin");
-      return;
-    }
-
-    const filtered = groupArray.filter(
-      (g) =>
-        g.name.includes(trimmed) ||
-        g.memberArray.some((m) => m.name.includes(trimmed))
+    const navigate = useNavigate();
+    const groupArray = useLinkUpStore((state) => state.groupArray);
+    const setSearchResultArray = useLinkUpStore(
+        (state) => state.setSearchResultArray,
     );
+    const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
 
-    setSearchResultArray(filtered);
+    const user = useRealLinkupStore((state) => state.user);
+    const setUser = useRealLinkupStore((state) => state.setUser);
+    const setAccessToken = useRealLinkupStore((state) => state.setAccessToken);
 
-    if (filtered.length === 0) {
-      setSearchStatus("fail");
-    } else {
-      setSearchStatus("success");
-    }
-    navigate("/test/mijin");
-  };
+    const handleSearch = (keyword) => {
+        const trimmed = keyword.trim();
+        if (trimmed === "") {
+            setSearchResultArray([]);
+            setSearchStatus("fail");
+            navigate("/test/mijin");
+            return;
+        }
 
+        const filtered = groupArray.filter(
+            (g) =>
+                g.name.includes(trimmed) ||
+                g.memberArray.some((m) => m.name.includes(trimmed)),
+        );
+
+        setSearchResultArray(filtered);
+
+        if (filtered.length === 0) {
+            setSearchStatus("fail");
+        } else {
+            setSearchStatus("success");
+        }
+        navigate("/test/mijin");
+    };
+
+    const handleLogout = () => {
+        setUser(null);
+        setAccessToken(null);
+        // TODO: logout api 추가해야
+    };
 
     return (
         <Hstack justify="center" items="center">
@@ -66,12 +77,21 @@ const Navbar = () => {
                 />
 
                 <SideSection justify="end">
-                    <CustomButton onClick={() => navigate("/mypage")}>
-                        마이페이지
-                    </CustomButton>
-                    <CustomButton onClick={() => navigate("/login")}>
-                        로그인
-                    </CustomButton>
+                    {user && (
+                        <>
+                            <CustomButton onClick={() => navigate("/mypage")}>
+                                마이페이지
+                            </CustomButton>
+                            <CustomButton onClick={handleLogout}>
+                                로그아웃
+                            </CustomButton>
+                        </>
+                    )}
+                    {!user && (
+                        <CustomButton onClick={() => navigate("/login")}>
+                            로그인
+                        </CustomButton>
+                    )}
                 </SideSection>
             </Hstack>
         </Hstack>
