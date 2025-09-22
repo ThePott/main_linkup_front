@@ -1,8 +1,8 @@
 import styles from "./AgencySidebar.module.css";
-import CustomButton from "../../package/customButton/CustomButton";
-import { Vstack } from "../../package/layout";
-import RoundBox from "../../package/RoundBox";
-import useLinkUpStore from "../../shared/store/store";
+import CustomButton from "../../../package/customButton/CustomButton";
+import { Vstack } from "../../../package/layout";
+import RoundBox from "../../../package/RoundBox";
+import useLinkUpStore from "../../../shared/store/store";
 
 const GroupLabel = ({ children }) => {
     return <h2 className={styles.groupLabel}>{children}</h2>;

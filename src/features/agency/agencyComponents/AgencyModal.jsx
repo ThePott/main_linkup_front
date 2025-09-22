@@ -1,10 +1,10 @@
-import CustomButton from "../../package/customButton/CustomButton";
-import CustomInput from "../../package/CustomInput";
-import FileInput from "../../package/FileInput";
-import GridContainer from "../../package/gridContainer/GridContainer";
-import { Vstack } from "../../package/layout";
-import Modal from "../../package/modal/Modal";
-import useLinkUpStore from "../../shared/store/store";
+import CustomButton from "../../../package/customButton/CustomButton";
+import CustomInput from "../../../package/CustomInput";
+import FileInput from "../../../package/FileInput";
+import GridContainer from "../../../package/gridContainer/GridContainer";
+import { Vstack } from "../../../package/layout";
+import Modal from "../../../package/modal/Modal";
+import useLinkUpStore from "../../../shared/store/store";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "artistName", "text", "name"],
