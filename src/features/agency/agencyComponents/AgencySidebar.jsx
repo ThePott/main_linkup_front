@@ -3,6 +3,7 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import { Vstack } from "../../../package/layout";
 import RoundBox from "../../../package/RoundBox";
 import useLinkUpStore from "../../../shared/store/store";
+import { artistArray } from "../../../shared/store/dummyThepott";
 
 const GroupLabel = ({ children }) => {
     return <h2 className={styles.groupLabel}>{children}</h2>;
@@ -17,6 +18,8 @@ const ArtistButton = ({ artist }) => {
         (state) => state.setSelectedArtist,
     );
 
+    const name = artist.stage_name ?? artist.group_name;
+
     const handleClick = () => {
         console.log({ artist });
     };
@@ -28,7 +31,7 @@ const ArtistButton = ({ artist }) => {
 
     return (
         <CustomButton onClick={handleClick} onDoubleClick={handleDoubleClick}>
-            <ArtistLabel>{artist.name}</ArtistLabel>
+            <ArtistLabel>{name}</ArtistLabel>
         </CustomButton>
     );
 };
@@ -47,6 +50,12 @@ const AgencySidebar = () => {
     //     // throw new Error("---- ERROR OCCURRED: 소속사 말고는 접근이 불가능해야 합니다")
     // }
     const artistArray = useLinkUpStore((state) => state.artistArray);
+    const groupArray = artistArray.filter(
+        (artist) => artist.artist_type === "group",
+    );
+    const indivisualArray = artistArray.filter(
+        (artist) => artist.artist_type === "indivisual",
+    );
 
     // const soloArtistArray = user.managingArtistArray.filter(
     //     (artist) => !artist.is_group,
@@ -63,7 +72,12 @@ const AgencySidebar = () => {
 
     return (
         <Vstack className={styles.sidebar}>
-            {JSON.stringify(artistArray)}
+            {groupArray.map((group) => (
+                <ArtistButton artist={group} />
+            ))}
+            {indivisualArray.map((indivisual) => (
+                <ArtistButton artist={indivisual} />
+            ))}
             {/* {groupArtistEntryArray.map((entry) => ( */}
             {/*     <RoundBox */}
             {/*         key={entry[0]} */}
