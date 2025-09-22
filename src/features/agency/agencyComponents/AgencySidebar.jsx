@@ -1,15 +1,16 @@
 import styles from "./AgencySidebar.module.css";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { Vstack } from "../../../package/layout";
-import RoundBox from "../../../package/RoundBox";
 import useLinkUpStore from "../../../shared/store/store";
-import { artistArray } from "../../../shared/store/dummyThepott";
 
-const GroupLabel = ({ children }) => {
-    return <h2 className={styles.groupLabel}>{children}</h2>;
-};
-const ArtistLabel = ({ children }) => {
-    return <h2 className={styles.artistLabel}>{children}</h2>;
+const ArtistLabel = ({ artist_type, children }) => {
+    const style = {};
+    style["--text-align"] = artist_type === "group" ? "center" : "start";
+    return (
+        <p style={style} className={styles.artistLabel}>
+            {children}
+        </p>
+    );
 };
 
 const ArtistButton = ({ artist }) => {
@@ -30,7 +31,11 @@ const ArtistButton = ({ artist }) => {
     };
 
     return (
-        <CustomButton onClick={handleClick} onDoubleClick={handleDoubleClick}>
+        <CustomButton
+            className={styles.artistButton}
+            onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
+        >
             <ArtistLabel>{name}</ArtistLabel>
         </CustomButton>
     );
@@ -66,9 +71,9 @@ const AgencySidebar = () => {
     // );
     // const groupArtistEntryArray = Object.entries(groupArtistDict);
     //
-    // const handleAdd = () => {
-    //     setIsModalOn(true);
-    // };
+    const handleAdd = () => {
+        setIsModalOn(true);
+    };
 
     return (
         <Vstack className={styles.sidebar}>
@@ -102,9 +107,9 @@ const AgencySidebar = () => {
             {/*         ))} */}
             {/*     </Vstack> */}
             {/* </Vstack> */}
-            {/* <CustomButton isOn={true} onClick={handleAdd}> */}
-            {/*     추가 */}
-            {/* </CustomButton> */}
+            <CustomButton isOn={true} onClick={handleAdd}>
+                추가
+            </CustomButton>
         </Vstack>
     );
 };
