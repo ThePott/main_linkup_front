@@ -1,12 +1,24 @@
-import RecommendContent from "../../../features/front/recommend/RecommendContent";
-import TotalContent from "../../../features/front/total/TotalContent";
-import styles from "./HeeHaaTestPage.module.css";
+import { useState } from "react";
+import MypageContent from "../../../features/mypage/MypageContent";
+import mockData from "../../../shared/store/dummyHeehaa.json";
+import mockSubData from "../../../shared/store/dummy2Heehaa.json";
 
 const HeeHaaTestPage = () => {
+    const [fanPosting, setFanPosting] = useState(mockData);
+    const subscribeArray = mockSubData;
+
+    const [isOpen, setIsOpen] = useState(false);
+    const handleCreate = (data) => {
+        console.log(data);
+    };
+
     return (
         <>
-            {/* <RecommendContent /> */}
-            <TotalContent />
+            <MypageContent
+                post={fanPosting}
+                subscribeArray={subscribeArray}
+                onSubmit={handleCreate}
+            />
         </>
     );
 };
