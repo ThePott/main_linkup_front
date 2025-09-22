@@ -1,0 +1,28 @@
+.groupLabel {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+    transition-property: color;
+}
+.groupLabel:hover {
+    color: var(--color-vivid);
+}
+
+.artistLabel {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-muted);
+    transition-property: color;
+    text-align: end;
+}
+.artistLabel:hover {
+    color: var(--color-vivid);
+}
+
+.sidebar {
+    text-align: start;
+    height: 100%;
+    min-width: 300px;
+    flex-shrink: 0;
+    padding: var(--spacing-md);
+    overflow: scroll;
+}

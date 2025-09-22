@@ -1,27 +1,50 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-const useLinkUpStore = create((set, get) => ({
-    something: 1,
-    setSomething(diff) {
-        const state = get();
-        const newSomething = state.something + diff;
-        set({ something: newSomething });
-    },
+const useLinkUpStore = create()(
+    persist(
+        (set, get) => ({
+            something: 1,
+            setSomething(diff) {
+                const state = get();
+                const newSomething = state.something + diff;
+                set({ something: newSomething });
+            },
 
-    user: null,
-    setUser(user) {
-        set({ user });
-    },
+            access_token: null,
+            setAccessToken(access_token) {
+                set({ access_token });
+            },
 
-    isModalOn: false,
-    setIsModalOn(isModalOn) {
-        set({ isModalOn });
-    },
+            user: null,
+            setUser(user) {
+                set({ user });
+            },
 
-    selectedArtist: null,
-    setSelectedArtist(selectedArtist) {
-        set({ selectedArtist });
-    },
-}));
+            isModalOn: false,
+            setIsModalOn(isModalOn) {
+                set({ isModalOn });
+            },
+
+            selectedArtist: null,
+            setSelectedArtist(selectedArtist) {
+                set({ selectedArtist });
+            },
+
+            eventArray: [],
+            setEventArray(eventArray) {
+                set({ eventArray });
+            },
+        }),
+        {
+            name: "linkup-session-storage", // Name for your storage item
+            storage: createJSONStorage(() => sessionStorage),
+            partialize: (state) => ({
+                access_token: state.access_token,
+                user: state.user,
+            }),
+        },
+    ),
+);
 
 export default useLinkUpStore;

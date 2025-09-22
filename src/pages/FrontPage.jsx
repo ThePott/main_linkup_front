@@ -4,10 +4,13 @@ import CustomButton from "../package/customButton/CustomButton";
 import RecommendContent from "../features/front/recommend/RecommendContent";
 import TotalContent from "../features/front/total/TotalContent";
 import SearchContent from "../features/front/search/SearchContent";
+import { useFront } from "../features/front/useFront";
+import useLinkUpStore from "../shared/store/store";
 
 /** 임시로 각 콘텐트로 이동시키게 만들었습니다. */
 const FrontPage = () => {
     const [whatToShow, setWhatToShow] = useState(null);
+    useFront();
 
     if (!whatToShow) {
         return (

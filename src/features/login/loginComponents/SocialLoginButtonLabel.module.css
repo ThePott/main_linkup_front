@@ -1,0 +1,8 @@
+.socialLoginButtonLabel {
+    flex-grow: 1;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color);
+}
+.socialLoginButton {
+    background-color: var(--bg);
+}
