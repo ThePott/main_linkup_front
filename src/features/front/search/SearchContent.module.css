@@ -21,7 +21,7 @@
 
 .scheduleList {
     display: flex;
-    lex-direction: column;
+    flex-direction: column;
     gap: 1rem;
 }
 

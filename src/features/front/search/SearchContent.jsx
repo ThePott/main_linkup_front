@@ -1,16 +1,45 @@
+import { useEffect } from "react";
 import useLinkUpStore from "../../../shared/store/dummyMijin.js";
 import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostCard from "../../../shared/FanpostCard.jsx";
-import styles from "./SearchContent.module.css"; 
+import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard.jsx"; 
+import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
-    const searchStatus = useLinkUpStore((state) => state.searchStatus);
-    const recommendedGroupArray = useLinkUpStore(
-        (state) => state.recommendedGroupArray
-    );
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const navigate = useNavigate();
+
+    const searchStatus = useLinkUpStore((state) => state.searchStatus);
+    const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
+
+    const groupArray = useLinkUpStore((state) => state.groupArray);
+    const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
+
+    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
+    const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
+
+    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                setSearchStatus("loading");
+                const res = await fetch("http://3.35.210.2:8000/api/idol");
+                const data = await res.json();
+                console.log("API 호출 성공", data);
+
+                const artists = data.artists || [];
+                setGroupArray(artists);
+                setRecommendedGroupArray(artists.slice(0, 2));
+                setSearchStatus("success");
+            } catch (err) {
+                console.error("API 호출 에러:", err);
+                setSearchStatus("fail");
+            }
+        };
+
+        fetchGroups();
+    }, [setGroupArray, setRecommendedGroupArray, setSearchStatus]);
 
     // 검색 실패 화면
     if (searchStatus === "fail") {
@@ -26,7 +55,7 @@ const SearchContent = () => {
                             className={styles.clickable}
                             onClick={() => navigate(`/detail/group/${group.id}`)}
                         >
-                            <img src={group.imgFace} alt={group.name} width={80} />
+                            <ArtistCard artist={group} type="FACE" imgWidth={80} />
                             <div>{group.name}</div>
                         </RoundBox>
                     ))}
@@ -34,25 +63,23 @@ const SearchContent = () => {
             </div>
         );
     }
-    const groupArrayToShow =
-        searchResultArray.length > 0
-            ? searchResultArray
-            : useLinkUpStore.getState().groupArray;
 
-    // 검색 성공 화면
+    const groupArrayToShow = searchResultArray.length > 0 ? searchResultArray : groupArray;
+
+// 검색 성공 화면
     return (
         <div className={styles.container}>
             <h2>검색 결과</h2>
 
             {groupArrayToShow.map((group) => {
-                // 그룹 + 멤버 일정 합치기
+
                 const combinedSchedules = [
-                    ...group.groupScheduleArray.map((s) => ({
+                    ...(group.groupScheduleArray || []).map((s) => ({
                         ...s,
                         owner: group.name,
                     })),
-                    ...group.memberArray.flatMap((member) =>
-                        member.scheduleArray.map((ms) => ({
+                    ...(group.memberArray || []).flatMap((member) =>
+                        (member.scheduleArray || []).map((ms) => ({
                             ...ms,
                             owner: member.name,
                         }))
@@ -61,32 +88,37 @@ const SearchContent = () => {
 
                 const topSchedules = combinedSchedules.slice(0, 3);
 
-
                 return (
                     <div key={group.id} className={styles.groupBlock}>
-                        {/* 그룹 + 멤버 */}
                         <div className={styles.groupMemberRow}>
-                            <RoundBox
+                            <div
                                 className={styles.clickable}
                                 onClick={() => navigate(`/detail/group/${group.id}`)}
                             >
-                                <img src={group.imgFace} alt={group.name} width={80} />
+                                {/* 그룹 */}
+                                <CustomImageCard 
+                                    url={group.imgFace} 
+                                    style={{ width: 160, height: 200 }} 
+                                />
                                 <div>{group.name}</div>
-                            </RoundBox>
+                            </div>
 
-                            {group.memberArray.map((member) => (
-                                <RoundBox
+                            {/* 멤버들 */}
+                            {(group.memberArray || []).map((member) => (
+                                <div
                                     key={member.id}
                                     className={styles.clickable}
                                     onClick={() => navigate(`/detail/artist/${member.id}`)}
                                 >
-                                    <img src={member.imgFace} alt={member.name} width={80} />
+                                    <CustomImageCard 
+                                        url={member.imgFace} 
+                                        style={{ width: 160, height: 200 }} 
+                                    />
                                     <div>{member.name}</div>
-                                </RoundBox>
+                                </div>
                             ))}
                         </div>
 
-                        {/* 일정 */}
                         <h4>일정</h4>
                         <div className={styles.scheduleList}>
                             {topSchedules.map((s, i) => (
@@ -96,10 +128,9 @@ const SearchContent = () => {
                             ))}
                         </div>
 
-                        {/* 그룹 팬포스트 */}
                         <h4>그룹 팬포스트</h4>
                         <FanPostCard
-                            posts={group.groupPostArray}
+                            posts={group.groupPostArray || []}
                             limit={12}
                             cols={3}
                             onClickPost={(postId) => navigate(`/post/${postId}`)}
@@ -109,6 +140,6 @@ const SearchContent = () => {
             })}
         </div>
     );
-};
+}
 
 export default SearchContent;
