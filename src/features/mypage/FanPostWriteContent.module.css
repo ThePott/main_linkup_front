@@ -1,0 +1,65 @@
+.form {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.fileContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.exitBtn {
+    margin-top: var(--spacing-md);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding-left: var(--spacing-lg);
+    width: 500px;
+}
+
+.select {
+    font-size: var(--text-xs);
+    padding: var(--spacing-xs);
+    border: 1px solid var(--color-dimdim);
+}
+
+.textarea {
+    height: var(--sizing-md);
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-md);
+    font-size: var(--text-md);
+    border: 1px solid var(--color-dimdim);
+}
+
+.btnWrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--spacing-sm);
+}
+
+.select,
+.btn {
+    width: 200px;
+}
+
+.exitModalBtn {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.confirmModalBtn {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+}
