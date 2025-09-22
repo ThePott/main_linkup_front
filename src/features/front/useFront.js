@@ -35,6 +35,8 @@ const useGetMe = () => {
     }, [user]);
 };
 
+const useParseTokenFromRedirectedUrl = () => {};
+
 export const useFront = () => {
     useGetMe();
 };
