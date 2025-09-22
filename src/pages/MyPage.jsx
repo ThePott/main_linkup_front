@@ -1,57 +1,94 @@
+import React, { useEffect, useState } from "react";
 import Sidebar from "../features/mypage/Sidebar.jsx";
-import CustomInput from "../package/CustomInput.jsx";
 import RoundBox from "../package/RoundBox.jsx";
+import DeleteAccountModal from "../features/mypage/DeleteAccountModal.jsx";
+import useLinkUpStore from "../shared/store/store";
+import { apiAuthMe } from "../shared/services/linkupApi.js";
 import "./MyPage.css";
 
+// 카드 데이터 (임시)
 const cardData = [
-  { id: 1, title: "카드 1", image: "x", description: "설명 1" },
-  { id: 2, title: "카드 2", image: "x", description: "설명 2" },
-  { id: 3, title: "카드 3", image: "x", description: "설명 3" },
-  { id: 4, title: "카드 4", image: "x", description: "설명 4" },
-  { id: 5, title: "카드 5", image: "x", description: "설명 5" },
-  { id: 6, title: "카드 6", image: "x", description: "설명 6" },
-  { id: 7, title: "카드 7", image: "x", description: "설명 7" },
-  { id: 8, title: "카드 8", image: "x", description: "설명 8" },
+  { id: 1, title: "카드 1" },
+  { id: 2, title: "카드 2" },
+  { id: 3, title: "카드 3" },
+  { id: 4, title: "카드 4" },
+  { id: 5, title: "카드 5" },
+  { id: 6, title: "카드 6" },
+  { id: 7, title: "카드 7" },
+  { id: 8, title: "카드 8" },
 ];
 
-// 현재 로그인한 사용자 정보
-const currentUser = {
-  name: "홍길동",
-  profile: "x",
-  following: 120, //예시 로그인 시 api로 be에서 호출 받을 예정
-  likes: 340, 
-  posts: 15 
-};
-
 const MyPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+  const accessToken = useLinkUpStore((state) => state.access_token);
+  const storeUser = useLinkUpStore((state) => state.user);
+
+  // 로그인 정보가 store에 있는 경우 바로 표시
+  useEffect(() => {
+    if (!accessToken) return;
+
+    const fetchUserInfo = async () => {
+      try {
+        const data = await apiAuthMe("GET"); // 로그인 사용자 정보 갱신
+        setUserInfo(data);
+      } catch (err) {
+        console.error("회원 정보 가져오기 실패:", err);
+      }
+    };
+
+    // store에 user가 없으면 서버에서 가져오기, 있으면 바로 사용
+    if (!storeUser) {
+      fetchUserInfo();
+    } else {
+      setUserInfo(storeUser);
+    }
+  }, [accessToken, storeUser]);
+
+  if (!accessToken) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
+  if (!userInfo) {
+    return <div>로딩 중...</div>;
+  }
+
+  // 통계 (나중에 API 연동 가능)
+  const userStats = {
+    following: userInfo.following ?? 0,
+    likes: userInfo.likes ?? 0,
+    posts: userInfo.posts ?? 0,
+  };
+
   return (
     <div className="mypage-wrapper">
-
       {/* 사용자 프로필 */}
       <div className="profile-feed">
         <div className="profile-box">
-          <img src={currentUser.profile} alt={currentUser.name} className="user-profile" />
+          <img
+            src={userInfo.profile || "default-profile.png"}
+            alt={userInfo.name}
+            className="user-profile"
+          />
           <div className="user-info">
-            <span className="user-name">{currentUser.name}</span>
+            <span className="user-name">{userInfo.name}</span>
             <div className="user-stats">
-              <span>팔로잉: {currentUser.following}</span>
-              <span>좋아요: {currentUser.likes}</span>
-              <span>포스트: {currentUser.posts}</span>
+              <span>팔로잉: {userStats.following}</span>
+              <span>좋아요: {userStats.likes}</span>
+              <span>포스트: {userStats.posts}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 본문 영역(크게 필요 없음) */}
+      {/* 본문 영역 */}
       <div className="mypage-container">
         <div className="mypage-content">
-
           {/* 카드 피드 */}
           <div className="card-grid">
             {cardData.map((card) => (
-              <RoundBox key={card.id}>
-                {card.title}
-              </RoundBox>
+              <RoundBox key={card.id}>{card.title}</RoundBox>
             ))}
           </div>
         </div>
@@ -59,6 +96,16 @@ const MyPage = () => {
         {/* 오른쪽 사이드바 */}
         <Sidebar />
       </div>
+
+      {/* 회원 탈퇴 모달 */}
+      <DeleteAccountModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onDeleted={() => {
+          alert("탈퇴 완료! 메인 페이지로 이동합니다.");
+          window.location.href = "/";
+        }}
+      />
     </div>
   );
 };
