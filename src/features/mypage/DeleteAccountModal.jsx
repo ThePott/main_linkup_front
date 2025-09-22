@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Modal from "../../package/modal/Modal.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
-import { deleteAccount } from "./UserApi.js";
+import { apiAuthMe } from "../../shared/services/linkupApi.js";
+import useLinkUpStore from "../../shared/store/store";
 
-const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
+const DeleteAccountModal = ({ isOpen, onClose, onDeleted }) => {
   const [resultModal, setResultModal] = useState({
     open: false,
     message: "",
@@ -12,7 +13,15 @@ const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
 
   const handleConfirm = async () => {
     try {
-      await deleteAccount(userId);
+      // 회원 탈퇴 API 호출
+      await apiAuthMe("DELETE");
+
+      // 탈퇴 성공 후 store 초기화
+      const store = useLinkUpStore.getState();
+      store.setAccessToken(null);
+      store.setUser(null);
+
+      // 결과 모달 설정
       setResultModal({
         open: true,
         message: "회원 탈퇴가 완료되었습니다.",
@@ -23,6 +32,7 @@ const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
         },
       });
     } catch (error) {
+      console.error("회원 탈퇴 실패:", error.response?.data || error.message);
       setResultModal({
         open: true,
         message: "회원 탈퇴에 실패했습니다.",
