@@ -75,7 +75,6 @@ const ThePottApiTestPage = () => {
     };
     const callbackLog = (data) => {
         console.log({ data });
-        debugger;
     };
 
     return (
