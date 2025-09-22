@@ -1,32 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "../../package/modal/Modal.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import { deleteAccount } from "./UserApi.js";
 
 const DeleteAccountModal = ({ isOpen, onClose, userId, onDeleted }) => {
-    const handleConfirm = async () => {
+    const [resultModal, setResultModal] = useState({
+    open: false,
+    message: "",
+    onConfirm: null,
+  });
+
+  const handleConfirm = async () => {
     try {
       await deleteAccount(userId);
-      alert("회원 탈퇴가 완료되었습니다.");
-      if (onDeleted) onDeleted(); // 상위 컴포넌트에서 처리할 콜백
-      onClose();
+      setResultModal({
+        open: true,
+        message: "회원 탈퇴가 완료되었습니다.",
+        onConfirm: () => {
+          if (onDeleted) onDeleted();
+          onClose();
+          setResultModal((prev) => ({ ...prev, open: false }));
+        },
+      });
     } catch (error) {
-      alert("회원 탈퇴에 실패했습니다.");
+      setResultModal({
+        open: true,
+        message: "회원 탈퇴에 실패했습니다.",
+        onConfirm: () => {
+          setResultModal((prev) => ({ ...prev, open: false }));
+        },
+      });
     }
   };
 
   return (
-    <Modal isOn={isOpen} onBackgroundClick={onClose}>
-      <h2>정말 탈퇴하시겠습니까?</h2>
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-        <CustomButton color="RED" shape="RECTANGLE" onClick={handleConfirm}>
-          예
-        </CustomButton>
-        <CustomButton color="MONO" shape="RECTANGLE" onClick={onClose}>
-          아니오
-        </CustomButton>
-      </div>
-    </Modal>
+    <>
+      {/* 탈퇴 확인 모달 */}
+      <Modal isOn={isOpen} onBackgroundClick={onClose}>
+        <h2>정말 탈퇴하시겠습니까?</h2>
+        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          <CustomButton color="RED" shape="RECTANGLE" onClick={handleConfirm}>
+            예
+          </CustomButton>
+          <CustomButton color="MONO" shape="RECTANGLE" onClick={onClose}>
+            아니오
+          </CustomButton>
+        </div>
+      </Modal>
+
+      {/* 결과 모달 (성공/실패 공통) */}
+      <Modal
+        isOn={resultModal.open}
+        onBackgroundClick={resultModal.onConfirm}
+      >
+        <h2>{resultModal.message}</h2>
+        <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+          <CustomButton color="MONO" shape="RECTANGLE" onClick={resultModal.onConfirm}>
+            확인
+          </CustomButton>
+        </div>
+      </Modal>
+    </>
   );
 };
 
