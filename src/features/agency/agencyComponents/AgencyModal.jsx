@@ -103,7 +103,7 @@ const AgencyModal = () => {
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
         const artist_type = group_name ? "group" : "individual";
-        const parent_group_id = 0;
+        // const parent_group_id = 0;
         // const img_face = target.img_face.value;
         // const img_torso = target.img_torso.value;
         // const img_banner = target.img_banner.value;
@@ -114,7 +114,7 @@ const AgencyModal = () => {
             debut_date,
             birthdate,
             artist_type,
-            parent_group_id,
+            // parent_group_id,
             email: `${Date.now()}@dont.understand`,
         };
         console.log({ body });
