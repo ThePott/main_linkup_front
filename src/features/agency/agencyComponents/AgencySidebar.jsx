@@ -2,6 +2,7 @@ import styles from "./AgencySidebar.module.css";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { Vstack } from "../../../package/layout";
 import useLinkUpStore from "../../../shared/store/store";
+import AgencyArtistModal from "./AgencyArtistModal";
 
 const ArtistLabel = ({ artist_type, children }) => {
     const style = {};
@@ -59,44 +60,50 @@ const AgencySidebar = () => {
     };
 
     return (
-        <Vstack className={styles.sidebar}>
-            {groupArray.map((group) => (
-                <ArtistButton
-                    key={`${group.group_name}__${group.stage_name}`}
-                    artist={group}
-                />
-            ))}
-            {individualArray.map((individual) => (
-                <ArtistButton key={individual.stage_name} artist={individual} />
-            ))}
-            {/* {groupArtistEntryArray.map((entry) => ( */}
-            {/*     <RoundBox */}
-            {/*         key={entry[0]} */}
-            {/*         style={{ textAlign: "start", margin: 0 }} */}
-            {/*         padding="MD" */}
-            {/*     > */}
-            {/*         <Vstack gap="none"> */}
-            {/*             <ArtistLabel>{entry[0]}</ArtistLabel> */}
-            {/*             <Vstack> */}
-            {/*                 {entry[1].map((artist) => ( */}
-            {/*                     <ArtistButton key={artist.id} artist={artist} /> */}
-            {/*                 ))} */}
-            {/*             </Vstack> */}
-            {/*         </Vstack> */}
-            {/*     </RoundBox> */}
-            {/* ))} */}
-            {/* <Vstack gap="none"> */}
-            {/*     <GroupLabel>Solo Artists</GroupLabel> */}
-            {/*     <Vstack> */}
-            {/*         {soloArtistArray.map((artist) => ( */}
-            {/*             <ArtistButton key={artist.id} artist={artist} /> */}
-            {/*         ))} */}
-            {/*     </Vstack> */}
-            {/* </Vstack> */}
-            <CustomButton isOn={true} onClick={handleAdd}>
-                추가
-            </CustomButton>
-        </Vstack>
+        <>
+            <AgencyArtistModal />
+            <Vstack className={styles.sidebar}>
+                {groupArray.map((group) => (
+                    <ArtistButton
+                        key={`${group.group_name}__${group.stage_name}`}
+                        artist={group}
+                    />
+                ))}
+                {individualArray.map((individual) => (
+                    <ArtistButton
+                        key={individual.stage_name}
+                        artist={individual}
+                    />
+                ))}
+                {/* {groupArtistEntryArray.map((entry) => ( */}
+                {/*     <RoundBox */}
+                {/*         key={entry[0]} */}
+                {/*         style={{ textAlign: "start", margin: 0 }} */}
+                {/*         padding="MD" */}
+                {/*     > */}
+                {/*         <Vstack gap="none"> */}
+                {/*             <ArtistLabel>{entry[0]}</ArtistLabel> */}
+                {/*             <Vstack> */}
+                {/*                 {entry[1].map((artist) => ( */}
+                {/*                     <ArtistButton key={artist.id} artist={artist} /> */}
+                {/*                 ))} */}
+                {/*             </Vstack> */}
+                {/*         </Vstack> */}
+                {/*     </RoundBox> */}
+                {/* ))} */}
+                {/* <Vstack gap="none"> */}
+                {/*     <GroupLabel>Solo Artists</GroupLabel> */}
+                {/*     <Vstack> */}
+                {/*         {soloArtistArray.map((artist) => ( */}
+                {/*             <ArtistButton key={artist.id} artist={artist} /> */}
+                {/*         ))} */}
+                {/*     </Vstack> */}
+                {/* </Vstack> */}
+                <CustomButton isOn={true} onClick={handleAdd}>
+                    추가
+                </CustomButton>
+            </Vstack>
+        </>
     );
 };
 

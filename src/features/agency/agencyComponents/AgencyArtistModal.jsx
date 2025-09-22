@@ -42,7 +42,7 @@ const ArtistInput = ({ selectedArtist, info }) => {
     );
 };
 
-const AgencyModal = () => {
+const AgencyArtistModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const isModalOn = useLinkUpStore((state) => state.isModalOn);
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
@@ -181,4 +181,4 @@ const AgencyModal = () => {
     );
 };
 
-export default AgencyModal;
+export default AgencyArtistModal;
