@@ -61,7 +61,7 @@ const Calendar = ({ eventArray = [], isSmall }) => {
             </Hstack>
             <GridContainer cols={7}>
                 {weekDayArray.map((weekday) => (
-                    <HeaderCell weekday={weekday} />
+                    <HeaderCell key={weekday} weekday={weekday} />
                 ))}
             </GridContainer>
             <GridContainer cols={7} rows={isSmall ? undefined : 5}>

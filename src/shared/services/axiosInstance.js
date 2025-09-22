@@ -2,16 +2,18 @@ import axios from "axios";
 import useLinkUpStore from "../store/store";
 
 const axiosInstance = axios.create({
-    baseURL: "http://3.35.210.2:8000",
+    baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    const token = useLinkUpStore.getState().token;
-    if (!token) {
+    const state = useLinkUpStore.getState();
+    const access_token = state.access_token;
+
+    if (!access_token) {
         return config;
     }
 
-    config.headers.Autorization = token;
+    config.headers.Authorization = `Bearer ${access_token}`;
     return config;
 });
 

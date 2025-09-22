@@ -1,7 +1,15 @@
+import styles from "./AgencySidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton";
 import { Vstack } from "../../package/layout";
 import RoundBox from "../../package/RoundBox";
 import useLinkUpStore from "../../shared/store/store";
+
+const GroupLabel = ({ children }) => {
+    return <h2 className={styles.groupLabel}>{children}</h2>;
+};
+const ArtistLabel = ({ children }) => {
+    return <h2 className={styles.artistLabel}>{children}</h2>;
+};
 
 const ArtistButton = ({ artist }) => {
     const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
@@ -19,12 +27,8 @@ const ArtistButton = ({ artist }) => {
     };
 
     return (
-        <CustomButton
-            onClick={handleClick}
-            style={{ textAlign: "end" }}
-            onDoubleClick={handleDoubleClick}
-        >
-            {artist.name}
+        <CustomButton onClick={handleClick} onDoubleClick={handleDoubleClick}>
+            <ArtistLabel>{artist.name}</ArtistLabel>
         </CustomButton>
     );
 };
@@ -57,21 +61,34 @@ const AgencySidebar = () => {
     };
 
     return (
-        <Vstack style={{ height: "100%", overflow: "scroll" }}>
+        <Vstack className={styles.sidebar}>
             {groupArtistEntryArray.map((entry) => (
-                <RoundBox key={entry[0]} style={{ textAlign: "start" }}>
-                    <Vstack>
-                        <p>{entry[0]}</p>
-                        {entry[1].map((artist) => (
-                            <ArtistButton key={artist.id} artist={artist} />
-                        ))}
+                <RoundBox
+                    key={entry[0]}
+                    style={{ textAlign: "start", margin: 0 }}
+                    padding="MD"
+                >
+                    <Vstack gap="none">
+                        <ArtistLabel>{entry[0]}</ArtistLabel>
+                        <Vstack>
+                            {entry[1].map((artist) => (
+                                <ArtistButton key={artist.id} artist={artist} />
+                            ))}
+                        </Vstack>
                     </Vstack>
                 </RoundBox>
             ))}
-            {soloArtistArray.map((artist) => (
-                <ArtistButton key={artist.id} artist={artist} />
-            ))}
-            <CustomButton onClick={handleAdd}>추가</CustomButton>
+            <Vstack gap="none">
+                <GroupLabel>Solo Artists</GroupLabel>
+                <Vstack>
+                    {soloArtistArray.map((artist) => (
+                        <ArtistButton key={artist.id} artist={artist} />
+                    ))}
+                </Vstack>
+            </Vstack>
+            <CustomButton isOn={true} onClick={handleAdd}>
+                추가
+            </CustomButton>
         </Vstack>
     );
 };

@@ -11,3 +11,10 @@ export const login = async (body) => {
     console.log({ token_type });
     return access_token;
 };
+
+export const socialLogin = async (provider) => {
+    const response = await axiosInstance.get(`/api/auth/${provider}/login`);
+    const access_token = response.data;
+    console.log({ access_token });
+    return access_token;
+};

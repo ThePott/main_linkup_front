@@ -1,14 +1,21 @@
 .container {
-    max-width: 1200px;
+    max-width: var(--container-lg);
     margin: auto;
-}
-
-.subscribeBtn {
-    margin-right: var(--spacing-lg);
-}
-
-.subscribeCancelBtn {
     margin-top: var(--spacing-lg);
+}
+
+.circleIcon {
+    width: calc(var(--sizing-sm) - 100px);
+    height: calc(var(--sizing-sm) - 100px);
+    margin-left: var(--spacing-sm);
+}
+
+.bannerContainer {
+    overflow: hidden;
+}
+
+.banner {
+    height: 300px;
 }
 
 .text {
@@ -21,18 +28,35 @@
     justify-content: space-between;
 }
 
-.calendar {
-    width: 100%;
+.scheduleContainer {
+    width: var(--sizing-lg);
+}
+
+.dailyScheduleContainer {
+    text-align: center;
+}
+
+.dailySchedyleRoundbox {
+    display: flex;
+    width: var(--sizing-lg);
+    height: calc(var(--sizing-sm) / 2);
+    margin-left: var(--spacing-xl);
 }
 
 .dailySchedule {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding-left: var(--spacing-xl);
-    font-size: 1.3rem;
+    width: 100%;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    font-size: var(--text-lg);
 }
 
-.scheduleLocation {
-    padding-right: calc(var(--spacing-xl) * 1.5);
+.btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--spacing-xl);
+    margin-top: var(--spacing-md);
 }

@@ -25,7 +25,7 @@ const AgencyContent = () => {
                 <AgencySidebar />
                 <FlexOneContainer>
                     <Vstack items="center" className={styles.fullHeight}>
-                        <RoundBox clssName={styles.agencyRoundBoxForCalender}>
+                        <RoundBox className={styles.agencyRoundBoxForCalender}>
                             <Calendar eventArray={eventArray} />
                         </RoundBox>
                     </Vstack>

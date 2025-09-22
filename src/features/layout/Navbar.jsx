@@ -4,6 +4,7 @@ import styles from "./Navbar.module.css";
 import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
+import useLinkUpStore from "../../shared/store/dummyMijin";
 
 const SideSection = ({ justify, children, ...props }) => {
     return (
@@ -14,11 +15,36 @@ const SideSection = ({ justify, children, ...props }) => {
 };
 
 const Navbar = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const groupArray = useLinkUpStore((state) => state.groupArray);
+  const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
+  const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
 
-    const handleSearch = () => {
-        // 검색 처리 로직
-    };
+  const handleSearch = (keyword) => {
+    const trimmed = keyword.trim();
+    if (trimmed === "") {
+      setSearchResultArray([]);
+      setSearchStatus("fail");
+      navigate("/test/mijin");
+      return;
+    }
+
+    const filtered = groupArray.filter(
+      (g) =>
+        g.name.includes(trimmed) ||
+        g.memberArray.some((m) => m.name.includes(trimmed))
+    );
+
+    setSearchResultArray(filtered);
+
+    if (filtered.length === 0) {
+      setSearchStatus("fail");
+    } else {
+      setSearchStatus("success");
+    }
+    navigate("/test/mijin");
+  };
+
 
     return (
         <Hstack justify="center" items="center">

@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import RoundBox from "../package/RoundBox";
-import ArtistCard from "./ArtistCard";
+import CustomImageCard from "./CustomImageCard/CustomImageCard";
 
-const SuggestedCard = ({ artist, type, imgWidth, borderRadius }) => {
+const SuggestedCard = ({ artist }) => {
     const navigate = useNavigate();
-    const { id: artistId } = artist;
+    const { id: artistId, profile_image: imgUrl } = artist;
 
     const handleClick = () => {
         navigate(`/detail/artist/${artistId}`);
@@ -20,12 +20,7 @@ const SuggestedCard = ({ artist, type, imgWidth, borderRadius }) => {
                 cursor: "pointer",
             }}
         >
-            <ArtistCard
-                artist={artist}
-                type={type}
-                imgWidth={imgWidth}
-                borderRadius={borderRadius}
-            />
+            <CustomImageCard url={imgUrl} style={{ height: "200px" }} />
         </RoundBox>
     );
 };

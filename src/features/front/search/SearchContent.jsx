@@ -61,6 +61,7 @@ const SearchContent = () => {
 
                 const topSchedules = combinedSchedules.slice(0, 3);
 
+
                 return (
                     <div key={group.id} className={styles.groupBlock}>
                         {/* 그룹 + 멤버 */}

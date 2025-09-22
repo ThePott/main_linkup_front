@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login } from "./loginApi";
+import { login, socialLogin } from "./loginApi";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useLinkUpStore from "../../../shared/store/store";
@@ -41,9 +41,29 @@ export const useLogin = () => {
             return;
         }
         console.error(error);
-        debugger;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error]);
 
     return { setBody, error, isLoading };
+};
+
+export const useSocialLogin = (provider) => {
+    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
+    const lowerCasedProvider = provider.toLowerCase();
+    // data: access_token
+    const { data, isLoading, error, refetch } = useQuery({
+        queryKey: ["socialLogin", lowerCasedProvider],
+        queryFn: () => socialLogin(lowerCasedProvider),
+        refetchOnWindowFocus: false,
+        enabled: false,
+    });
+
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        setAccessToken(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
+
+    return { isLoading, error, refetch };
 };

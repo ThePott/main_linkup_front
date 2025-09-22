@@ -1,24 +1,29 @@
+import styles from "./SocialLoginButtonLabel.module.css";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { Hstack } from "../../../package/layout";
 import FacebookIcon from "./FacebookIcon";
 import GoogleIcon from "./GoogleIcon";
 import KakaoIcon from "./KakaoIcon";
+import { useSocialLogin } from "../loginServices/useLogin";
 
-const providerToStyle = {
+const providerToProps = {
     GOOGLE: {
-        style: { backgroundColor: "var(--color-bg)" },
         label: "구글로 로그인",
+        buttonStyle: { "--bg": "var(--color-bg)" },
     },
     KAKAO: {
-        style: { backgroundColor: "#FEE500" },
         label: "카카오로 로그인",
+        labelStyle: { "--color": "black" },
+        buttonStyle: { "--bg": "#FEE500" },
     },
     FACEBOOK: {
-        style: {
-            backgroundColor: "#1877f2",
-            color: "var(--color-vivid-inverted)",
-        },
         label: "페이스북으로 로그인",
+        labelStyle: {
+            "--color": "white",
+        },
+        buttonStyle: {
+            "--bg": "#1877f2",
+        },
     },
 };
 const providerToIcon = {
@@ -27,23 +32,33 @@ const providerToIcon = {
     FACEBOOK: <FacebookIcon />,
 };
 
-const SocialLoginButton = ({ provider, style, ...props }) => {
+const SocialLoginButtonLabel = ({ children, ...props }) => {
+    return <p {...props}>{children}</p>;
+};
+
+const SocialLoginButton = ({ provider }) => {
+    // const { error, isLoading, refetch } = useSocialLogin(provider);
+    const props = providerToProps[provider];
     const Icon = providerToIcon[provider];
+
+    const lowerCasedHref = `http://3.35.210.2:8000/api/auth/${provider.toLowerCase()}/login`;
+    const handleClick = () => {
+        window.location.href = lowerCasedHref;
+    };
     return (
         <CustomButton
-            {...props}
-            style={{ ...providerToStyle[provider].style, ...style }}
+            style={props.buttonStyle}
+            className={styles.socialLoginButton}
+            onClick={handleClick}
         >
             <Hstack>
                 {Icon}
-                <p
-                    style={{
-                        flexGrow: 1,
-                        fontWeight: "var(--font-weight-semibold)",
-                    }}
+                <SocialLoginButtonLabel
+                    style={props.labelStyle}
+                    className={styles.socialLoginButtonLabel}
                 >
-                    {providerToStyle[provider].label}
-                </p>
+                    {props.label}
+                </SocialLoginButtonLabel>
             </Hstack>
         </CustomButton>
     );
