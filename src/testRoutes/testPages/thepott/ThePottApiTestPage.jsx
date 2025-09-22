@@ -6,6 +6,7 @@ import {
     postThenLog,
 } from "../../../package/commonServices/fetchVariants";
 import { useState } from "react";
+import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
@@ -60,6 +61,10 @@ const ThePottApiTestPage = () => {
             callback,
             accessToken,
         );
+    const getCompaniesArtists = (callback) =>
+        getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
+    const getCompaniesEvents = (callback) =>
+        getThenLog(`${baseURL}/api/companies/events`, callback, accessToken);
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
@@ -68,60 +73,66 @@ const ThePottApiTestPage = () => {
     const callbackMe = (data) => {
         setUser(data);
     };
-    const callbackEvents = (data) => {
-        console.log({ data });
-        debugger;
-    };
-    const callbackSubscriptions = (data) => {
-        console.log({ data });
-        debugger;
-    };
-    const callbackIdol = (data) => {
+    const callbackLog = (data) => {
         console.log({ data });
         debugger;
     };
 
     return (
         <FullScreen center>
-            <RoundBoxGlobalShadow padding="XL">
-                <Vstack gap="xl">
-                    <RoundBoxGlobalShadow padding="XL">
-                        개벌자 도구(Cmd + Alt + I) {"->"} Console 탭
-                    </RoundBoxGlobalShadow>
-                    <CustomButton onClick={getHome}>get home</CustomButton>
-                    <CustomButton onClick={getHealth}>get health</CustomButton>
-                    <CustomButton onClick={postEmailVerification}>
-                        send email verification
-                    </CustomButton>
-                    <CustomButton onClick={() => postFanLogin(callbackLogin)}>
-                        <p>fan login</p>
-                        <p>{accessToken}</p>
-                    </CustomButton>
-                    <CustomButton
-                        onClick={() => postCompanyLogin(callbackLogin)}
-                    >
-                        <p>company login</p>
-                        <p>{accessToken}</p>
-                    </CustomButton>
-                    <CustomButton onClick={() => getMe(callbackMe)}>
-                        <p>get me</p>
-                        <p>{JSON.stringify(user)}</p>
-                    </CustomButton>
-                    <CustomButton onClick={() => getEvents(callbackEvents)}>
-                        <p>get events</p>
-                    </CustomButton>
-                    <CustomButton
-                        onClick={() =>
-                            getFanSubscription(callbackSubscriptions)
-                        }
-                    >
-                        <p>get subscription</p>
-                    </CustomButton>
-                    <CustomButton onClick={() => getIdol(callbackIdol)}>
-                        <p>get idol</p>
-                    </CustomButton>
-                </Vstack>
-            </RoundBoxGlobalShadow>
+            <FlexOneContainer isYScrollable>
+                <RoundBoxGlobalShadow padding="XL">
+                    <Vstack gap="xl">
+                        <RoundBoxGlobalShadow padding="XL">
+                            개벌자 도구(Cmd + Alt + I) {"->"} Console 탭
+                        </RoundBoxGlobalShadow>
+                        <CustomButton onClick={getHome}>get home</CustomButton>
+                        <CustomButton onClick={getHealth}>
+                            get health
+                        </CustomButton>
+                        <CustomButton onClick={postEmailVerification}>
+                            send email verification
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => postFanLogin(callbackLogin)}
+                        >
+                            <p>fan login</p>
+                            <p>{accessToken}</p>
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => postCompanyLogin(callbackLogin)}
+                        >
+                            <p>company login</p>
+                            <p>{accessToken}</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getMe(callbackMe)}>
+                            <p>get me</p>
+                            <p>{JSON.stringify(user)}</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getEvents(callbackLog)}>
+                            <p>get events</p>
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => getFanSubscription(callbackLog)}
+                        >
+                            <p>get subscription</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getIdol(callbackLog)}>
+                            <p>get idol</p>
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => getCompaniesArtists(callbackLog)}
+                        >
+                            <p>get companies artists</p>
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => getCompaniesEvents(callbackLog)}
+                        >
+                            <p>get companies events</p>
+                        </CustomButton>
+                    </Vstack>
+                </RoundBoxGlobalShadow>
+            </FlexOneContainer>
         </FullScreen>
     );
 };
