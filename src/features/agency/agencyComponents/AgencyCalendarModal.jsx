@@ -13,29 +13,6 @@ const convertIsoToDatetimeLocal = (isoString) => {
     return isoString.slice(0, 16); // Takes "YYYY-MM-DDTHH:mm"
 };
 
-// HACK: 기능 구현 되면 이 부분 삭제해야 함
-const DebugButtonToPopulateForm = () => {
-    const setSelectedEvent = useLinkUpStore((state) => state.setSelectedEvent);
-    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-
-    const handleClick = () => {
-        const body = {
-            artist_id: selectedArtist.id,
-            title: "엄청난 콘서트",
-            category: "콘서트",
-            description:
-                "데뷔 5주년 기념 콘서트를 개최합니다. 모두들 함께 하세요!",
-            location: "서울 잠실 어딘가 좋은 곳",
-        };
-        setSelectedEvent((prev) => ({ ...prev, ...body }));
-    };
-    return (
-        <CustomButton isOn={true} handleClick={handleClick}>
-            DEBUG
-        </CustomButton>
-    );
-};
-
 const AgencyCalendarModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
@@ -94,7 +71,6 @@ const AgencyCalendarModal = () => {
             isOn={modalKey === "agencyCalendar"}
             onBackgroundClick={handleDismiss}
         >
-            <DebugButtonToPopulateForm />
             <form onSubmit={handleSubmit}>
                 <Vstack>
                     <CustomInputLabeled

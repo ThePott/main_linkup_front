@@ -83,6 +83,7 @@ const AgencyArtistModal = () => {
         }
 
         deleteMutation.mutate(selectedArtist.id);
+        // TODO: 여기서 삭제한 걸 로컬 데이터에도 반영해야 한다
         // const newUser = { ...user };
         // newUser.managingArtistArray = newUser.managingArtistArray.filter(
         //     (artist) => artist.id !== selectedArtist.id,
