@@ -103,13 +103,7 @@ const AgencyArtistModal = () => {
         }
 
         deleteMutation.mutate(selectedArtist.id);
-        // TODO: 여기서 삭제한 걸 로컬 데이터에도 반영해야 한다
-        // const newUser = { ...user };
-        // newUser.managingArtistArray = newUser.managingArtistArray.filter(
-        //     (artist) => artist.id !== selectedArtist.id,
-        // );
-        // setUser(newUser);
-        // handleDismiss();
+        // TODO: 삭제한 걸 로컬에도 반영해야 한다
     };
 
     const handleSubmit = (event) => {
@@ -161,25 +155,7 @@ const AgencyArtistModal = () => {
             postMutation.mutate(formData);
         }
 
-        // const newUser = { ...user };
-        // if (!selectedArtist) {
-        //     // TODO: POST 요청 보내고서 해당 객체 받아와야
-        //     // 그래야 이미지 url 적용하고 id도 스토어에 저정함
-        //     newUser.managingArtistArray.push({
-        //         id: Date.now(),
-        //         ...body,
-        //     });
-        //     // TODO: 실제로는 store에 추가하기 전에 reponse에 맞게 User 수정해야 함
-        // } else {
-        //     // TODO: 실제론 PUT 요청도 같이 보내야 함
-        //     newUser.managingArtistArray = newUser.managingArtistArray.map(
-        //         (el) =>
-        //             el.id === selectedArtist.id
-        //                 ? { ...selectedArtist, ...body }
-        //                 : el,
-        //     );
-        // }
-        // setUser(newUser);
+        // TODO: POST or PUT 요청 보내고서 로컬에도 반영해야 함
     };
 
     const buttonLabel = selectedArtist ? "수정" : "추가";
