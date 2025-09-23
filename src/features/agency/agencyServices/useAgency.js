@@ -53,3 +53,26 @@ export const useAgencyCalendar = () => {
 
     return { isPending, error };
 };
+
+export const useAgentArtistModal = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    console.log({ selectedArtist, yaho: "siiick" });
+    const artistId = selectedArtist?.id ?? -1;
+    const { isPending, error } = useQuery({
+        queryKey: [`/api/companies/artists/`, artistId],
+        queryFn: async () => {
+            if (artistId === -1) {
+                return null;
+            }
+            const selectedArtist = useLinkUpStore.getState().selectedArtist;
+            const data = await axiosReturnsData(
+                "GET",
+                `/api/companies/artists/${selectedArtist?.id ?? -1}`,
+            );
+            useLinkUpStore.setState({ selectedArtist: data });
+            return data;
+        },
+    });
+
+    return { isPending, error };
+};

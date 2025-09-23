@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
 import FileInput from "../../../package/FileInput";
@@ -7,6 +7,8 @@ import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+import { useAgentArtistModal } from "../agencyServices/useAgency";
+import { useEffect, useRef } from "react";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -43,9 +45,13 @@ const ArtistInput = ({ selectedArtist, info }) => {
 };
 
 const AgencyArtistModal = () => {
+    const formRef = useRef(null);
+
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
+
+    const { isPending, error } = useAgentArtistModal();
 
     const postMutation = useMutation({
         mutationFn: (formData) => {
@@ -70,6 +76,20 @@ const AgencyArtistModal = () => {
             return axiosReturnsData("DELETE", `/api/companies/artists/${id}`);
         },
     });
+
+    useEffect(() => {
+        if (!selectedArtist) {
+            return;
+        }
+        if (!formRef.current) {
+            return;
+        }
+        if (!selectedArtist.img_face) {
+            return;
+        }
+        console.log({ selectedArtist });
+        debugger;
+    }, [selectedArtist]);
 
     const handleDismiss = () => {
         setModalKey(null);
@@ -102,11 +122,11 @@ const AgencyArtistModal = () => {
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
         const artist_type = group_name ? "group" : "individual";
-        
+
         // Get actual File objects instead of values
-        const img_face = target.img_face.files[0];
-        const img_torso = target.img_torso.files[0];
-        const img_banner = target.img_banner.files[0];
+        const face_image = target.face_image.files[0];
+        const torso_image = target.torso_image.files[0];
+        const banner_image = target.banner_image.files[0];
 
         handleDismiss();
 
@@ -125,17 +145,17 @@ const AgencyArtistModal = () => {
         } else {
             // Create FormData for file uploads
             const formData = new FormData();
-            formData.append('stage_name', stage_name);
-            formData.append('group_name', group_name);
-            formData.append('debut_date', debut_date);
-            formData.append('birthdate', birthdate);
-            formData.append('artist_type', artist_type);
-            formData.append('email', `${Date.now()}@dont.understand`);
-            
+            formData.append("stage_name", stage_name);
+            formData.append("group_name", group_name);
+            formData.append("debut_date", debut_date);
+            formData.append("birthdate", birthdate);
+            formData.append("artist_type", artist_type);
+            formData.append("email", `${Date.now()}@dont.understand`);
+
             // Append files if they exist
-            if (img_face) formData.append('img_face', img_face);
-            if (img_torso) formData.append('img_torso', img_torso);
-            if (img_banner) formData.append('img_banner', img_banner);
+            if (face_image) formData.append("face_image", face_image);
+            if (torso_image) formData.append("torso_image", torso_image);
+            if (banner_image) formData.append("banner_image", banner_image);
 
             console.log({ formData });
             postMutation.mutate(formData);
@@ -169,7 +189,7 @@ const AgencyArtistModal = () => {
             isOn={modalKey === "agencySidebar"}
             onBackgroundClick={handleDismiss}
         >
-            <form onSubmit={handleSubmit}>
+            <form ref={formRef} onSubmit={handleSubmit}>
                 <GridContainer gap="MD" cols={4}>
                     <Vstack>
                         {inputFieldInfoArray.map((info) => (
@@ -180,9 +200,9 @@ const AgencyArtistModal = () => {
                             />
                         ))}
                     </Vstack>
-                    <FileInput name="img_face" />
-                    <FileInput name="img_torso" />
-                    <FileInput name="img_banner" />
+                    <FileInput name="face_image" />
+                    <FileInput name="torso_image" />
+                    <FileInput name="banner_image" />
 
                     <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (
