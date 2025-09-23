@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import useLinkUpStore from "../../shared/store/store";
 import FileInput from "../../package/FileInput";
 import CustomButton from "../../package/customButton/CustomButton";
 import Modal from "../../package/modal/Modal";
@@ -7,7 +8,9 @@ import styles from "./FanPostWriteContent.module.css";
 
 import subscribeArray from "../../shared/store/dummy2Heehaa.json";
 
-const FanPostWriteContent = ({ onSubmit }) => {
+const FanPostWriteContent = () => {
+    const addFanPostFeed = useLinkUpStore((state) => state.addFanPostFeed);
+
     const [showImageModal, setShowImageModal] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [completedModalOpen, setCompletedModalOpen] = useState(false);
@@ -36,7 +39,16 @@ const FanPostWriteContent = ({ onSubmit }) => {
         if (!form) return;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
-        onSubmit(data);
+        // 데이터가 잘 담겼는지 확인 <- 삭제 필요
+        console.log("data", data);
+
+        addFanPostFeed({
+            imageUrl: data.image_url,
+            artistName: data.artist_name,
+            content: data.post_content,
+        });
+        // 데이터가 잘 담겼는지 확인 <- 삭제 필요
+        console.log("add", addFanPostFeed);
 
         setCompletedModalOpen(true);
         setTimeout(() => {
