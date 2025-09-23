@@ -1,56 +1,53 @@
 import React, { useState } from "react";
 import Modal from "../../package/modal/Modal.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
+import { apiChangePassword } from "../../shared/services/linkupApi.js"; // api 연동 추가
 
 const PasswordChangeModal = ({ isOpen, onClose }) => {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [errorMessages, setErrorMessages] = useState([]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const currentPassword = form.currentPassword.value;
-    const newPassword = form.newPassword.value;
-    const confirmPassword = form.confirmPassword.value;
-
-    console.log({ currentPassword, newPassword, confirmPassword });
+    const { currentPassword, newPassword, confirmPassword } = formData;
 
     if (newPassword !== confirmPassword) {
-      alert("새 비밀번호와 확인이 일치하지 않습니다.");
+      setErrorMessages(["새 비밀번호와 확인이 일치하지 않습니다."]);
       return;
     }
-     /* // ✅ 백엔드 API 호출
+
     try {
-      const response = await fetch("http://localhost:3000/api/user/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-        }),
-      });
+      await apiChangePassword(currentPassword, newPassword, confirmPassword);
 
-        if (!response.ok) {
-            throw new Error("비밀번호 변경 실패");
-        }
+      alert("비밀번호 변경이 완료되었습니다.");
+      setErrorMessages([]);
+      setFormData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      onClose();
+    } catch (error) {
+      console.error("비밀번호 변경 실패:", error.response?.data || error.message);
 
-        const data = await response.json();
-        console.log("API 응답:", data);
+      const detail = error.response?.data?.detail;
 
-        alert("비밀번호 변경이 완료되었습니다.");
-        onClose();
-        form.reset();} 
-
-        catch (err) {
-            console.error(err);
-            alert("비밀번호 변경 중 오류가 발생했습니다.");
-            }
-      }; */
-
-    alert("비밀번호 변경이 완료되었습니다.");
-    onClose();
-    form.reset();
+      if (Array.isArray(detail)) {
+        const msgs = detail.map((d) => d.msg || d);
+        setErrorMessages(msgs);
+      } else if (typeof detail === "string") {
+        setErrorMessages([detail]);
+      } else {
+        setErrorMessages(["비밀번호 변경 중 오류가 발생했습니다."]);
+      }
+    }
   };
 
   return (
@@ -77,6 +74,7 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
             width: "100%",
           }}
         />
+
         <input
           type="password"
           name="newPassword"
@@ -88,6 +86,7 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
             width: "100%",
           }}
         />
+
         <input
           type="password"
           name="confirmPassword"
@@ -99,6 +98,15 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
             width: "100%",
           }}
         />
+
+        {/* 에러 메시지 표시 */}
+        {errorMessages.length > 0 && (
+          <div style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
+            {errorMessages.map((msg, idx) => (
+              <div key={idx}>{msg}</div>
+            ))}
+          </div>
+        )}
 
         {/* 버튼 영역 */}
         <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
