@@ -34,5 +34,18 @@ export const apiAuthMe = async (method, body) => {
     }
 
     const data = response.data;
-    return data;
+};
+
+/** // 비밀번호 변경 용 함수
+ * @param {string} currentPassword 기존 비밀번호
+ * @param {string} newPassword 새 비밀번호
+ */
+
+export const apiChangePassword = async (currentPassword, newPassword) => {
+    const ADDITIONAL_URL = "/api/auth/change-password"; // api 명세서에 변경 주소 없음.
+    const response = await axiosInstance.post(ADDITIONAL_URL, {
+    currentPassword,
+    newPassword,
+  });
+  return response.data;
 };
