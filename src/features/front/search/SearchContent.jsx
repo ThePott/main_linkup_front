@@ -9,7 +9,7 @@ import styles from "./SearchContent.module.css";
 const SearchContent = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const query = searchParams.get("q") || "";
+    const queryParam = searchParams.get("query") || "";
 
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
     const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
@@ -20,24 +20,20 @@ const SearchContent = () => {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                // URL 파라미터의 검색어를 기반으로 API 호출
-                const url = query
-                    ? `http://3.35.210.2:8000/api/idol/${query}`
+                const url = queryParam
+                    ? `http://3.35.210.2:8000/api/idol/${queryParam}`
                     : "http://3.35.210.2:8000/api/idol";
 
                 const res = await fetch(url);
                 const data = await res.json();
 
-                if (query) {
+                if (queryParam) {
                     setSearchResultArray([data]);
                 } else {
                     const artists = data.artists || [];
                     setGroupArray(artists);
-                    setRecommendedGroupArray(artists.slice(0, 2));
-
-                    if (searchResultArray.length === 0) {
-                        setSearchResultArray(artists);
-                    }
+                    setRecommendedGroupArray(artists); 
+                    setSearchResultArray([]); 
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
@@ -45,16 +41,16 @@ const SearchContent = () => {
         };
 
         fetchGroups();
-    }, []);
+    }, [queryParam]); 
 
-    if (!query && searchResultArray.length === 0) {
+    if (!queryParam && searchResultArray.length === 0) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
                 <p>일치하는 결과를 찾지 못했어요.</p>
                 <h3>추천 그룹</h3>
                 <div className={styles.recommendedContainer}>
-                    {recommendedGroupArray.slice(0, 2).map((group) => (
+                    {recommendedGroupArray.map((group) => (
                         <div
                             key={group.id}
                             className={styles.clickable}
@@ -79,13 +75,13 @@ const SearchContent = () => {
             <h2>검색 결과</h2>
             {groupArrayToShow.map((group) => {
                 const combinedSchedules = [
-                    ...(group.groupScheduleArray || []).map((s) => ({
-                        ...s,
+                    ...(group.groupScheduleArray || []).map((schedule) => ({
+                        ...schedule,
                         owner: group.name,
                     })),
                     ...(group.memberArray || []).flatMap((member) =>
-                        (member.scheduleArray || []).map((ms) => ({
-                            ...ms,
+                        (member.scheduleArray || []).map((memberSchedule) => ({
+                            ...memberSchedule,
                             owner: member.name,
                         }))
                     ),
@@ -124,9 +120,9 @@ const SearchContent = () => {
 
                         <h4>일정</h4>
                         <div className={styles.scheduleList}>
-                            {topSchedules.map((s, i) => (
-                                <RoundBox key={i}>
-                                    {s.owner} {s.title} - {s.sttime}
+                            {topSchedules.map((schedule, index) => (
+                                <RoundBox key={index}>
+                                    {schedule.owner} {schedule.title} - {schedule.sttime}
                                 </RoundBox>
                             ))}
                         </div>

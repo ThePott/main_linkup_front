@@ -5,6 +5,7 @@ import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/dummyMijin";
 import useRealLinkupStore from "../../shared/store/store";
+
 const SideSection = ({ justify, children, ...props }) => {
     return (
         <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -16,6 +17,7 @@ const SideSection = ({ justify, children, ...props }) => {
 const Navbar = () => {
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
+
     const groupArray = useLinkUpStore((state) => state.groupArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
     const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
@@ -25,26 +27,24 @@ const Navbar = () => {
     const setAccessToken = useRealLinkupStore((state) => state.setAccessToken);
 
     const handleSearch = (keyword) => {
-    const trimmed = keyword.trim();
+        const trimmed = keyword.trim();
 
-    setSearchParams({ q: trimmed });
+        setSearchParams({ query: trimmed });
 
-    if (trimmed === "") {
-        setSearchResultArray([]);
-        setSearchStatus("fail");
-        navigate("/test/mijin");
-        return;
-    }
+        if (trimmed === "") {
+            setSearchResultArray([]);
+            setSearchStatus("fail");
+            return;
+        }
 
-    const filtered = groupArray.filter(
-        (g) =>
-        g.name.includes(trimmed) ||
-        (g.memberArray || []).some((m) => m.name?.includes(trimmed))
-    );
+        const filtered = groupArray.filter(
+            (g) =>
+                g.name?.includes(trimmed) ||
+                (g.memberArray || []).some((m) => m.name?.includes(trimmed))
+        );
 
-    setSearchResultArray(filtered);
-    setSearchStatus(filtered.length === 0 ? "fail" : "success");
-    navigate("/test/mijin");
+        setSearchResultArray(filtered);
+        setSearchStatus(filtered.length === 0 ? "fail" : "success");
     };
 
     const handleLogout = () => {
@@ -72,7 +72,7 @@ const Navbar = () => {
                 />
 
                 <SideSection justify="end">
-                    {user && (
+                    {user ? (
                         <>
                             <CustomButton onClick={() => navigate("/mypage")}>
                                 마이페이지
@@ -81,8 +81,7 @@ const Navbar = () => {
                                 로그아웃
                             </CustomButton>
                         </>
-                    )}
-                    {!user && (
+                    ) : (
                         <CustomButton onClick={() => navigate("/login")}>
                             로그인
                         </CustomButton>
