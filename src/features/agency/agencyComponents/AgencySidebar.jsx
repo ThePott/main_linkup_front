@@ -15,7 +15,7 @@ const ArtistLabel = ({ artist_type, children }) => {
 };
 
 const ArtistButton = ({ artist }) => {
-    const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedArtist = useLinkUpStore(
         (state) => state.setSelectedArtist,
     );
@@ -27,7 +27,7 @@ const ArtistButton = ({ artist }) => {
     };
 
     const handleDoubleClick = () => {
-        setIsModalOn(true);
+        setModalKey("agencySidebar");
     };
 
     return (
@@ -42,7 +42,7 @@ const ArtistButton = ({ artist }) => {
 };
 
 const AgencySidebar = () => {
-    const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedArtist = useLinkUpStore(
         (state) => state.setSelectedArtist,
     );
@@ -57,7 +57,7 @@ const AgencySidebar = () => {
 
     const handleAdd = () => {
         setSelectedArtist(null);
-        setIsModalOn(true);
+        setModalKey("agencySidebar");
     };
 
     return (
@@ -76,30 +76,6 @@ const AgencySidebar = () => {
                         artist={individual}
                     />
                 ))}
-                {/* {groupArtistEntryArray.map((entry) => ( */}
-                {/*     <RoundBox */}
-                {/*         key={entry[0]} */}
-                {/*         style={{ textAlign: "start", margin: 0 }} */}
-                {/*         padding="MD" */}
-                {/*     > */}
-                {/*         <Vstack gap="none"> */}
-                {/*             <ArtistLabel>{entry[0]}</ArtistLabel> */}
-                {/*             <Vstack> */}
-                {/*                 {entry[1].map((artist) => ( */}
-                {/*                     <ArtistButton key={artist.id} artist={artist} /> */}
-                {/*                 ))} */}
-                {/*             </Vstack> */}
-                {/*         </Vstack> */}
-                {/*     </RoundBox> */}
-                {/* ))} */}
-                {/* <Vstack gap="none"> */}
-                {/*     <GroupLabel>Solo Artists</GroupLabel> */}
-                {/*     <Vstack> */}
-                {/*         {soloArtistArray.map((artist) => ( */}
-                {/*             <ArtistButton key={artist.id} artist={artist} /> */}
-                {/*         ))} */}
-                {/*     </Vstack> */}
-                {/* </Vstack> */}
                 <CustomButton isOn={true} onClick={handleAdd}>
                     추가
                 </CustomButton>

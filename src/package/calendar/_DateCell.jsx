@@ -63,7 +63,7 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
 };
 
 const DateCell = ({ date, eventArray, isDim, isToday }) => {
-    const { setModalKey } = useCalendarContext();
+    const { setSelectedEvent, setModalKey } = useCalendarContext();
 
     const isHolyday = false;
 
@@ -71,6 +71,8 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     const className = `${opacityClassName}`;
 
     const handleDoubleClick = () => {
+        setSelectedEvent({});
+
         setModalKey("agencyCalendar");
     };
 
