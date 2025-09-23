@@ -13,6 +13,7 @@ const convertIsoToDatetimeLocal = (isoString) => {
     return isoString.slice(0, 16); // Takes "YYYY-MM-DDTHH:mm"
 };
 
+// HACK: 기능 구현 되면 이 부분 삭제해야 함
 const DebugButtonToPopulateForm = () => {
     const setSelectedEvent = useLinkUpStore((state) => state.setSelectedEvent);
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
@@ -42,28 +43,12 @@ const AgencyCalendarModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
 
     const postMutation = useMutation({
-        mutationFn: async (body) => {
-            // HACK: 디버깅 용으로 data 받은 거고 실 사용시에는 삭제해서 간결하게 해야 함
-            const data = axiosReturnsData(
-                "POST",
-                `/api/companies/events`,
-                body,
-            );
-            debugger;
-            return data;
-        },
+        mutationFn: (body) =>
+            axiosReturnsData("POST", `/api/companies/events`, body),
     });
     const putMutation = useMutation({
-        mutationFn: async ({ body, id }) => {
-            // HACK: 디버깅 용으로 data 받은 거고 실 사용시에는 삭제해서 간결하게 해야 함
-            const data = axiosReturnsData(
-                "PUT",
-                `/api/companies/events/${id}`,
-                body,
-            );
-            debugger;
-            return data;
-        },
+        mutationFn: ({ body, id }) =>
+            axiosReturnsData("PUT", `/api/companies/events/${id}`, body),
     });
     const deleteMutation = useMutation({
         mutationFn: (id) =>
@@ -163,7 +148,9 @@ const AgencyCalendarModal = () => {
                     <CustomButton>제출</CustomButton>
                 </Vstack>
             </form>
-            <CustomButton onClick={() => deleteMutation.mutate()}>
+            <CustomButton
+                onClick={() => deleteMutation.mutate(selectedEvent?.id ?? -1)}
+            >
                 삭제
             </CustomButton>
         </Modal>

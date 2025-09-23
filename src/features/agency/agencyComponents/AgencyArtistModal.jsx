@@ -48,8 +48,12 @@ const AgencyArtistModal = () => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
     const postMutation = useMutation({
-        mutationFn: (body) => {
-            return axiosReturnsData("POST", "/api/companies/artists", body);
+        mutationFn: (formData) => {
+            return axiosReturnsData(
+                "POST",
+                "/api/companies/artists-with-images",
+                formData,
+            );
         },
     });
     const putMutation = useMutation({
