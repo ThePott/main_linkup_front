@@ -51,7 +51,7 @@ const AgencyArtistModal = () => {
         mutationFn: (formData) => {
             return axiosReturnsData(
                 "POST",
-                "/api/companies/artists-with-images",
+                "/api/companies/artists/with-images",
                 formData,
             );
         },
@@ -102,31 +102,43 @@ const AgencyArtistModal = () => {
         const debut_date = target.debut_date.value;
         const birthdate = target.birthdate.value;
         const artist_type = group_name ? "group" : "individual";
-        // const parent_group_id = 0;
-        // const img_face = target.img_face.value;
-        // const img_torso = target.img_torso.value;
-        // const img_banner = target.img_banner.value;
+        
+        // Get actual File objects instead of values
+        const img_face = target.img_face.files[0];
+        const img_torso = target.img_torso.files[0];
+        const img_banner = target.img_banner.files[0];
 
-        const body = {
-            stage_name,
-            group_name,
-            debut_date,
-            birthdate,
-            artist_type,
-            // parent_group_id,
-            email: `${Date.now()}@dont.understand`,
-        };
-        console.log({ body });
         handleDismiss();
 
         if (selectedArtist) {
-            // HACK: birthdate도 소속사에서 처음부터 받아오면 아래 삭제해야
-            if (!birthdate) {
-                body.birthdate = "2025-01-01";
-            }
+            // For updates, use JSON body for PUT requests
+            const body = {
+                stage_name,
+                group_name,
+                debut_date,
+                birthdate: birthdate || "2025-01-01",
+                artist_type,
+                email: `${Date.now()}@dont.understand`,
+            };
+            console.log({ body });
             putMutation.mutate({ body, id: selectedArtist.id });
         } else {
-            postMutation.mutate(body);
+            // Create FormData for file uploads
+            const formData = new FormData();
+            formData.append('stage_name', stage_name);
+            formData.append('group_name', group_name);
+            formData.append('debut_date', debut_date);
+            formData.append('birthdate', birthdate);
+            formData.append('artist_type', artist_type);
+            formData.append('email', `${Date.now()}@dont.understand`);
+            
+            // Append files if they exist
+            if (img_face) formData.append('img_face', img_face);
+            if (img_torso) formData.append('img_torso', img_torso);
+            if (img_banner) formData.append('img_banner', img_banner);
+
+            console.log({ formData });
+            postMutation.mutate(formData);
         }
 
         // const newUser = { ...user };
