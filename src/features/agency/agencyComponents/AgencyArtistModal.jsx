@@ -1,7 +1,7 @@
+import styles from "./AgencyArtistModal.module.css";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
-import FileInput from "../../../package/FileInput";
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
@@ -9,6 +9,7 @@ import useLinkUpStore from "../../../shared/store/store";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import { useAgentArtistModal } from "../agencyServices/useAgency";
 import { useEffect, useRef } from "react";
+import ImageInput from "../../../package/imageInput/ImageInput";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -149,6 +150,7 @@ const AgencyArtistModal = () => {
 
     return (
         <Modal
+            className={styles.modal}
             isOn={modalKey === "agencySidebar"}
             onBackgroundClick={handleDismiss}
         >
@@ -163,9 +165,18 @@ const AgencyArtistModal = () => {
                             />
                         ))}
                     </Vstack>
-                    <FileInput name="face_image" />
-                    <FileInput name="torso_image" />
-                    <FileInput name="banner_image" />
+                    <ImageInput
+                        name="face_image"
+                        defaultSrc={selectedArtist?.face_image}
+                    />
+                    <ImageInput
+                        name="torso_image"
+                        defaultSrc={selectedArtist?.torso_image}
+                    />
+                    <ImageInput
+                        name="banner_image"
+                        defaultSrc={selectedArtist?.banner_image}
+                    />
 
                     <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (

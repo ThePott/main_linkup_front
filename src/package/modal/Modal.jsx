@@ -1,21 +1,21 @@
 import RoundBox from "../RoundBox";
 import styles from "./Modal.module.css";
 
-const ModalContent = ({ children }) => {
+const ModalContent = ({ children, ...props }) => {
     const handleClick = (event) => {
         event.stopPropagation();
     };
     return (
-        <RoundBox padding="LG" onClick={handleClick}>
+        <RoundBox {...props} padding="LG" onClick={handleClick}>
             {children}
         </RoundBox>
     );
 };
 
-const ModalBackdrop = ({ onBackgroundClick, children }) => {
+const ModalBackdrop = ({ onBackgroundClick, children, ...props }) => {
     return (
         <div onClick={onBackgroundClick} className={styles.backdrop}>
-            <ModalContent>{children}</ModalContent>
+            <ModalContent {...props}>{children}</ModalContent>
         </div>
     );
 };
