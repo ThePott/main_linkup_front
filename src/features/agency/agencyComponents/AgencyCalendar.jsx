@@ -3,15 +3,25 @@ import RoundBox from "../../../package/RoundBox";
 import useLinkUpStore from "../../../shared/store/store";
 import { useAgencyCalendar } from "../agencyServices/useAgency";
 import styles from "./AgencyCalendar.module.css";
+import AgencyCalendarModal from "./AgencyCalendarModal";
 
 const AgencyCalendar = () => {
     const eventArray = useLinkUpStore((state) => state.eventArray);
-    const setEventArray = useLinkUpStore((state) => state.setEventArray);
-    const { isPEnding, error } = useAgencyCalendar();
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
+    const setSelectedEvent = useLinkUpStore((state) => state.setSelectedEvent);
+
+    const { isPending, error } = useAgencyCalendar();
     return (
-        <RoundBox className={styles.agencyRoundBoxForCalender}>
-            <Calendar eventArray={eventArray} />
-        </RoundBox>
+        <>
+            <AgencyCalendarModal />
+            <RoundBox className={styles.agencyRoundBoxForCalender}>
+                <Calendar
+                    eventArray={eventArray}
+                    setModalKey={setModalKey}
+                    setSelectedEvent={setSelectedEvent}
+                />
+            </RoundBox>
+        </>
     );
 };
 

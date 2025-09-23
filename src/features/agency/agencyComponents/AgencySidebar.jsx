@@ -50,6 +50,7 @@ const AgencySidebar = () => {
     const groupArray = artistArray.filter(
         (artist) => artist.artist_type === "group",
     );
+
     const individualArray = artistArray.filter(
         (artist) => artist.artist_type === "individual",
     );

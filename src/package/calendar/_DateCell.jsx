@@ -1,6 +1,7 @@
 import { Vstack } from "../layout";
 import EventBox from "./_EventBox";
 import styles from "./calendar.module.css";
+import { useCalendarContext } from "./CalendarContext";
 
 const getDayType = (date) => {
     const day = date.getDay();
@@ -62,13 +63,19 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
 };
 
 const DateCell = ({ date, eventArray, isDim, isToday }) => {
+    const { setModalKey } = useCalendarContext();
+
     const isHolyday = false;
 
     const opacityClassName = isDim ? styles.dim : "";
     const className = `${opacityClassName}`;
 
+    const handleDoubleClick = () => {
+        setModalKey("agencyCalendar");
+    };
+
     return (
-        <Vstack className={className}>
+        <Vstack className={className} onDoubleClick={handleDoubleClick}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
             {eventArray.map((event) => (
                 <EventBox key={event.id} event={event} />

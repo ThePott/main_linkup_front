@@ -6,6 +6,7 @@ import useCalendar from "./useCalendar";
 import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
 import { format } from "date-fns";
+import { CalendarContext } from "./CalendarContext";
 
 const formatToYmd = (date) => format(date, "yyyyMMdd");
 
@@ -22,7 +23,12 @@ const groupEventArrayBySttime = (eventArray) => {
  * @param {"SM" | "MD" | "LG"} props.size
  * @param {boolean} props.isSmall
  */
-const Calendar = ({ eventArray = [], isSmall }) => {
+const Calendar = ({
+    eventArray = [],
+    isSmall,
+    setModalKey,
+    setSelectedEvent,
+}) => {
     const {
         selectedDate,
         // setCurrentDate,
@@ -45,37 +51,44 @@ const Calendar = ({ eventArray = [], isSmall }) => {
 
     const groupedEvent = groupEventArrayBySttime(eventArray);
 
+    const contextValue = {
+        setModalKey,
+        setSelectedEvent,
+    };
+
     return (
-        <Vstack className={styles.calendar}>
-            <Hstack
-                justify="end"
-                items="center"
-                gap="none"
-                className={styles.bold}
-            >
-                <div>
-                    {fullYear}년 {month}월
-                </div>
-                <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
-                <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
-            </Hstack>
-            <GridContainer cols={7}>
-                {weekDayArray.map((weekday) => (
-                    <HeaderCell key={weekday} weekday={weekday} />
-                ))}
-            </GridContainer>
-            <GridContainer cols={7} rows={isSmall ? undefined : 5}>
-                {dateWithIsDimArray.map(({ date, isDim }) => (
-                    <DateCell
-                        key={date}
-                        isDim={isDim}
-                        date={date}
-                        eventArray={groupedEvent[formatToYmd(date)] ?? []}
-                        isToday={getIsToday(date)}
-                    />
-                ))}
-            </GridContainer>
-        </Vstack>
+        <CalendarContext.Provider value={contextValue}>
+            <Vstack className={styles.calendar}>
+                <Hstack
+                    justify="end"
+                    items="center"
+                    gap="none"
+                    className={styles.bold}
+                >
+                    <div>
+                        {fullYear}년 {month}월
+                    </div>
+                    <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
+                    <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
+                </Hstack>
+                <GridContainer cols={7}>
+                    {weekDayArray.map((weekday) => (
+                        <HeaderCell key={weekday} weekday={weekday} />
+                    ))}
+                </GridContainer>
+                <GridContainer cols={7} rows={isSmall ? undefined : 5}>
+                    {dateWithIsDimArray.map(({ date, isDim }) => (
+                        <DateCell
+                            key={date}
+                            isDim={isDim}
+                            date={date}
+                            eventArray={groupedEvent[formatToYmd(date)] ?? []}
+                            isToday={getIsToday(date)}
+                        />
+                    ))}
+                </GridContainer>
+            </Vstack>
+        </CalendarContext.Provider>
     );
 };
 

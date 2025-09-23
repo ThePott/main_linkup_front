@@ -26,6 +26,11 @@ const useLinkUpStore = create()(
                 set({ isModalOn });
             },
 
+            modalKey: null,
+            setModalKey(modalKey) {
+                set({ modalKey });
+            },
+
             selectedArtist: null,
             setSelectedArtist(selectedArtist) {
                 set({ selectedArtist });
@@ -39,6 +44,11 @@ const useLinkUpStore = create()(
             artistArray: [],
             setArtistArray(artistArray) {
                 set({ artistArray });
+            },
+
+            selectedEvent: null,
+            setSelectedEvent(selectedEvent) {
+                set({ selectedEvent });
             },
         }),
         {

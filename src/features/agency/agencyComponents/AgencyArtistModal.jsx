@@ -44,13 +44,8 @@ const ArtistInput = ({ selectedArtist, info }) => {
 
 const AgencyArtistModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    const isModalOn = useLinkUpStore((state) => state.isModalOn);
-    const setIsModalOn = useLinkUpStore((state) => state.setIsModalOn);
-    const setSelectedArtist = useLinkUpStore(
-        (state) => state.setSelectedArtist,
-    );
-    const user = useLinkUpStore((state) => state.user);
-    const setUser = useLinkUpStore((state) => state.setUser);
+    const modalKey = useLinkUpStore((state) => state.modalKey);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
     const postMutation = useMutation({
         mutationFn: (body) => {
@@ -73,11 +68,11 @@ const AgencyArtistModal = () => {
     });
 
     const handleDismiss = () => {
-        setIsModalOn(false);
+        setModalKey(null);
     };
 
     const handleDelete = () => {
-        if (!user || !selectedArtist) {
+        if (!selectedArtist) {
             throw new Error(
                 "---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함",
             );
@@ -153,7 +148,10 @@ const AgencyArtistModal = () => {
     const buttonLabel = selectedArtist ? "수정" : "추가";
 
     return (
-        <Modal isOn={isModalOn} onBackgroundClick={handleDismiss}>
+        <Modal
+            isOn={modalKey === "agencySidebar"}
+            onBackgroundClick={handleDismiss}
+        >
             <form onSubmit={handleSubmit}>
                 <GridContainer gap="MD" cols={4}>
                     <Vstack>
