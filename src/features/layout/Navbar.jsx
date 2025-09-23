@@ -1,5 +1,4 @@
-import { Link, useNavigate } from "react-router";
-
+import { Link, useNavigate, useSearchParams } from "react-router";
 import styles from "./Navbar.module.css";
 import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
@@ -16,10 +15,9 @@ const SideSection = ({ justify, children, ...props }) => {
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const [, setSearchParams] = useSearchParams();
     const groupArray = useLinkUpStore((state) => state.groupArray);
-    const setSearchResultArray = useLinkUpStore(
-        (state) => state.setSearchResultArray,
-    );
+    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
     const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
 
     const user = useRealLinkupStore((state) => state.user);
@@ -27,34 +25,31 @@ const Navbar = () => {
     const setAccessToken = useRealLinkupStore((state) => state.setAccessToken);
 
     const handleSearch = (keyword) => {
-        const trimmed = keyword.trim();
-        if (trimmed === "") {
-            setSearchResultArray([]);
-            setSearchStatus("fail");
-            navigate("/test/mijin");
-            return;
-        }
+    const trimmed = keyword.trim();
 
-        const filtered = groupArray.filter(
-            (g) =>
-                g.name.includes(trimmed) ||
-                g.memberArray.some((m) => m.name.includes(trimmed)),
-        );
+    setSearchParams({ q: trimmed });
 
-        setSearchResultArray(filtered);
-
-        if (filtered.length === 0) {
-            setSearchStatus("fail");
-        } else {
-            setSearchStatus("success");
-        }
+    if (trimmed === "") {
+        setSearchResultArray([]);
+        setSearchStatus("fail");
         navigate("/test/mijin");
+        return;
+    }
+
+    const filtered = groupArray.filter(
+        (g) =>
+        g.name.includes(trimmed) ||
+        (g.memberArray || []).some((m) => m.name?.includes(trimmed))
+    );
+
+    setSearchResultArray(filtered);
+    setSearchStatus(filtered.length === 0 ? "fail" : "success");
+    navigate("/test/mijin");
     };
 
     const handleLogout = () => {
         setUser(null);
         setAccessToken(null);
-        // TODO: logout api 추가해야
     };
 
     return (

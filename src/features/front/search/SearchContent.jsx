@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 import useLinkUpStore from "../../../shared/store/dummyMijin.js";
-import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostCard from "../../../shared/FanpostCard.jsx";
 import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard.jsx";
@@ -8,27 +8,36 @@ import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("q") || "";
 
-    // const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-
     const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
-
     const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const res = await fetch("http://3.35.210.2:8000/api/idol");
-                const data = await res.json();
-                const artists = data.artists || [];
-                setGroupArray(artists);
-                setRecommendedGroupArray(artists.slice(0, 2));
+                // URL 파라미터의 검색어를 기반으로 API 호출
+                const url = query
+                    ? `http://3.35.210.2:8000/api/idol/${query}`
+                    : "http://3.35.210.2:8000/api/idol";
 
-                if (searchResultArray.length === 0) {
-                    setSearchResultArray(artists);
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (query) {
+                    setSearchResultArray([data]);
+                } else {
+                    const artists = data.artists || [];
+                    setGroupArray(artists);
+                    setRecommendedGroupArray(artists.slice(0, 2));
+
+                    if (searchResultArray.length === 0) {
+                        setSearchResultArray(artists);
+                    }
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
@@ -36,11 +45,9 @@ const SearchContent = () => {
         };
 
         fetchGroups();
-    }, [setGroupArray, setRecommendedGroupArray, setSearchResultArray]);
+    }, []);
 
-    const isFail = searchResultArray.length !== 1;
-
-    if (isFail) {
+    if (!query && searchResultArray.length === 0) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
