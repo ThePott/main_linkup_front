@@ -4,6 +4,13 @@ import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
 
+// Convert: "2025-11-11T08:31:10.811895Z"
+// To: "2025-11-11T08:31"
+const convertIsoToDatetimeLocal = (isoString) => {
+    if (!isoString) return "";
+    return isoString.slice(0, 16); // Takes "YYYY-MM-DDTHH:mm"
+};
+
 const AgencyCalendarModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
@@ -36,11 +43,21 @@ const AgencyCalendarModal = () => {
                     />
                     <CustomInputLabeled
                         label="시작 시각"
-                        inputProps={{ defaultValue: selectedEvent?.start_time }}
+                        inputProps={{
+                            type: "datetime-local",
+                            defaultValue: convertIsoToDatetimeLocal(
+                                selectedEvent?.start_time,
+                            ),
+                        }}
                     />
                     <CustomInputLabeled
                         label="종료 시각"
-                        inputProps={{ defaultValue: selectedEvent?.end_time }}
+                        inputProps={{
+                            type: "datetime-local",
+                            defaultValue: convertIsoToDatetimeLocal(
+                                selectedEvent?.end_time,
+                            ),
+                        }}
                     />
                     <CustomInputLabeled
                         label="장소"

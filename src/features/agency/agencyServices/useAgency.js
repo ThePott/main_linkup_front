@@ -33,13 +33,14 @@ export const useAgencyCalendar = () => {
                 "GET",
                 `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
             );
-            const eventArray = data.map((event) => ({
-                ...event,
-                start_time: new Date(event.start_time),
-                end_time: new Date(event.end_time),
-            }));
-            useLinkUpStore.setState({ eventArray });
-            return eventArray;
+            debugger;
+            // const eventArray = data.map((event) => ({
+            //     ...event,
+            //     start_time: new Date(event.start_time),
+            //     end_time: new Date(event.end_time),
+            // }));
+            useLinkUpStore.setState({ eventArray: data });
+            return data;
         },
         refetchOnWindowFocus: false,
         enabled: false,
