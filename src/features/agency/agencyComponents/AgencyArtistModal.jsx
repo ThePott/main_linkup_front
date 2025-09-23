@@ -14,7 +14,7 @@ const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
     ["그룹 이름", "group_name", "text"],
     ["데뷔일", "debut_date", "date"],
-    ["생일", "birthdate", "date"],
+    ["생일", "birth_date", "date"],
 ];
 const fileInputFieldInfoArray = [
     ["얼굴 사진", "img_face", "file"],
@@ -66,7 +66,7 @@ const AgencyArtistModal = () => {
         mutationFn: ({ body, id }) => {
             return axiosReturnsData(
                 "PUT",
-                `/api/companies/artists/${id}`,
+                `/api/companies/artists/with-images/${id}`,
                 body,
             );
         },
@@ -114,7 +114,7 @@ const AgencyArtistModal = () => {
         const stage_name = target.stage_name.value;
         const group_name = target.group_name.value;
         const debut_date = target.debut_date.value;
-        const birthdate = target.birthdate.value;
+        const birth_date = target.birth_date.value;
         const artist_type = group_name ? "group" : "individual";
 
         // Get actual File objects instead of values
@@ -122,40 +122,27 @@ const AgencyArtistModal = () => {
         const torso_image = target.torso_image.files[0];
         const banner_image = target.banner_image.files[0];
 
-        handleDismiss();
+        const formData = new FormData();
+        formData.append("stage_name", stage_name);
+        formData.append("group_name", group_name);
+        formData.append("debut_date", debut_date);
+        formData.append("birth_date", birth_date);
+        formData.append("artist_type", artist_type);
+        formData.append("email", `${Date.now()}@dont.understand`);
+
+        // Append files if they exist
+        if (face_image) formData.append("face_image", face_image);
+        if (torso_image) formData.append("torso_image", torso_image);
+        if (banner_image) formData.append("banner_image", banner_image);
 
         if (selectedArtist) {
-            // For updates, use JSON body for PUT requests
-            const body = {
-                stage_name,
-                group_name,
-                debut_date,
-                birthdate: birthdate || "2025-01-01",
-                artist_type,
-                email: `${Date.now()}@dont.understand`,
-            };
-            console.log({ body });
-            putMutation.mutate({ body, id: selectedArtist.id });
+            putMutation.mutate({ body: formData, id: selectedArtist.id });
         } else {
-            // Create FormData for file uploads
-            const formData = new FormData();
-            formData.append("stage_name", stage_name);
-            formData.append("group_name", group_name);
-            formData.append("debut_date", debut_date);
-            formData.append("birthdate", birthdate);
-            formData.append("artist_type", artist_type);
-            formData.append("email", `${Date.now()}@dont.understand`);
-
-            // Append files if they exist
-            if (face_image) formData.append("face_image", face_image);
-            if (torso_image) formData.append("torso_image", torso_image);
-            if (banner_image) formData.append("banner_image", banner_image);
-
-            console.log({ formData });
             postMutation.mutate(formData);
         }
 
         // TODO: POST or PUT 요청 보내고서 로컬에도 반영해야 함
+        handleDismiss();
     };
 
     const buttonLabel = selectedArtist ? "수정" : "추가";
