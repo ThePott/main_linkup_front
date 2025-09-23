@@ -1,51 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "../../package/modal/Modal.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
-import { apiChangePassword } from "../../shared/services/linkupApi.js"; // api 연동 추가
+import { apiChangePassword } from "../../shared/services/linkupApi.js";
 
 const PasswordChangeModal = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const [errorMessages, setErrorMessages] = useState([]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { currentPassword, newPassword, confirmPassword } = formData;
-
-    if (newPassword !== confirmPassword) {
-      setErrorMessages(["새 비밀번호와 확인이 일치하지 않습니다."]);
-      return;
-    }
+    const form = e.target;
+    const currentPassword = form.currentPassword.value;
+    const newPassword = form.newPassword.value;
+    const confirmPassword = form.confirmPassword.value;
 
     try {
-      await apiChangePassword(currentPassword, newPassword, confirmPassword);
-
+      // 백엔드로 바로 전송(유효성 검사 로직은 흥주님이 가지고 계심)
+      const response = await apiChangePassword(
+        currentPassword,
+        newPassword,
+        confirmPassword
+      );
+      console.log("API 응답:", response);
       alert("비밀번호 변경이 완료되었습니다.");
-      setErrorMessages([]);
-      setFormData({ currentPassword: "", newPassword: "", confirmPassword: "" });
       onClose();
+      form.reset();
     } catch (error) {
-      console.error("비밀번호 변경 실패:", error.response?.data || error.message);
+      console.error("비밀번호 변경 실패:", error);
 
       const detail = error.response?.data?.detail;
-
       if (Array.isArray(detail)) {
-        const msgs = detail.map((d) => d.msg || d);
-        setErrorMessages(msgs);
+        alert(detail.map((d) => d.msg).join("\n"));
       } else if (typeof detail === "string") {
-        setErrorMessages([detail]);
+        alert(detail);
       } else {
-        setErrorMessages(["비밀번호 변경 중 오류가 발생했습니다."]);
+        alert("비밀번호 변경 중 오류가 발생했습니다.");
       }
     }
   };
@@ -74,7 +61,6 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
             width: "100%",
           }}
         />
-
         <input
           type="password"
           name="newPassword"
@@ -86,7 +72,6 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
             width: "100%",
           }}
         />
-
         <input
           type="password"
           name="confirmPassword"
@@ -99,16 +84,6 @@ const PasswordChangeModal = ({ isOpen, onClose }) => {
           }}
         />
 
-        {/* 에러 메시지 표시 */}
-        {errorMessages.length > 0 && (
-          <div style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
-            {errorMessages.map((msg, idx) => (
-              <div key={idx}>{msg}</div>
-            ))}
-          </div>
-        )}
-
-        {/* 버튼 영역 */}
         <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
           <CustomButton color="BLUE" shape="RECTANGLE" type="submit">
             확인
