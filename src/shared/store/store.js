@@ -50,6 +50,28 @@ const useLinkUpStore = create()(
             setSelectedEvent(selectedEvent) {
                 set({ selectedEvent });
             },
+
+            //dummyMijin.js
+            groupArray: [], 
+            setGroupArray: (groupArray) => set({ groupArray }),
+
+            recommendedGroupArray: [],
+            setRecommendedGroupArray: (arr) => set({ recommendedGroupArray: arr }),
+
+            searchResultArray: [],
+            setSearchResultArray: (arr) => set({ searchResultArray: arr }),
+
+            searchStatus: "success",
+            setSearchStatus: (status) => set({ searchStatus: status }),
+
+            subscribedArtistIdArray: [],
+            toggleSubscribe: (artistId) =>
+                set((state) => {
+                    const current = state.subscribedArtistIdArray;
+                    return current.includes(artistId)
+                        ? { subscribedArtistIdArray: current.filter((id) => id !== artistId) }
+                        : { subscribedArtistIdArray: [...current, artistId] };
+                }),
         }),
         {
             name: "linkup-session-storage", // Name for your storage item
@@ -58,8 +80,8 @@ const useLinkUpStore = create()(
                 access_token: state.access_token,
                 user: state.user,
             }),
-        },
-    ),
+        }
+    )
 );
 
 export default useLinkUpStore;

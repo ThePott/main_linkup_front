@@ -3,16 +3,13 @@ import styles from "./Navbar.module.css";
 import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
-import useLinkUpStore from "../../shared/store/dummyMijin";
-import useRealLinkupStore from "../../shared/store/store";
+import useLinkUpStore from "../../shared/store/store";
 
-const SideSection = ({ justify, children, ...props }) => {
-    return (
-        <Hstack justify={justify} className={styles.sideSection} {...props}>
-            {children}
-        </Hstack>
-    );
-};
+const SideSection = ({ justify, children, ...props }) => (
+    <Hstack justify={justify} className={styles.sideSection} {...props}>
+        {children}
+    </Hstack>
+);
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -22,13 +19,12 @@ const Navbar = () => {
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
     const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
 
-    const user = useRealLinkupStore((state) => state.user);
-    const setUser = useRealLinkupStore((state) => state.setUser);
-    const setAccessToken = useRealLinkupStore((state) => state.setAccessToken);
+    const user = useLinkUpStore((state) => state.user);
+    const setUser = useLinkUpStore((state) => state.setUser);
+    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
-
         setSearchParams({ query: trimmed });
 
         if (trimmed === "") {
@@ -54,11 +50,7 @@ const Navbar = () => {
 
     return (
         <Hstack justify="center" items="center">
-            <Hstack
-                items="center"
-                justify="space-between"
-                className={styles.navbar}
-            >
+            <Hstack items="center" justify="space-between" className={styles.navbar}>
                 <SideSection justify="start">
                     <Link to="/" className={styles.logo}>
                         Logo

@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import useLinkUpStore from "../../shared/store/dummyMijin.js";
+import useLinkUpStore from "../../shared/store/store";
 import Calendar from "../../package/calendar/Calendar.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx"; 

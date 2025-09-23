@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import useLinkUpStore from "../../../shared/store/dummyMijin.js";
+import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostCard from "../../../shared/FanpostCard.jsx";
 import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard.jsx";
