@@ -1,15 +1,17 @@
 import useLinkUpStore from "../../../shared/store/dummyMijin.js";
 import { useNavigate } from "react-router";
 import RoundBox from "../../../package/RoundBox.jsx";
-import FanPostCard from "../../../shared/FanpostCard.jsx";
-import styles from "./SearchContent.module.css"; 
+import FanPostSection from "../../../shared/FanPostSection.jsx";
+import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
     const searchStatus = useLinkUpStore((state) => state.searchStatus);
     const recommendedGroupArray = useLinkUpStore(
         (state) => state.recommendedGroupArray
     );
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray
+    );
     const navigate = useNavigate();
 
     // 검색 실패 화면
@@ -24,9 +26,15 @@ const SearchContent = () => {
                         <RoundBox
                             key={group.id}
                             className={styles.clickable}
-                            onClick={() => navigate(`/detail/group/${group.id}`)}
+                            onClick={() =>
+                                navigate(`/detail/group/${group.id}`)
+                            }
                         >
-                            <img src={group.imgFace} alt={group.name} width={80} />
+                            <img
+                                src={group.imgFace}
+                                alt={group.name}
+                                width={80}
+                            />
                             <div>{group.name}</div>
                         </RoundBox>
                     ))}
@@ -61,16 +69,21 @@ const SearchContent = () => {
 
                 const topSchedules = combinedSchedules.slice(0, 3);
 
-
                 return (
                     <div key={group.id} className={styles.groupBlock}>
                         {/* 그룹 + 멤버 */}
                         <div className={styles.groupMemberRow}>
                             <RoundBox
                                 className={styles.clickable}
-                                onClick={() => navigate(`/detail/group/${group.id}`)}
+                                onClick={() =>
+                                    navigate(`/detail/group/${group.id}`)
+                                }
                             >
-                                <img src={group.imgFace} alt={group.name} width={80} />
+                                <img
+                                    src={group.imgFace}
+                                    alt={group.name}
+                                    width={80}
+                                />
                                 <div>{group.name}</div>
                             </RoundBox>
 
@@ -78,9 +91,15 @@ const SearchContent = () => {
                                 <RoundBox
                                     key={member.id}
                                     className={styles.clickable}
-                                    onClick={() => navigate(`/detail/artist/${member.id}`)}
+                                    onClick={() =>
+                                        navigate(`/detail/artist/${member.id}`)
+                                    }
                                 >
-                                    <img src={member.imgFace} alt={member.name} width={80} />
+                                    <img
+                                        src={member.imgFace}
+                                        alt={member.name}
+                                        width={80}
+                                    />
                                     <div>{member.name}</div>
                                 </RoundBox>
                             ))}
@@ -98,11 +117,13 @@ const SearchContent = () => {
 
                         {/* 그룹 팬포스트 */}
                         <h4>그룹 팬포스트</h4>
-                        <FanPostCard
+                        <FanPostSection
                             posts={group.groupPostArray}
                             limit={12}
                             cols={3}
-                            onClickPost={(postId) => navigate(`/post/${postId}`)}
+                            onClickPost={(postId) =>
+                                navigate(`/post/${postId}`)
+                            }
                         />
                     </div>
                 );
