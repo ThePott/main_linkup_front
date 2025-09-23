@@ -40,6 +40,14 @@ const useLinkUpStore = create()(
             setArtistArray(artistArray) {
                 set({ artistArray });
             },
+
+            fanPostFeedArray: [],
+            setFanPostFeedArray: (arr) => set({ fanPostFeedArray: arr }),
+
+            addFanPostFeed: (newFeed) => {
+                const prev = get().fanPostFeedArray;
+                set({ fanPostFeedArray: [newFeed, ...prev] });
+            },
         }),
         {
             name: "linkup-session-storage", // Name for your storage item
@@ -48,8 +56,8 @@ const useLinkUpStore = create()(
                 access_token: state.access_token,
                 user: state.user,
             }),
-        },
-    ),
+        }
+    )
 );
 
 export default useLinkUpStore;
