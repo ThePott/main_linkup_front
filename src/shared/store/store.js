@@ -46,6 +46,15 @@ const useLinkUpStore = create()(
                 set({ artistArray });
             },
 
+
+            fanPostArray: [],
+            setFanPostArray: (arr) => set({ fanPostArray: arr }),
+
+            addFanPost: (newPost) => {
+                const prev = get().fanPostArray;
+                set({ fanPostArray: [newPost, ...prev] });
+            },
+
             selectedEvent: null,
             setSelectedEvent(selectedEvent) {
                 set({ selectedEvent });
@@ -72,6 +81,7 @@ const useLinkUpStore = create()(
                         ? { subscribedArtistIdArray: current.filter((id) => id !== artistId) }
                         : { subscribedArtistIdArray: [...current, artistId] };
                 }),
+
         }),
         {
             name: "linkup-session-storage", // Name for your storage item

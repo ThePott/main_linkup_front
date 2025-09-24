@@ -2,11 +2,17 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox.jsx";
-import FanPostCard from "../../../shared/FanpostCard.jsx";
-import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard.jsx";
+import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
+    const searchStatus = useLinkUpStore((state) => state.searchStatus);
+    const recommendedGroupArray = useLinkUpStore(
+        (state) => state.recommendedGroupArray
+    );
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray
+    );
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
@@ -54,11 +60,14 @@ const SearchContent = () => {
                         <div
                             key={group.id}
                             className={styles.clickable}
-                            onClick={() => navigate(`/detail/group/${group.id}`)}
+                            onClick={() =>
+                                navigate(`/detail/group/${group.id}`)
+                            }
                         >
-                            <CustomImageCard
-                                url={group.profile_image || group.imgFace}
-                                style={{ width: 160, height: 200 }}
+                            <img
+                                src={group.imgFace}
+                                alt={group.name}
+                                width={80}
                             />
                             <div>{group.name}</div>
                         </div>
@@ -94,11 +103,14 @@ const SearchContent = () => {
                         <div className={styles.groupMemberRow}>
                             <div
                                 className={styles.clickable}
-                                onClick={() => navigate(`/detail/group/${group.id}`)}
+                                onClick={() =>
+                                    navigate(`/detail/group/${group.id}`)
+                                }
                             >
-                                <CustomImageCard
-                                    url={group.profile_image || group.imgFace}
-                                    style={{ width: 160, height: 200 }}
+                                <img
+                                    src={group.imgFace}
+                                    alt={group.name}
+                                    width={80}
                                 />
                                 <div>{group.name}</div>
                             </div>
@@ -107,11 +119,14 @@ const SearchContent = () => {
                                 <div
                                     key={member.id}
                                     className={styles.clickable}
-                                    onClick={() => navigate(`/detail/artist/${member.id}`)}
+                                    onClick={() =>
+                                        navigate(`/detail/artist/${member.id}`)
+                                    }
                                 >
-                                    <CustomImageCard
-                                        url={member.profile_image || member.imgFace}
-                                        style={{ width: 160, height: 200 }}
+                                    <img
+                                        src={member.imgFace}
+                                        alt={member.name}
+                                        width={80}
                                     />
                                     <div>{member.name}</div>
                                 </div>
@@ -128,11 +143,14 @@ const SearchContent = () => {
                         </div>
 
                         <h4>그룹 팬포스트</h4>
-                        <FanPostCard
-                            posts={group.groupPostArray || []}
+                        <FanPostSection
+                            posts={group.groupPostArray}
+
                             limit={12}
                             cols={3}
-                            onClickPost={(postId) => navigate(`/post/${postId}`)}
+                            onClickPost={(postId) =>
+                                navigate(`/post/${postId}`)
+                            }
                         />
                     </div>
                 );

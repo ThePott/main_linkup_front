@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import Calendar from "../../package/calendar/Calendar.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
-import Modal from "../../package/modal/Modal.jsx"; 
-import FanPostCard from "../../shared/FanpostCard.jsx"; 
+import Modal from "../../package/modal/Modal.jsx";
+import FanPostSection from "../../shared/FanPostSection.jsx";
 import RoundBox from "../../package/RoundBox.jsx";
 import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
@@ -14,17 +14,22 @@ const DetailContent = () => {
     const navigate = useNavigate();
 
     const groupArray = useLinkUpStore((state) => state.groupArray);
-    const subscribedArtistIdArray = useLinkUpStore((state) => state.subscribedArtistIdArray || []);
+    const subscribedArtistIdArray = useLinkUpStore(
+        (state) => state.subscribedArtistIdArray || []
+    );
     const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
 
-    // 현재 URL 선택된 그룹/ 아티스트 상세 정보 
+    // 현재 URL 선택된 그룹/ 아티스트 상세 정보
     const [selectedArtistResult, setSelectedArtistResult] = useState(null);
     // 그룹 일정 + 멤버 일정 종합
-    const [mergedScheduleResultArray, setMergedScheduleResultArray] = useState([]);
+    const [mergedScheduleResultArray, setMergedScheduleResultArray] = useState(
+        []
+    );
     // 그룹/ 아티스트 팬포스트 배열
-    const [postResultArray, setPostResultArray] = useState([]); 
+    const [postResultArray, setPostResultArray] = useState([]);
     // 구독 중인 그룹/멤버 정보(스토어에서 필터링한거)
-    const [subscribedArtistResultArray, setSubscribedArtistResultArray] = useState([]);
+    const [subscribedArtistResultArray, setSubscribedArtistResultArray] =
+        useState([]);
     // 구독취소 모달
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,26 +50,30 @@ const DetailContent = () => {
             const newMergedScheduleResultArray =
                 type === "group"
                     ? [
-                        // 그룹 일정
-                        ...selectedItem.groupScheduleArray.map((schedule) => ({
-                            ...schedule,
-                            owner: selectedItem.name,
-                        })),
-                        // 멤버 일정
-                        ...selectedItem.memberArray.flatMap((member) =>
-                            member.scheduleArray.map((schedule) => ({
-                                ...schedule,
-                                owner: member.name,
-                            }))
-                        ),
-                    ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime))
+                          // 그룹 일정
+                          ...selectedItem.groupScheduleArray.map(
+                              (schedule) => ({
+                                  ...schedule,
+                                  owner: selectedItem.name,
+                              })
+                          ),
+                          // 멤버 일정
+                          ...selectedItem.memberArray.flatMap((member) =>
+                              member.scheduleArray.map((schedule) => ({
+                                  ...schedule,
+                                  owner: member.name,
+                              }))
+                          ),
+                      ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime))
                     : selectedItem.scheduleArray.map((schedule) => ({
-                        ...schedule,
-                        owner: selectedItem.name,
-                    }));
+                          ...schedule,
+                          owner: selectedItem.name,
+                      }));
 
             setMergedScheduleResultArray(newMergedScheduleResultArray);
-            setPostResultArray(selectedItem.groupPostArray || selectedItem.postArray || []);
+            setPostResultArray(
+                selectedItem.groupPostArray || selectedItem.postArray || []
+            );
         } else {
             setMergedScheduleResultArray([]);
             setPostResultArray([]);
@@ -83,7 +92,12 @@ const DetailContent = () => {
     };
 
     if (!selectedArtistResult) {
-        return <div>해당 {type === "group" ? "그룹" : "아티스트"}를 찾을 수 없습니다.</div>;
+        return (
+            <div>
+                해당 {type === "group" ? "그룹" : "아티스트"}를 찾을 수
+                없습니다.
+            </div>
+        );
     }
 
     return (
@@ -94,7 +108,11 @@ const DetailContent = () => {
                     <div
                         key={artistItem.id}
                         onClick={() =>
-                            navigate(`/detail/${artistItem.isGroup ? "group" : "artist"}/${artistItem.id}`)
+                            navigate(
+                                `/detail/${
+                                    artistItem.isGroup ? "group" : "artist"
+                                }/${artistItem.id}`
+                            )
                         }
                         className={styles.subscribedItem}
                     >
@@ -125,16 +143,19 @@ const DetailContent = () => {
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {mergedScheduleResultArray.slice(0, 3).map((schedule, index) => (
-                        <RoundBox key={index} padding="MD">
-                            {schedule.owner} {schedule.title} - {schedule.sttime}
-                        </RoundBox>
-                    ))}
+                    {mergedScheduleResultArray
+                        .slice(0, 3)
+                        .map((schedule, index) => (
+                            <RoundBox key={index} padding="MD">
+                                {schedule.owner} {schedule.title} -{" "}
+                                {schedule.sttime}
+                            </RoundBox>
+                        ))}
                 </div>
             </div>
 
             {/* 4. 팬포스트 */}
-            <FanPostCard
+            <FanPostSection
                 posts={postResultArray}
                 limit={24}
                 cols={4}
@@ -142,9 +163,14 @@ const DetailContent = () => {
             />
 
             {/* 모달 */}
-            <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
+            <Modal
+                isOn={isModalOpen}
+                onBackgroundClick={() => setIsModalOpen(false)}
+            >
                 <h3>구독을 취소하시겠습니까?</h3>
-                <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
+                <div
+                    style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}
+                >
                     <CustomButton
                         shape="RECTANGLE"
                         color="RED"
