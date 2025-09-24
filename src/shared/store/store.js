@@ -5,44 +5,53 @@ const useLinkUpStore = create()(
     persist(
         (set, get) => ({
             something: 1,
-            setSomething(diff) {
+            setSomething: (diff) => {
                 const state = get();
                 const newSomething = state.something + diff;
                 set({ something: newSomething });
             },
 
             access_token: null,
-            setAccessToken(access_token) {
+            setAccessToken: (access_token) => {
                 set({ access_token });
             },
 
             user: null,
-            setUser(user) {
+            setUser: (user) => {
                 set({ user });
             },
 
-            isModalOn: false,
-            setIsModalOn(isModalOn) {
-                set({ isModalOn });
-            },
-
             modalKey: null,
-            setModalKey(modalKey) {
+            setModalKey: (modalKey) => {
                 set({ modalKey });
             },
 
             selectedArtist: null,
-            setSelectedArtist(selectedArtist) {
+            setSelectedArtist: (selectedArtist) => {
                 set({ selectedArtist });
             },
 
             eventArray: [],
-            setEventArray(eventArray) {
+            setEventArray: (eventArray) => {
                 set({ eventArray });
             },
 
             artistArray: [],
-            setArtistArray(artistArray) {
+            setArtistArray: (artistArray) => {
+                set({ artistArray });
+            },
+            addArtist: (artist) => {
+                const artistArray = [...get().artist, artist];
+                set({ artistArray });
+            },
+            deleteArtist: (artist) => {
+                const artistArray = get().artist.filter(
+                    (el) => el.id !== artist.id,
+                );
+                set({ artistArray });
+            },
+            clearTempArtist: () => {
+                const artistArray = get().artist.filter((artist) => artist.id);
                 set({ artistArray });
             },
 
@@ -56,16 +65,17 @@ const useLinkUpStore = create()(
             },
 
             selectedEvent: null,
-            setSelectedEvent(selectedEvent) {
+            setSelectedEvent: (selectedEvent) => {
                 set({ selectedEvent });
             },
 
             //dummyMijin.js
-            groupArray: [], 
+            groupArray: [],
             setGroupArray: (groupArray) => set({ groupArray }),
 
             recommendedGroupArray: [],
-            setRecommendedGroupArray: (arr) => set({ recommendedGroupArray: arr }),
+            setRecommendedGroupArray: (arr) =>
+                set({ recommendedGroupArray: arr }),
 
             searchResultArray: [],
             setSearchResultArray: (arr) => set({ searchResultArray: arr }),
@@ -78,7 +88,11 @@ const useLinkUpStore = create()(
                 set((state) => {
                     const current = state.subscribedArtistIdArray;
                     return current.includes(artistId)
-                        ? { subscribedArtistIdArray: current.filter((id) => id !== artistId) }
+                        ? {
+                              subscribedArtistIdArray: current.filter(
+                                  (id) => id !== artistId,
+                              ),
+                          }
                         : { subscribedArtistIdArray: [...current, artistId] };
                 }),
 
@@ -90,8 +104,8 @@ const useLinkUpStore = create()(
                 access_token: state.access_token,
                 user: state.user,
             }),
-        }
-    )
+        },
+    ),
 );
 
 export default useLinkUpStore;
