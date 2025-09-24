@@ -40,18 +40,43 @@ const useLinkUpStore = create()(
             setArtistArray: (artistArray) => {
                 set({ artistArray });
             },
-            addArtist: (artist) => {
-                const artistArray = [...get().artist, artist];
+            addArtistInTemp: (formData) => {
+                const artist = {
+                    stage_name: formData.getName("stage_name"),
+                    group_name: formData.getName("group_name"),
+                    debut_date: formData.getName("debut_date"),
+                    birth_date: formData.getName("birth_date"),
+                };
+
+                const artistArray = [...get().artistArray, artist];
                 set({ artistArray });
             },
-            deleteArtist: (artist) => {
-                const artistArray = get().artist.filter(
-                    (el) => el.id !== artist.id,
+            updateArtistInTemp: (artistId, formData) => {
+                const updatedArtist = {
+                    stage_name: formData.getName("stage_name"),
+                    group_name: formData.getName("group_name"),
+                    debut_date: formData.getName("debut_date"),
+                    birth_date: formData.getName("birth_date"),
+                };
+
+                const artistArray = get().artistArray.map((artist) =>
+                    artist.id === artistId
+                        ? { ...artist, ...updatedArtist }
+                        : artist,
                 );
                 set({ artistArray });
             },
-            clearTempArtist: () => {
-                const artistArray = get().artist.filter((artist) => artist.id);
+            replaceArtistWithResponse: (responseData) => {
+                const filteredArtistArray = get().artistArray.filter(
+                    (artist) => artist.id,
+                );
+                const artistArray = [...filteredArtistArray, responseData];
+                set({ artistArray });
+            },
+            deleteArtist: (artist) => {
+                const artistArray = get().artistArray.filter(
+                    (el) => el.id !== artist.id,
+                );
                 set({ artistArray });
             },
 
