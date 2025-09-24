@@ -20,9 +20,7 @@ export const apiAuthMe = async (method, body) => {
             break;
         case "PUT":
             if (!body) {
-                throw new Error(
-                    "---- ERROR OCCURRED: MISSING BODY WHEN REQUEST",
-                );
+                throw new Error("---- ERROR OCCURRED: MISSING BODY WHEN REQUEST");
             }
             response = await axiosInstance.put(ADDITIONAL_URL, body);
             break;
@@ -42,17 +40,13 @@ export const apiAuthMe = async (method, body) => {
  * @param {string} newPassword 새 비밀번호
  * @param {string} newPasswordConfirm 새 비밀번호 확인
  */
-
-export const apiChangePassword = async (
-  currentPassword,
-  newPassword,
-  newPasswordConfirm
-) => {
-  const ADDITIONAL_URL = "/api/auth/me/password";
-  const response = await axiosInstance.put(ADDITIONAL_URL, {
-    current_password: currentPassword,
-    new_password: newPassword,
-    new_password_confirm: newPasswordConfirm,
-  });
-  return response.data;
+export const apiChangePassword = async (currentPassword, newPassword, newPasswordConfirm) => {
+    const ADDITIONAL_URL = "/api/auth/me/password";
+    const response = await axiosInstance.put(ADDITIONAL_URL, {
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirm: newPasswordConfirm,
+    });
+    return response.data;
 };
+
