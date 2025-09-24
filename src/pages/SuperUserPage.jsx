@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./SuperUserPage.css";
 import CustomButton from "../package/customButton/CustomButton.jsx";
-
-// API 함수 임포트
-import {
-  fetchUsers,
-  banUser,
-  unbanUser,
-} from "../features/super-user/SuperuserApi";
+import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 
 const SuperUserPage = () => {
   const [emailSearch, setEmailSearch] = useState("");
   const [nicknameSearch, setNicknameSearch] = useState("");
   const [users, setUsers] = useState([]);
 
-  // 유저 불러오기
+  // 유저 목록 불러오기
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -28,7 +22,7 @@ const SuperUserPage = () => {
     loadUsers();
   }, []);
 
-  // 차단/해제
+  // 차단 / 차단 해제
   const handleToggleBan = async (id, banned) => {
     try {
       if (banned) {
@@ -39,12 +33,10 @@ const SuperUserPage = () => {
         alert(`유저 ${id}을(를) 차단했습니다.`);
       }
 
-      setUsers(
-        users.map((u) =>
-          u.id === id ? { ...u, banned: !banned } : u
-        )
-      );
+      // 상태 업데이트
+      setUsers(users.map((u) => (u.id === id ? { ...u, banned: !banned } : u)));
     } catch (error) {
+      console.error(error);
       alert("처리 실패");
     }
   };
@@ -52,8 +44,7 @@ const SuperUserPage = () => {
   // 검색 필터링
   const filteredUsers = users.filter(
     (user) =>
-      user.email.includes(emailSearch) &&
-      user.nickname.includes(nicknameSearch)
+      user.email.includes(emailSearch) && user.nickname.includes(nicknameSearch)
   );
 
   return (
@@ -92,7 +83,7 @@ const SuperUserPage = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>{user.banned ? "차단됨" : "정상"}</td>
-              <td>
+              <td style={{ display: "flex", gap: "8px" }}>
                 <CustomButton
                   color={user.banned ? "BLUE" : "RED"}
                   shape="RECTANGLE"
