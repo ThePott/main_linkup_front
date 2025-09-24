@@ -115,7 +115,6 @@ const AgencyArtistModal = () => {
             isOn={modalKey === "agencySidebar"}
             onBackgroundClick={handleDismiss}
         >
-            <RoundBox>{selectedArtist?.id ?? "null"}</RoundBox>
             <form ref={formRef} onSubmit={handleSubmit}>
                 <GridContainer gap="MD" cols={4}>
                     <Vstack>
