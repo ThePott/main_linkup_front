@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import styles from "./FanPostList.module.css";
+import styles from "./FanPostGrid.module.css";
 import GridCardContainer from "./GridCardContainer/GridCardContainer";
 
-const FanPostList = ({ feedList }) => {
+const FanPostGrid = ({ fanPostArray }) => {
     const navigate = useNavigate();
     const handleCreate = () => navigate("/mypage/write");
-    console.log(feedList);
+    console.log(fanPostArray);
 
     return (
         <GridCardContainer cols="auto">
@@ -15,7 +15,7 @@ const FanPostList = ({ feedList }) => {
                     <span>+</span>
                 </li>
 
-                {feedList.map((post, index) => (
+                {fanPostArray.map((post, index) => (
                     <li key={index} className={styles.fanpostItem}>
                         {/* <img src={post.imageUrl} alt={post.artistName} /> */}
                         <p>{post.artistName}</p>
@@ -27,4 +27,4 @@ const FanPostList = ({ feedList }) => {
     );
 };
 
-export default FanPostList;
+export default FanPostGrid;

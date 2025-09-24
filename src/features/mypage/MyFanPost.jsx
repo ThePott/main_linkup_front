@@ -1,14 +1,14 @@
 import { React } from "react";
 import useLinkUpStore from "../../shared/store/store";
-import FanPostList from "../../shared/FanPostList";
+import FanPostGrid from "../../shared/FanPostGrid";
 
 const MyFanPost = () => {
-    const feedList = useLinkUpStore((state) => state.fanPostFeedArray);
-    console.log("myfanpost", feedList);
+    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
+    console.log("myfanpost", fanPostArray);
 
     return (
         <>
-            <FanPostList feedList={feedList} />
+            <FanPostGrid fanPostArray={fanPostArray} />
         </>
     );
 };
