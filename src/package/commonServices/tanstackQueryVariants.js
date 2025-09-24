@@ -47,7 +47,6 @@ export const usePostMutation = (
  * @param {(formData: FormData) => object} conversionFn - 폼 데이터를 객체로 알맞게 변환하는 함수
  *
  * <button onClick={() => putMutation.mutate(body)}>수정 버튼</button>
- *
  * 주의할 점: 불필요하더라도 body에 id를 넣어주셔야 합니다. 그래야 UI 상에서 알맞는 객체가 업데이트가 됩니다.
  *
  */
@@ -90,7 +89,8 @@ export const usePutMutation = (
  * @param {string} queryEndpoint - 관련 자료 GET 할 때 쓴 엔드포인트
  * @param {(formData: FormData) => object} conversionFn - 폼 데이터를 객체로 알맞게 변환하는 함수
  *
- * <button onClick={()=>deleteMutation(삭제할 것id)}>삭제 버튼</button>
+ * <button onClick={()=>deleteMutation.mutate(삭제할 것의 id)}>삭제 버튼</button>
+ * 주의할 점: 삭제할 땐 body가 없는 것과 무관히 꼭 mutate 안에 id를 넣으셔야 합니다.
  */
 export const useDeleteMutation = (mutationEndpoint, queryEndpoint) => {
     const deleteMutation = useMutation({
