@@ -1,10 +1,14 @@
-const API_BASE_URL = "http://3.35.210.2:8000/api/superuser"; // 프록시 사용 x
+const API_BASE_URL = "http://3.35.210.2:8000/api/superuser";
 
 // 전체 유저 가져오기
-export async function fetchUsers() {
+export async function fetchUsers(access_token) {
   try {
     const res = await fetch(`${API_BASE_URL}/users`, {
-      cache: "no-store", // 매번 새 데이터 요청
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access_token}`, // 토큰 추가
+      },
     });
 
     if (!res.ok) {
@@ -20,11 +24,14 @@ export async function fetchUsers() {
 }
 
 // 유저 차단
-export async function banUser(id) {
+export async function banUser(id, access_token) {
   try {
     const res = await fetch(`${API_BASE_URL}/users/ban`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access_token}`,
+      },
       body: JSON.stringify({ user_id: id }),
     });
 
@@ -41,10 +48,13 @@ export async function banUser(id) {
 }
 
 // 유저 차단 해제
-export async function unbanUser(id) {
+export async function unbanUser(id, access_token) {
   try {
     const res = await fetch(`${API_BASE_URL}/users/${id}/unban`, {
       method: "POST",
+      headers: {
+        "Authorization": `Bearer ${access_token}`,
+      },
     });
 
     if (!res.ok) {
