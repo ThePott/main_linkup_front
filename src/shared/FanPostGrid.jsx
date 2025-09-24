@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import styles from "./FanPostGrid.module.css";
 import GridCardContainer from "./GridCardContainer/GridCardContainer";
+import CustomImageCard from "./CustomImageCard/CustomImageCard";
 
 const FanPostGrid = ({ fanPostArray }) => {
     const navigate = useNavigate();
@@ -17,7 +18,10 @@ const FanPostGrid = ({ fanPostArray }) => {
 
                 {fanPostArray.map((post, index) => (
                     <li key={index} className={styles.fanpostItem}>
-                        {/* <img src={post.imageUrl} alt={post.artistName} /> */}
+                        <CustomImageCard
+                            url={post.imageUrl}
+                            alt={post.artistName}
+                        />
                         <p>{post.artistName}</p>
                         <p>{post.content}</p>
                     </li>

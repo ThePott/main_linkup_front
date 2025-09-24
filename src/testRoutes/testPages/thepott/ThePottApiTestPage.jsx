@@ -7,6 +7,7 @@ import {
 } from "../../../package/commonServices/fetchVariants";
 import { useState } from "react";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
+import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
@@ -33,7 +34,7 @@ const postFanLogin = (callback) =>
             email: "fan_dummy_1@gmail.com",
             password: "fan123!",
         },
-        callback,
+        callback
     );
 const postCompanyLogin = (callback) =>
     postThenLog(
@@ -42,9 +43,15 @@ const postCompanyLogin = (callback) =>
             email: "sm_dummy@company.com",
             password: "company123!",
         },
-        callback,
+        callback
     );
 const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
+
+const postFanPost = () =>
+    axiosReturnsData("POST", "/api/posts", {
+        artist_id: 22,
+        post_content: "가나다라",
+    });
 
 const ThePottApiTestPage = () => {
     const [accessToken, setAccessToken] = useState(null);
@@ -59,7 +66,7 @@ const ThePottApiTestPage = () => {
             // `${baseURL}/events/?artist_parent_group=1`,
             `${baseURL}/events/`,
             callback,
-            accessToken,
+            accessToken
         );
     const getCompaniesArtists = (callback) =>
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
@@ -69,7 +76,7 @@ const ThePottApiTestPage = () => {
         getThenLog(
             `${baseURL}/api/companies/events?artist_id=6`,
             callback,
-            accessToken,
+            accessToken
         );
 
     const callbackLogin = (data) => {
@@ -139,6 +146,10 @@ const ThePottApiTestPage = () => {
                             onClick={() => getCompaniesEventsAespa(callbackLog)}
                         >
                             <p>get companies events</p>
+                        </CustomButton>
+
+                        <CustomButton onClick={() => postFanPost()}>
+                            <p>get posting</p>
                         </CustomButton>
                     </Vstack>
                 </RoundBoxGlobalShadow>

@@ -1,9 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
 import useLinkUpStore from "../../../shared/store/store";
 import { useEffect } from "react";
-import queryClient from "../../../shared/services/queryClient";
 import { convertFormDataToArtist } from "../agencyUtils";
+import {
+    useDeleteMutation,
+    usePostMutation,
+    usePutMutation,
+} from "../../../package/commonServices/tanstackQueryVariants";
 
 const useAgentArtistModalQuery = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
@@ -37,65 +41,23 @@ const useAgentArtistModalQuery = () => {
 };
 
 const useAgentArtistModalMutate = () => {
-    // const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    // const id = selectedArtist?.id ?? -1;
-    const addArtistInTemp = useLinkUpStore((state) => state.addArtistInTemp);
-    const addArtistInReal = useLinkUpStore((state) => state.addArtistInReal);
-    const updateArtistInTemp = useLinkUpStore(
-        (state) => state.updateArtistInTemp,
-    );
-    const deleteArtist = useLinkUpStore((state) => state.deleteArtist);
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const id = selectedArtist?.id ?? -1;
 
-    const postMutation = useMutation({
-        mutationFn: (formData) =>
-            axiosReturnsData(
-                "POST",
-                "/api/companies/artists/with-images",
-                formData,
-            ),
-        onMutate: async (formData) => {
-            const endpoint = "/api/companies/artists";
-            await queryClient.cancelQueries({
-                queryKey: [endpoint],
-            });
-            const previous = queryClient.getQueryData([endpoint]);
-            const newArtist = convertFormDataToArtist(formData);
-            queryClient.setQueryData([endpoint], (prev) => [
-                ...prev,
-                newArtist,
-            ]);
-            return { previous };
-        },
-        onError: async (error, data, context) => {
-            console.error(error);
-            queryClient.setQueryData(
-                ["/api/companies/artists"],
-                context.previous,
-            );
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["/api/companies/artists"],
-            });
-        },
-    });
-    const putMutation = useMutation({
-        mutationFn: async ({ body, id }) =>
-            axiosReturnsData(
-                "PUT",
-                `/api/companies/artists/with-images/${id}`,
-                body,
-            ),
-        onMutate: ({ id, body }) => {
-            updateArtistInTemp(id, body);
-        },
-    });
-    const deleteMutation = useMutation({
-        mutationFn: (id) => {
-            return axiosReturnsData("DELETE", `/api/companies/artists/${id}`);
-        },
-        onMutate: (id) => deleteArtist(id),
-    });
+    const postMutation = usePostMutation(
+        `/api/companies/artists/with-images`,
+        "/api/companies/artists",
+        convertFormDataToArtist,
+    );
+    const putMutation = usePutMutation(
+        `/api/companies/artists/with-images/${id}`,
+        "/api/companies/artists",
+        convertFormDataToArtist,
+    );
+    const deleteMutation = useDeleteMutation(
+        `/api/companies/artists/${id}`,
+        "/api/companies/artists",
+    );
 
     return { postMutation, putMutation, deleteMutation };
 };

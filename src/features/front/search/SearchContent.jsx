@@ -7,44 +7,85 @@ import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
     const searchStatus = useLinkUpStore((state) => state.searchStatus);
-
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
+    const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
-    const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
-    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
+
+    const setRecommendedGroupArray = useLinkUpStore(
+        (state) => state.setRecommendedGroupArray
+    );
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray
+    );
+    const setSearchResultArray = useLinkUpStore(
+        (state) => state.setSearchResultArray
+    );
 
     useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const url = queryParam
-                    ? `http://3.35.210.2:8000/api/idol/${queryParam}`
-                    : "http://3.35.210.2:8000/api/idol";
+        const fetchData = async () => {
+        try {
+            if (queryParam) {
+            const res = await fetch(
+                `http://3.35.210.2:8000/api/idol/${encodeURIComponent(queryParam)}`
+            );
 
-                const res = await fetch(url);
-                const data = await res.json();
-
-                if (queryParam) {
-                    setSearchResultArray([data]);
-                } else {
-                    const artists = data.artists || [];
-                    setGroupArray(artists);
-                    setRecommendedGroupArray(artists);
-                    setSearchResultArray([]);
-                }
-            } catch (err) {
-                console.error("API 호출 에러:", err);
+            if (!res.ok) {
+                setSearchResultArray([]);
+                setRecommendedGroupArray(
+                groupArray.filter((group) =>
+                    (group.name || "")
+                    .toLowerCase()
+                    .includes(queryParam.toLowerCase())
+                )
+                );
+                return;
             }
+
+            const artist = await res.json();
+
+            if (artist.artist_type === "individual" && artist.group_name) {
+                const groupRes = await fetch(
+                `http://3.35.210.2:8000/api/idol/${encodeURIComponent(
+                    artist.group_name
+                )}`
+                );
+                const groupData = await groupRes.json();
+                setSearchResultArray([groupData]);
+            } else {
+                setSearchResultArray([artist]);
+            }
+            setRecommendedGroupArray([]);
+            } else {
+            const res = await fetch(
+                "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1"
+            );
+            if (!res.ok) {
+                setSearchResultArray([]);
+                return;
+
+            }
+            const data = await res.json();
+            const artists = data.artists || [];
+            setGroupArray(artists);
+            setRecommendedGroupArray(artists);
+            setSearchResultArray([]);
+            }
+        } catch (err) {
+            console.error("API 호출 에러:", err);
+            setSearchResultArray([]);
+        }
         };
 
-        fetchGroups();
-    }, [queryParam]);
 
-    if (!queryParam && searchResultArray.length === 0) {
+        fetchData();
+    }, [queryParam, groupArray]);
+
+
+
+    if (searchResultArray.length === 0) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
@@ -62,7 +103,9 @@ const SearchContent = () => {
                         </div>
                     ))}
                 </div>
+            ))}
             </div>
+        </div>
         );
     }
 
@@ -114,7 +157,8 @@ const SearchContent = () => {
                         <div className={styles.scheduleList}>
                             {topSchedules.map((schedule, index) => (
                                 <RoundBox key={index}>
-                                    {schedule.owner} {schedule.title} - {schedule.sttime}
+                                    {schedule.owner} {schedule.title} -{" "}
+                                    {schedule.sttime}
                                 </RoundBox>
                             ))}
                         </div>
@@ -127,8 +171,28 @@ const SearchContent = () => {
                             onClickPost={(postId) => navigate(`/post/${postId}`)}
                         />
                     </div>
-                );
-            })}
+                ))}
+                </div>
+
+                <h4>일정</h4>
+                <div className={styles.scheduleList}>
+                {topSchedules.map((schedule, index) => (
+                    <RoundBox key={index}>
+                    {schedule.owner} {schedule.title} - {schedule.sttime}
+                    </RoundBox>
+                ))}
+                </div>
+
+                <h4>그룹 팬포스트</h4>
+                <FanPostCard
+                posts={group.groupPostArray || []}
+                limit={12}
+                cols={3}
+                onClickPost={(postId) => navigate(`/post/${postId}`)}
+                />
+            </div>
+            );
+        })}
         </div>
     );
 };
