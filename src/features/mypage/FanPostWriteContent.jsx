@@ -9,7 +9,7 @@ import styles from "./FanPostWriteContent.module.css";
 import subscribeArray from "../../shared/store/dummy2Heehaa.json";
 
 const FanPostWriteContent = () => {
-    const addFanPostFeed = useLinkUpStore((state) => state.addFanPostFeed);
+    const addFanPost = useLinkUpStore((state) => state.addFanPost);
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -42,13 +42,13 @@ const FanPostWriteContent = () => {
         // 데이터가 잘 담겼는지 확인 <- 삭제 필요
         console.log("data", data);
 
-        addFanPostFeed({
+        addFanPost({
             imageUrl: data.image_url,
             artistName: data.artist_name,
             content: data.post_content,
         });
         // 데이터가 잘 담겼는지 확인 <- 삭제 필요
-        console.log("add", addFanPostFeed);
+        console.log("add", addFanPost);
 
         setCompletedModalOpen(true);
         setTimeout(() => {

@@ -41,12 +41,12 @@ const useLinkUpStore = create()(
                 set({ artistArray });
             },
 
-            fanPostFeedArray: [],
-            setFanPostFeedArray: (arr) => set({ fanPostFeedArray: arr }),
+            fanPostArray: [],
+            setFanPostArray: (arr) => set({ fanPostArray: arr }),
 
-            addFanPostFeed: (newFeed) => {
-                const prev = get().fanPostFeedArray;
-                set({ fanPostFeedArray: [newFeed, ...prev] });
+            addFanPost: (newPost) => {
+                const prev = get().fanPostArray;
+                set({ fanPostArray: [newPost, ...prev] });
             },
         }),
         {
