@@ -43,13 +43,19 @@ const Navbar = () => {
                     onEnter={handleSearch}
                     className={styles.searchbar}
                 />
-
+                
                 <SideSection justify="end">
                     {user ? (
-                        <>
-                            <CustomButton onClick={() => navigate("/mypage")}>
-                                마이페이지
-                            </CustomButton>
+                        <> 
+                            {user.user_type === "admin" ? (
+                                <CustomButton onClick={() => navigate("/super-user")}> 
+                                    관리페이지
+                                </CustomButton> //유저 권한에 따라서 버튼 변경
+                            ) : (
+                                <CustomButton onClick={() => navigate("/mypage")}>
+                                    마이페이지
+                                </CustomButton> //유저 권한에 따라서 버튼 변경
+                            )}
                             <CustomButton onClick={handleLogout}>
                                 로그아웃
                             </CustomButton>
