@@ -5,13 +5,19 @@ import RecommendContent from "../features/front/recommend/RecommendContent";
 import TotalContent from "../features/front/total/TotalContent";
 import SearchContent from "../features/front/search/SearchContent";
 import { useFront } from "../features/front/useFront";
+import { useSearchParams } from "react-router";
 
 /** 임시로 각 콘텐트로 이동시키게 만들었습니다. */
 const FrontPage = () => {
     const [whatToShow, setWhatToShow] = useState(null);
+    const [searchParams] = useSearchParams();
+    const queryParam = searchParams.get("query");
 
     useFront();
 
+    if (queryParam) {
+        return <SearchContent />;
+    }
     if (!whatToShow) {
         return (
             <Hstack>
