@@ -1,13 +1,11 @@
 import styles from "./AgencyArtistModal.module.css";
-import { useMutation } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
-import { useAgentArtistModal } from "../agencyServices/useAgency";
+import useAgentArtistModal from "../agencyServices/useAgencyArtistModal";
 import { useRef } from "react";
 import ImageInput from "../../../package/imageInput/ImageInput";
 import RoundBox from "../../../package/RoundBox";
@@ -53,45 +51,8 @@ const AgencyArtistModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const addArtistInTemp = useLinkUpStore((state) => state.addArtistInTemp);
-    const addArtistInReal = useLinkUpStore((state) => state.addArtistInReal);
-
-    const updateArtistInTemp = useLinkUpStore(
-        (state) => state.updateArtistInTemp,
-    );
-    const deleteArtist = useLinkUpStore((state) => state.deleteArtist);
-
-    const { isPending, error } = useAgentArtistModal();
-
-    const postMutation = useMutation({
-        mutationFn: (formData) =>
-            axiosReturnsData(
-                "POST",
-                "/api/companies/artists/with-images",
-                formData,
-            ),
-        onMutate: (formData) => {
-            addArtistInTemp(formData);
-        },
-        onSuccess: (data) => addArtistInReal(data),
-    });
-    const putMutation = useMutation({
-        mutationFn: async ({ body, id }) =>
-            axiosReturnsData(
-                "PUT",
-                `/api/companies/artists/with-images/${id}`,
-                body,
-            ),
-        onMutate: ({ id, body }) => {
-            updateArtistInTemp(id, body);
-        },
-    });
-    const deleteMutation = useMutation({
-        mutationFn: (id) => {
-            return axiosReturnsData("DELETE", `/api/companies/artists/${id}`);
-        },
-        onMutate: (id) => deleteArtist(id),
-    });
+    const { isPending, error, postMutation, putMutation, deleteMutation } =
+        useAgentArtistModal();
 
     const handleDismiss = () => {
         setModalKey(null);
