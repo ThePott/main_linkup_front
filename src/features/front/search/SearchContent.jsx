@@ -7,11 +7,6 @@ import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
     const searchStatus = useLinkUpStore((state) => state.searchStatus);
-    const recommendedGroupArray = useLinkUpStore(
-        (state) => state.recommendedGroupArray
-    );
-
-
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
@@ -92,27 +87,21 @@ const SearchContent = () => {
 
     if (searchResultArray.length === 0) {
         return (
-        <div className={styles.container}>
-            <h2>검색 결과</h2>
-            {queryParam ? (
-            <p>일치하는 검색 결과가 없습니다.</p>
-            ) : (
-            <p>일치하는 결과를 찾지 못했어요.</p>
-            )}
-
-            <h3>추천 그룹</h3>
-            <div className={styles.recommendedContainer}>
-            {recommendedGroupArray.map((group) => (
-                <div
-                key={group.id}
-                className={styles.clickable}
-                onClick={() => navigate(`/detail/group/${group.id}`)}
-                >
-                <CustomImageCard
-                    url={group.profile_image || group.imgFace}
-                    style={{ width: 160, height: 200 }}
-                />
-                <div>{group.name}</div>
+            <div className={styles.container}>
+                <h2>검색 결과</h2>
+                <p>일치하는 결과를 찾지 못했어요.</p>
+                <h3>추천 그룹</h3>
+                <div className={styles.recommendedContainer}>
+                    {recommendedGroupArray.map((group) => (
+                        <div
+                            key={group.id}
+                            className={styles.clickable}
+                            onClick={() => navigate(`/detail/group/${group.id}`)}
+                        >
+                            <img src={group.imgFace} alt={group.name} width={80} />
+                            <div>{group.name}</div>
+                        </div>
+                    ))}
                 </div>
             ))}
             </div>
@@ -146,15 +135,9 @@ const SearchContent = () => {
                         <div className={styles.groupMemberRow}>
                             <div
                                 className={styles.clickable}
-                                onClick={() =>
-                                    navigate(`/detail/group/${group.id}`)
-                                }
+                                onClick={() => navigate(`/detail/group/${group.id}`)}
                             >
-                                <img
-                                    src={group.imgFace}
-                                    alt={group.name}
-                                    width={80}
-                                />
+                                <img src={group.imgFace} alt={group.name} width={80} />
                                 <div>{group.name}</div>
                             </div>
 
@@ -162,15 +145,9 @@ const SearchContent = () => {
                                 <div
                                     key={member.id}
                                     className={styles.clickable}
-                                    onClick={() =>
-                                        navigate(`/detail/artist/${member.id}`)
-                                    }
+                                    onClick={() => navigate(`/detail/artist/${member.id}`)}
                                 >
-                                    <img
-                                        src={member.imgFace}
-                                        alt={member.name}
-                                        width={80}
-                                    />
+                                    <img src={member.imgFace} alt={member.name} width={80} />
                                     <div>{member.name}</div>
                                 </div>
                             ))}
@@ -191,9 +168,7 @@ const SearchContent = () => {
                             posts={group.groupPostArray}
                             limit={12}
                             cols={3}
-                            onClickPost={(postId) =>
-                                navigate(`/post/${postId}`)
-                            }
+                            onClickPost={(postId) => navigate(`/post/${postId}`)}
                         />
                     </div>
                 ))}
