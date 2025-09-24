@@ -18,30 +18,34 @@ const SearchContent = () => {
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
     useEffect(() => {
-        const fetchGroups = async () => {
+        const fetchData = async () => {
             try {
-                const url = queryParam
-                    ? `http://3.35.210.2:8000/api/idol/${queryParam}`
-                    : "http://3.35.210.2:8000/api/idol";
-
-                const res = await fetch(url);
-                const data = await res.json();
-
                 if (queryParam) {
-                    setSearchResultArray([data]);
+                    const res = await fetch(`http://3.35.210.2:8000/api/idol/${queryParam}`);
+                    const artist = await res.json();
+
+                    if (artist.artist_type === "individual" && artist.group_name) {
+                        const groupRes = await fetch(`http://3.35.210.2:8000/api/idol/${artist.group_name}`);
+                        const groupData = await groupRes.json();
+                        setSearchResultArray([groupData]);
+                    } else {
+                        setSearchResultArray([artist]);
+                    }
                 } else {
+                    const res = await fetch("http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1");
+                    const data = await res.json();
                     const artists = data.artists || [];
                     setGroupArray(artists);
-                    setRecommendedGroupArray(artists); 
-                    setSearchResultArray([]); 
+                    setRecommendedGroupArray(artists);
+                    setSearchResultArray([]);
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
             }
         };
 
-        fetchGroups();
-    }, [queryParam]); 
+        fetchData();
+    }, [queryParam]);
 
     if (!queryParam && searchResultArray.length === 0) {
         return (
@@ -67,7 +71,6 @@ const SearchContent = () => {
             </div>
         );
     }
-
     const groupArrayToShow = searchResultArray;
 
     return (

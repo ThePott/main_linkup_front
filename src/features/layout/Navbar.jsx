@@ -15,10 +15,6 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
 
-    const groupArray = useLinkUpStore((state) => state.groupArray);
-    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
-    const setSearchStatus = useLinkUpStore((state) => state.setSearchStatus);
-
     const user = useLinkUpStore((state) => state.user);
     const setUser = useLinkUpStore((state) => state.setUser);
     const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
@@ -26,21 +22,6 @@ const Navbar = () => {
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
         setSearchParams({ query: trimmed });
-
-        if (trimmed === "") {
-            setSearchResultArray([]);
-            setSearchStatus("fail");
-            return;
-        }
-
-        const filtered = groupArray.filter(
-            (g) =>
-                g.name?.includes(trimmed) ||
-                (g.memberArray || []).some((m) => m.name?.includes(trimmed))
-        );
-
-        setSearchResultArray(filtered);
-        setSearchStatus(filtered.length === 0 ? "fail" : "success");
     };
 
     const handleLogout = () => {
