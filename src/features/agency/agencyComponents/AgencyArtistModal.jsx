@@ -54,7 +54,7 @@ const AgencyArtistModal = () => {
     const { isPending, error, postMutation, putMutation, deleteMutation } =
         useAgentArtistModal();
 
-    const handleDismiss = () => {
+    const dismiss = () => {
         setModalKey(null);
     };
 
@@ -66,6 +66,7 @@ const AgencyArtistModal = () => {
         }
 
         deleteMutation.mutate(selectedArtist.id);
+        dismiss();
         // TODO: 삭제한 걸 로컬에도 반영해야 한다
     };
 
@@ -98,13 +99,14 @@ const AgencyArtistModal = () => {
         if (banner_image) formData.append("banner_image", banner_image);
 
         if (selectedArtist) {
-            putMutation.mutate({ body: formData, id: selectedArtist.id });
+            formData.append("id", selectedArtist.id);
+            putMutation.mutate(formData);
         } else {
             postMutation.mutate(formData);
         }
 
         // TODO: POST or PUT 요청 보내고서 로컬에도 반영해야 함
-        handleDismiss();
+        dismiss();
     };
 
     const buttonLabel = selectedArtist ? "수정" : "추가";
@@ -113,7 +115,7 @@ const AgencyArtistModal = () => {
         <Modal
             className={styles.modal}
             isOn={modalKey === "agencySidebar"}
-            onBackgroundClick={handleDismiss}
+            onBackgroundClick={dismiss}
         >
             <form ref={formRef} onSubmit={handleSubmit}>
                 <GridContainer gap="MD" cols={4}>

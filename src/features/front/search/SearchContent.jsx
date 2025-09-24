@@ -11,12 +11,14 @@ const SearchContent = () => {
         (state) => state.recommendedGroupArray
     );
 
+
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
     const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
+
     const setRecommendedGroupArray = useLinkUpStore(
         (state) => state.setRecommendedGroupArray
     );
@@ -68,6 +70,7 @@ const SearchContent = () => {
             if (!res.ok) {
                 setSearchResultArray([]);
                 return;
+
             }
             const data = await res.json();
             const artists = data.artists || [];
@@ -81,8 +84,10 @@ const SearchContent = () => {
         }
         };
 
+
         fetchData();
     }, [queryParam, groupArray]);
+
 
 
     if (searchResultArray.length === 0) {
@@ -130,7 +135,7 @@ const SearchContent = () => {
                         (member.scheduleArray || []).map((memberSchedule) => ({
                             ...memberSchedule,
                             owner: member.name,
-                        }))
+                        })),
                     ),
                 ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
 
