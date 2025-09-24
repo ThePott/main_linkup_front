@@ -1,15 +1,14 @@
 import styles from "./AgencyArtistModal.module.css";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInput from "../../../package/CustomInput";
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
-import { useAgentArtistModal } from "../agencyServices/useAgency";
-import { useEffect, useRef } from "react";
+import useAgentArtistModal from "../agencyServices/useAgencyArtistModal";
+import { useRef } from "react";
 import ImageInput from "../../../package/imageInput/ImageInput";
+import RoundBox from "../../../package/RoundBox";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -18,9 +17,9 @@ const inputFieldInfoArray = [
     ["생일", "birth_date", "date"],
 ];
 const fileInputFieldInfoArray = [
-    ["얼굴 사진", "img_face", "file"],
-    ["상반신 사진", "img_torso", "file"],
-    ["배너 사진", "img_banner", "file"],
+    ["얼굴 사진", "face_image", "file"],
+    ["상반신 사진", "torso_image", "file"],
+    ["배너 사진", "banner_image", "file"],
 ];
 
 const makeDefaultValue = (selectedArtist, info) => {
@@ -52,45 +51,8 @@ const AgencyArtistModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const { isPending, error } = useAgentArtistModal();
-
-    const postMutation = useMutation({
-        mutationFn: (formData) => {
-            return axiosReturnsData(
-                "POST",
-                "/api/companies/artists/with-images",
-                formData,
-            );
-        },
-    });
-    const putMutation = useMutation({
-        mutationFn: ({ body, id }) => {
-            return axiosReturnsData(
-                "PUT",
-                `/api/companies/artists/with-images/${id}`,
-                body,
-            );
-        },
-    });
-    const deleteMutation = useMutation({
-        mutationFn: (id) => {
-            return axiosReturnsData("DELETE", `/api/companies/artists/${id}`);
-        },
-    });
-
-    useEffect(() => {
-        if (!selectedArtist) {
-            return;
-        }
-        if (!formRef.current) {
-            return;
-        }
-        if (!selectedArtist.img_face) {
-            return;
-        }
-        console.log({ selectedArtist });
-        debugger;
-    }, [selectedArtist]);
+    const { isPending, error, postMutation, putMutation, deleteMutation } =
+        useAgentArtistModal();
 
     const handleDismiss = () => {
         setModalKey(null);
@@ -129,7 +91,6 @@ const AgencyArtistModal = () => {
         formData.append("debut_date", debut_date);
         formData.append("birth_date", birth_date);
         formData.append("artist_type", artist_type);
-        formData.append("email", `${Date.now()}@dont.understand`);
 
         // Append files if they exist
         if (face_image) formData.append("face_image", face_image);
