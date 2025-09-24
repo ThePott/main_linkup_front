@@ -1,22 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCompaniesArtists } from "./agencyApi";
 import { useEffect } from "react";
-import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
 
-export const useAgency = () => {
-    // data is stored right after fetch
-    const { isPending, error } = useQuery({
-        queryKey: ["companiesArtists"],
-        queryFn: () => getCompaniesArtists(),
+const useAgency = () => {
+    const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
+    const { data, isPending, error } = useQuery({
+        queryKey: ["/api/companies/artists"],
+        queryFn: () => axiosReturnsData("GET", "/api/companies/artists"),
     });
 
     useEffect(() => {
-        if (!error) {
+        if (!data) {
             return;
         }
-        console.error(error);
-    }, [error]);
+        setArtistArray(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
 
     return {
         error,
@@ -24,32 +24,4 @@ export const useAgency = () => {
     };
 };
 
-export const useAgencyCalendar = () => {
-    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    const { isPending, error, refetch } = useQuery({
-        queryKey: ["companiesEvent", selectedArtist?.id ?? -1],
-        queryFn: async () => {
-            const data = await axiosReturnsData(
-                "GET",
-                `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
-            );
-            // const eventArray = data.map((event) => ({
-            //     ...event,
-            //     start_time: new Date(event.start_time),
-            //     end_time: new Date(event.end_time),
-            // }));
-            useLinkUpStore.setState({ eventArray: data });
-            return data;
-        },
-        refetchOnWindowFocus: false,
-        enabled: false,
-    });
-    useEffect(() => {
-        if (!selectedArtist) {
-            return;
-        }
-        refetch();
-    }, [selectedArtist]);
-
-    return { isPending, error };
-};
+export default useAgency;

@@ -2,11 +2,17 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox.jsx";
-import FanPostCard from "../../../shared/FanpostCard.jsx";
-import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard.jsx";
+import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
+    const searchStatus = useLinkUpStore((state) => state.searchStatus);
+    const recommendedGroupArray = useLinkUpStore(
+        (state) => state.recommendedGroupArray
+    );
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray
+    );
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
@@ -118,50 +124,77 @@ const SearchContent = () => {
 
     return (
         <div className={styles.container}>
-        <h2>검색 결과</h2>
-        {groupArrayToShow.map((group) => {
-            const combinedSchedules = [
-            ...(group.groupScheduleArray || []).map((schedule) => ({
-                ...schedule,
-                owner: group.name,
-            })),
-            ...(group.memberArray || []).flatMap((member) =>
-                (member.scheduleArray || []).map((memberSchedule) => ({
-                ...memberSchedule,
-                owner: member.name,
-                }))
-            ),
-            ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
+            <h2>검색 결과</h2>
+            {groupArrayToShow.map((group) => {
+                const combinedSchedules = [
+                    ...(group.groupScheduleArray || []).map((schedule) => ({
+                        ...schedule,
+                        owner: group.name,
+                    })),
+                    ...(group.memberArray || []).flatMap((member) =>
+                        (member.scheduleArray || []).map((memberSchedule) => ({
+                            ...memberSchedule,
+                            owner: member.name,
+                        }))
+                    ),
+                ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
 
-            const topSchedules = combinedSchedules.slice(0, 3);
+                const topSchedules = combinedSchedules.slice(0, 3);
 
-            return (
-            <div key={group.id} className={styles.groupBlock}>
-                <div className={styles.groupMemberRow}>
-                {/* 그룹 카드 */}
-                <div
-                    className={styles.clickable}
-                    onClick={() => navigate(`/detail/group/${group.id}`)}
-                >
-                    <CustomImageCard
-                    url={group.profile_image || group.imgFace}
-                    style={{ width: 160, height: 200 }}
-                    />
-                    <div>{group.name}</div>
-                </div>
+                return (
+                    <div key={group.id} className={styles.groupBlock}>
+                        <div className={styles.groupMemberRow}>
+                            <div
+                                className={styles.clickable}
+                                onClick={() =>
+                                    navigate(`/detail/group/${group.id}`)
+                                }
+                            >
+                                <img
+                                    src={group.imgFace}
+                                    alt={group.name}
+                                    width={80}
+                                />
+                                <div>{group.name}</div>
+                            </div>
 
-                {/* 멤버 카드 */}
-                {(group.memberArray || []).map((member) => (
-                    <div
-                    key={member.id}
-                    className={styles.clickable}
-                    onClick={() => navigate(`/detail/artist/${member.id}`)}
-                    >
-                    <CustomImageCard
-                        url={member.profile_image || member.imgFace}
-                        style={{ width: 160, height: 200 }}
-                    />
-                    <div>{member.name}</div>
+                            {(group.memberArray || []).map((member) => (
+                                <div
+                                    key={member.id}
+                                    className={styles.clickable}
+                                    onClick={() =>
+                                        navigate(`/detail/artist/${member.id}`)
+                                    }
+                                >
+                                    <img
+                                        src={member.imgFace}
+                                        alt={member.name}
+                                        width={80}
+                                    />
+                                    <div>{member.name}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <h4>일정</h4>
+                        <div className={styles.scheduleList}>
+                            {topSchedules.map((schedule, index) => (
+                                <RoundBox key={index}>
+                                    {schedule.owner} {schedule.title} - {schedule.sttime}
+                                </RoundBox>
+                            ))}
+                        </div>
+
+                        <h4>그룹 팬포스트</h4>
+                        <FanPostSection
+                            posts={group.groupPostArray}
+
+                            limit={12}
+                            cols={3}
+                            onClickPost={(postId) =>
+                                navigate(`/post/${postId}`)
+                            }
+                        />
                     </div>
                 ))}
                 </div>

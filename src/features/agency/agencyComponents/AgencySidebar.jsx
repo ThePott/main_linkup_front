@@ -47,13 +47,6 @@ const AgencySidebar = () => {
         (state) => state.setSelectedArtist,
     );
     const artistArray = useLinkUpStore((state) => state.artistArray);
-    const groupArray = artistArray.filter(
-        (artist) => artist.artist_type === "group",
-    );
-
-    const individualArray = artistArray.filter(
-        (artist) => artist.artist_type === "individual",
-    );
 
     const handleAdd = () => {
         setSelectedArtist(null);
@@ -64,17 +57,8 @@ const AgencySidebar = () => {
         <>
             <AgencyArtistModal />
             <Vstack className={styles.sidebar}>
-                {groupArray.map((group) => (
-                    <ArtistButton
-                        key={`${group.group_name}__${group.stage_name}`}
-                        artist={group}
-                    />
-                ))}
-                {individualArray.map((individual) => (
-                    <ArtistButton
-                        key={individual.stage_name}
-                        artist={individual}
-                    />
+                {artistArray.map((artist) => (
+                    <ArtistButton key={artist.stage_name} artist={artist} />
                 ))}
                 <CustomButton isOn={true} onClick={handleAdd}>
                     추가
