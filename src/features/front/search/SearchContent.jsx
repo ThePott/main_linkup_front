@@ -1,5 +1,6 @@
-import useLinkUpStore from "../../../shared/store/dummyMijin.js";
-import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router";
+import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
@@ -13,17 +14,50 @@ const SearchContent = () => {
         (state) => state.searchResultArray
     );
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const queryParam = searchParams.get("query") || "";
 
-    // 검색 실패 화면
-    if (searchStatus === "fail") {
+    const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
+    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
+    const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
+    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
+    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const url = queryParam
+                    ? `http://3.35.210.2:8000/api/idol/${queryParam}`
+                    : "http://3.35.210.2:8000/api/idol";
+
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (queryParam) {
+                    setSearchResultArray([data]);
+                } else {
+                    const artists = data.artists || [];
+                    setGroupArray(artists);
+                    setRecommendedGroupArray(artists); 
+                    setSearchResultArray([]); 
+                }
+            } catch (err) {
+                console.error("API 호출 에러:", err);
+            }
+        };
+
+        fetchGroups();
+    }, [queryParam]); 
+
+    if (!queryParam && searchResultArray.length === 0) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
                 <p>일치하는 결과를 찾지 못했어요.</p>
-                <h3>찾으시는 그룹이 이 그룹이신가요?</h3>
+                <h3>추천 그룹</h3>
                 <div className={styles.recommendedContainer}>
-                    {recommendedGroupArray.slice(0, 2).map((group) => (
-                        <RoundBox
+                    {recommendedGroupArray.map((group) => (
+                        <div
                             key={group.id}
                             className={styles.clickable}
                             onClick={() =>
@@ -36,32 +70,27 @@ const SearchContent = () => {
                                 width={80}
                             />
                             <div>{group.name}</div>
-                        </RoundBox>
+                        </div>
                     ))}
                 </div>
             </div>
         );
     }
-    const groupArrayToShow =
-        searchResultArray.length > 0
-            ? searchResultArray
-            : useLinkUpStore.getState().groupArray;
 
-    // 검색 성공 화면
+    const groupArrayToShow = searchResultArray;
+
     return (
         <div className={styles.container}>
             <h2>검색 결과</h2>
-
             {groupArrayToShow.map((group) => {
-                // 그룹 + 멤버 일정 합치기
                 const combinedSchedules = [
-                    ...group.groupScheduleArray.map((s) => ({
-                        ...s,
+                    ...(group.groupScheduleArray || []).map((schedule) => ({
+                        ...schedule,
                         owner: group.name,
                     })),
-                    ...group.memberArray.flatMap((member) =>
-                        member.scheduleArray.map((ms) => ({
-                            ...ms,
+                    ...(group.memberArray || []).flatMap((member) =>
+                        (member.scheduleArray || []).map((memberSchedule) => ({
+                            ...memberSchedule,
                             owner: member.name,
                         }))
                     ),
@@ -71,9 +100,8 @@ const SearchContent = () => {
 
                 return (
                     <div key={group.id} className={styles.groupBlock}>
-                        {/* 그룹 + 멤버 */}
                         <div className={styles.groupMemberRow}>
-                            <RoundBox
+                            <div
                                 className={styles.clickable}
                                 onClick={() =>
                                     navigate(`/detail/group/${group.id}`)
@@ -85,10 +113,10 @@ const SearchContent = () => {
                                     width={80}
                                 />
                                 <div>{group.name}</div>
-                            </RoundBox>
+                            </div>
 
-                            {group.memberArray.map((member) => (
-                                <RoundBox
+                            {(group.memberArray || []).map((member) => (
+                                <div
                                     key={member.id}
                                     className={styles.clickable}
                                     onClick={() =>
@@ -101,24 +129,23 @@ const SearchContent = () => {
                                         width={80}
                                     />
                                     <div>{member.name}</div>
-                                </RoundBox>
+                                </div>
                             ))}
                         </div>
 
-                        {/* 일정 */}
                         <h4>일정</h4>
                         <div className={styles.scheduleList}>
-                            {topSchedules.map((s, i) => (
-                                <RoundBox key={i}>
-                                    {s.owner} {s.title} - {s.sttime}
+                            {topSchedules.map((schedule, index) => (
+                                <RoundBox key={index}>
+                                    {schedule.owner} {schedule.title} - {schedule.sttime}
                                 </RoundBox>
                             ))}
                         </div>
 
-                        {/* 그룹 팬포스트 */}
                         <h4>그룹 팬포스트</h4>
                         <FanPostSection
                             posts={group.groupPostArray}
+
                             limit={12}
                             cols={3}
                             onClickPost={(postId) =>

@@ -36,3 +36,23 @@ export const apiAuthMe = async (method, body) => {
     const data = response.data;
     return data;
 };
+
+/** // 비밀번호 변경 용 함수
+ * @param {string} currentPassword 기존 비밀번호
+ * @param {string} newPassword 새 비밀번호
+ * @param {string} newPasswordConfirm 새 비밀번호 확인
+ */
+
+export const apiChangePassword = async (
+  currentPassword,
+  newPassword,
+  newPasswordConfirm
+) => {
+  const ADDITIONAL_URL = "/api/auth/me/password";
+  const response = await axiosInstance.put(ADDITIONAL_URL, {
+    current_password: currentPassword,
+    new_password: newPassword,
+    new_password_confirm: newPasswordConfirm,
+  });
+  return response.data;
+};
