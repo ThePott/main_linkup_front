@@ -4,12 +4,14 @@ import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
+import ArtistCardNew from "../../../shared/ArtistCardNew/ArtistCardNew";
 
 const SearchContent = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
+    const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
     const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
@@ -19,16 +21,24 @@ const SearchContent = () => {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const url = queryParam
-                    ? `http://3.35.210.2:8000/api/idol/${queryParam}`
-                    : "http://3.35.210.2:8000/api/idol";
-
-                const res = await fetch(url);
-                const data = await res.json();
-
                 if (queryParam) {
-                    setSearchResultArray([data]);
+                    const res = await fetch(`http://3.35.210.2:8000/api/idol/${queryParam}`);
+                    const artist = await res.json();
+
+                    if (artist.artist_type === "individual" && artist.group_name) {
+                        const groupRes = await fetch(
+                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`,
+                        );
+                        const groupData = await groupRes.json();
+                        setSearchResultArray([groupData]);
+                    } else {
+                        setSearchResultArray([artist]);
+                    }
                 } else {
+                    const res = await fetch(
+                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1",
+                    );
+                    const data = await res.json();
                     const artists = data.artists || [];
                     setGroupArray(artists);
                     setRecommendedGroupArray(artists);
@@ -42,7 +52,7 @@ const SearchContent = () => {
         fetchGroups();
     }, [queryParam]);
 
-    if (!queryParam && searchResultArray.length === 0) {
+    if (queryParam && searchResultArray.length === 0) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
@@ -64,28 +74,11 @@ const SearchContent = () => {
         );
     }
 
-    const groupArrayToShow = searchResultArray;
-
-    return (
-        <div className={styles.container}>
-            <h2>검색 결과</h2>
-            {groupArrayToShow.map((group) => {
-                const combinedSchedules = [
-                    ...(group.groupScheduleArray || []).map((schedule) => ({
-                        ...schedule,
-                        owner: group.name,
-                    })),
-                    ...(group.memberArray || []).flatMap((member) =>
-                        (member.scheduleArray || []).map((memberSchedule) => ({
-                            ...memberSchedule,
-                            owner: member.name,
-                        })),
-                    ),
-                ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
-
-                const topSchedules = combinedSchedules?.slice(0, 3) ?? [];
-
-                return (
+    if (searchResultArray.lengh > 1) {
+        return (
+            <div className={styles.container}>
+                <h2>검색 결과</h2>
+                {searchResultArray.map((group) => (
                     <div key={group.id} className={styles.groupBlock}>
                         <div className={styles.groupMemberRow}>
                             <div
@@ -95,38 +88,54 @@ const SearchContent = () => {
                                 <img src={group.imgFace} alt={group.name} width={80} />
                                 <div>{group.name}</div>
                             </div>
-
-                            {(group.memberArray || []).map((member) => (
-                                <div
-                                    key={member.id}
-                                    className={styles.clickable}
-                                    onClick={() => navigate(`/detail/artist/${member.id}`)}
-                                >
-                                    <img src={member.imgFace} alt={member.name} width={80} />
-                                    <div>{member.name}</div>
-                                </div>
-                            ))}
                         </div>
-
-                        <h4>일정</h4>
-                        <div className={styles.scheduleList}>
-                            {topSchedules.map((schedule, index) => (
-                                <RoundBox key={index}>
-                                    {schedule.owner} {schedule.title} - {schedule.sttime}
-                                </RoundBox>
-                            ))}
-                        </div>
-
-                        <h4>그룹 팬포스트</h4>
-                        <FanPostSection
-                            posts={group.groupPostArray}
-                            limit={12}
-                            cols={3}
-                            onClickPost={(postId) => navigate(`/post/${postId}`)}
-                        />
                     </div>
-                );
-            })}
+                ))}
+            </div>
+        );
+    }
+
+    const eventArray = [
+        "스케줄은",
+        "events api를 이용해서",
+        "받아오셔야 합니다",
+        "스토어에 저장된",
+        "eventArray를 활용해주세요",
+    ];
+
+    const fanPostArray = []; // api로 받아오셔야 합니다
+
+    // 검색 성공 결과가 그룹인지 멤버인지 확인하셔야 합니다. 그룹이다 -> 추가 api 요청, 멤버이다 -> 불필요할 듯합니다?
+    const groupMemberArray = []; // api로 따로 받아오셔야 합니다
+    const groupThenMemberArray = [...searchResultArray, ...groupMemberArray];
+
+    return (
+        <div className={styles.container}>
+            <h2>검색 결과</h2>
+
+            {groupThenMemberArray.map((artist) => (
+                <ArtistCardNew artist={artist} />
+            ))}
+
+            <h4>일정</h4>
+
+            <div className={styles.scheduleList}>
+                {eventArray.map((schedule, index) => (
+                    <RoundBox key={index}>
+                        {schedule}
+                        {/* {schedule.owner} {schedule.title} - {schedule.sttime} */}
+                    </RoundBox>
+                ))}
+            </div>
+
+            <h4>그룹 팬포스트</h4>
+
+            <FanPostSection
+                posts={fanPostArray}
+                limit={12}
+                cols={3}
+                onClickPost={(postId) => navigate(`/post/${postId}`)}
+            />
         </div>
     );
 };
