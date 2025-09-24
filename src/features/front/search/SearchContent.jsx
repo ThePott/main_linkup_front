@@ -5,13 +5,13 @@ import RoundBox from "../../../package/RoundBox.jsx";
 import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
 import ArtistCardNew from "../../../shared/ArtistCardNew/ArtistCardNew";
+import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
 
 const SearchContent = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
-    const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
     const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
@@ -78,19 +78,11 @@ const SearchContent = () => {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
-                {searchResultArray.map((group) => (
-                    <div key={group.id} className={styles.groupBlock}>
-                        <div className={styles.groupMemberRow}>
-                            <div
-                                className={styles.clickable}
-                                onClick={() => navigate(`/detail/group/${group.id}`)}
-                            >
-                                <img src={group.imgFace} alt={group.name} width={80} />
-                                <div>{group.name}</div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                <GridCardContainer>
+                    {searchResultArray.map((artist) => (
+                        <ArtistCardNew artist={artist} />
+                    ))}
+                </GridCardContainer>
             </div>
         );
     }
@@ -113,9 +105,11 @@ const SearchContent = () => {
         <div className={styles.container}>
             <h2>검색 결과</h2>
 
-            {groupThenMemberArray.map((artist) => (
-                <ArtistCardNew artist={artist} />
-            ))}
+            <GridCardContainer>
+                {groupThenMemberArray.map((artist) => (
+                    <ArtistCardNew artist={artist} />
+                ))}
+            </GridCardContainer>
 
             <h4>일정</h4>
 
