@@ -2,6 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
 import useLinkUpStore from "../../../shared/store/store";
 import { useEffect } from "react";
+import queryClient from "../../../shared/services/queryClient";
+import { convertFormDataToArtist } from "../agencyUtils";
 
 const useAgentArtistModalQuery = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
@@ -35,6 +37,8 @@ const useAgentArtistModalQuery = () => {
 };
 
 const useAgentArtistModalMutate = () => {
+    // const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    // const id = selectedArtist?.id ?? -1;
     const addArtistInTemp = useLinkUpStore((state) => state.addArtistInTemp);
     const addArtistInReal = useLinkUpStore((state) => state.addArtistInReal);
     const updateArtistInTemp = useLinkUpStore(
@@ -49,10 +53,31 @@ const useAgentArtistModalMutate = () => {
                 "/api/companies/artists/with-images",
                 formData,
             ),
-        onMutate: (formData) => {
-            addArtistInTemp(formData);
+        onMutate: async (formData) => {
+            const endpoint = "/api/companies/artists";
+            await queryClient.cancelQueries({
+                queryKey: [endpoint],
+            });
+            const previous = queryClient.getQueryData([endpoint]);
+            const newArtist = convertFormDataToArtist(formData);
+            queryClient.setQueryData([endpoint], (prev) => [
+                ...prev,
+                newArtist,
+            ]);
+            return { previous };
         },
-        onSuccess: (data) => addArtistInReal(data),
+        onError: async (error, data, context) => {
+            console.error(error);
+            queryClient.setQueryData(
+                ["/api/companies/artists"],
+                context.previous,
+            );
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["/api/companies/artists"],
+            });
+        },
     });
     const putMutation = useMutation({
         mutationFn: async ({ body, id }) =>
