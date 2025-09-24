@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./SuperUserPage.css";
 import CustomButton from "../package/customButton/CustomButton.jsx";
-/* import { fetchUsers, banUser, unbanUser, deleteUser, } from "../features/super-user/SuperuserApi"*/
 
-const dummyUsers = [
-  { id: 1, nickname: "Alice", email: "alice@test.com", role: "user", banned: false },
-  { id: 2, nickname: "Bob", email: "bob@test.com", role: "admin", banned: true },
-  { id: 3, nickname: "Charlie", email: "charlie@test.com", role: "user", banned: false },
-];
+// API 함수 임포트
+import {
+  fetchUsers,
+  banUser,
+  unbanUser,
+} from "../features/super-user/SuperuserApi";
 
 const SuperUserPage = () => {
   const [emailSearch, setEmailSearch] = useState("");
   const [nicknameSearch, setNicknameSearch] = useState("");
   const [users, setUsers] = useState([]);
 
+  // 유저 불러오기
   useEffect(() => {
-    setUsers(dummyUsers); // 더미데이터 사용
-  }, []);
-
-  /* useEffect(() => {
     const loadUsers = async () => {
       try {
         const data = await fetchUsers();
@@ -29,14 +26,16 @@ const SuperUserPage = () => {
       }
     };
     loadUsers();
-  }, []); */ //api 연동 부분
+  }, []);
 
-  //차단, 차단 해제 병합
+  // 차단/해제
   const handleToggleBan = async (id, banned) => {
     try {
       if (banned) {
+        await unbanUser(id);
         alert(`유저 ${id} 차단을 해제했습니다.`);
       } else {
+        await banUser(id);
         alert(`유저 ${id}을(를) 차단했습니다.`);
       }
 
@@ -47,25 +46,14 @@ const SuperUserPage = () => {
       );
     } catch (error) {
       alert("처리 실패");
-
-    }
-  };
-
-  // 삭제
-  const handleDelete = async (id) => {
-    try {
-      await deleteUser(id);
-      alert(`유저 ${id}을(를) 삭제했습니다.`);
-      setUsers(users.filter((user) => user.id !== id));
-    } catch (error) {
-      alert("삭제 실패");
     }
   };
 
   // 검색 필터링
   const filteredUsers = users.filter(
     (user) =>
-      user.email.includes(emailSearch) && user.nickname.includes(nicknameSearch)
+      user.email.includes(emailSearch) &&
+      user.nickname.includes(nicknameSearch)
   );
 
   return (
@@ -104,7 +92,7 @@ const SuperUserPage = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>{user.banned ? "차단됨" : "정상"}</td>
-              <td style={{ display: "flex", gap: "8px" }}>
+              <td>
                 <CustomButton
                   color={user.banned ? "BLUE" : "RED"}
                   shape="RECTANGLE"
