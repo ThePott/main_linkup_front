@@ -4,6 +4,8 @@ import useLinkUpStore from "../../shared/store/store";
 import FileInput from "../../package/FileInput";
 import CustomButton from "../../package/customButton/CustomButton";
 import Modal from "../../package/modal/Modal";
+import axiosInstance from "../../shared/services/axiosInstance";
+import { useMutation } from "@tanstack/react-query";
 import styles from "./FanPostWriteContent.module.css";
 
 import subscribeArray from "../../shared/store/dummy2Heehaa.json";
@@ -18,6 +20,24 @@ const FanPostWriteContent = () => {
 
     const inputRef = useRef(null);
     const navigate = useNavigate();
+
+    const postFanPost = async (formData) => {
+        const response = await axiosInstance.post("/api/posts", formData);
+        console.log("response.data", response);
+        return response;
+    };
+
+    const mutation = useMutation({
+        mutationFn: postFanPost,
+        onSuccess: (newPost) => {
+            addFanPost(newPost);
+            setCompletedModalOpen(true);
+            setTimeout(() => {
+                setCompletedModalOpen(false);
+                navigate("/mypage");
+            }, 2000);
+        },
+    });
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -38,28 +58,10 @@ const FanPostWriteContent = () => {
         const form = document.querySelector(`form.${styles.form}`);
         if (!form) return;
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        // 데이터가 잘 담겼는지 확인 <- 삭제 필요
-        console.log("data", data);
-
-        addFanPost({
-            imageUrl: data.image_url,
-            artistName: data.artist_name,
-            content: data.post_content,
-        });
-        // 데이터가 잘 담겼는지 확인 <- 삭제 필요
-        console.log("add", addFanPost);
-
-        setCompletedModalOpen(true);
-        setTimeout(() => {
-            setCompletedModalOpen(false);
-            navigate("/mypage");
-        }, 2000);
+        mutation.mutate(formData);
     };
 
-    const handleExit = () => {
-        setExitConfirmModalOpen(true);
-    };
+    const handleExit = () => setExitConfirmModalOpen(true);
 
     const handleExitConfirmYes = () => {
         setExitConfirmModalOpen(false);
@@ -96,7 +98,7 @@ const FanPostWriteContent = () => {
                 </div>
                 <div className={styles.content}>
                     <select
-                        name="artist_name"
+                        name="artist_id"
                         ref={inputRef}
                         className={styles.select}
                         required
@@ -104,7 +106,7 @@ const FanPostWriteContent = () => {
                         {subscribeArray.map((artist) => (
                             <option
                                 key={artist.artist_id}
-                                value={artist.artist_name}
+                                value={artist.artist_id}
                             >
                                 {artist.artist_name}
                             </option>
