@@ -96,9 +96,9 @@ const useLinkUpStore = create()(
                 );
                 set({ artistArray });
             },
-            deleteArtist: (artist) => {
+            deleteArtist: (id) => {
                 const artistArray = get().artistArray.filter(
-                    (el) => el.id !== artist.id,
+                    (artist) => artist.id !== id,
                 );
                 set({ artistArray });
             },
