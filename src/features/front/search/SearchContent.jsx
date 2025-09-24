@@ -6,22 +6,23 @@ import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
 
 const SearchContent = () => {
-    const searchStatus = useLinkUpStore((state) => state.searchStatus);
-    const recommendedGroupArray = useLinkUpStore(
-        (state) => state.recommendedGroupArray
-    );
-    const searchResultArray = useLinkUpStore(
-        (state) => state.searchResultArray
-    );
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
-    const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
-    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
+    const recommendedGroupArray = useLinkUpStore(
+        (state) => state.recommendedGroupArray,
+    );
+    const setRecommendedGroupArray = useLinkUpStore(
+        (state) => state.setRecommendedGroupArray,
+    );
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray,
+    );
+    const setSearchResultArray = useLinkUpStore(
+        (state) => state.setSearchResultArray,
+    );
 
     useEffect(() => {
         const fetchGroups = async () => {
@@ -38,8 +39,8 @@ const SearchContent = () => {
                 } else {
                     const artists = data.artists || [];
                     setGroupArray(artists);
-                    setRecommendedGroupArray(artists); 
-                    setSearchResultArray([]); 
+                    setRecommendedGroupArray(artists);
+                    setSearchResultArray([]);
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
@@ -47,7 +48,7 @@ const SearchContent = () => {
         };
 
         fetchGroups();
-    }, [queryParam]); 
+    }, [queryParam]);
 
     if (!queryParam && searchResultArray.length === 0) {
         return (
@@ -92,7 +93,7 @@ const SearchContent = () => {
                         (member.scheduleArray || []).map((memberSchedule) => ({
                             ...memberSchedule,
                             owner: member.name,
-                        }))
+                        })),
                     ),
                 ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime));
 
@@ -137,7 +138,8 @@ const SearchContent = () => {
                         <div className={styles.scheduleList}>
                             {topSchedules.map((schedule, index) => (
                                 <RoundBox key={index}>
-                                    {schedule.owner} {schedule.title} - {schedule.sttime}
+                                    {schedule.owner} {schedule.title} -{" "}
+                                    {schedule.sttime}
                                 </RoundBox>
                             ))}
                         </div>
@@ -145,7 +147,6 @@ const SearchContent = () => {
                         <h4>그룹 팬포스트</h4>
                         <FanPostSection
                             posts={group.groupPostArray}
-
                             limit={12}
                             cols={3}
                             onClickPost={(postId) =>
