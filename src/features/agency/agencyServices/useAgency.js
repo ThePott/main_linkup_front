@@ -56,7 +56,6 @@ export const useAgencyCalendar = () => {
 
 export const useAgentArtistModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    console.log({ selectedArtist, yaho: "siiick" });
     const artistId = selectedArtist?.id ?? -1;
     const { isPending, error } = useQuery({
         queryKey: [`/api/companies/artists/`, artistId],

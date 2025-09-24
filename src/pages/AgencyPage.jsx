@@ -6,7 +6,6 @@ import useLinkUpStore from "../shared/store/store.js";
 const AgencyPage = () => {
     const { error, isLoading } = useAgency();
     const artistArray = useLinkUpStore((state) => state.artistArray);
-    console.log({ artistArray });
 
     return (
         <>

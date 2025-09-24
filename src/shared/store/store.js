@@ -42,10 +42,10 @@ const useLinkUpStore = create()(
             },
             addArtistInTemp: (formData) => {
                 const artist = {
-                    stage_name: formData.getName("stage_name"),
-                    group_name: formData.getName("group_name"),
-                    debut_date: formData.getName("debut_date"),
-                    birth_date: formData.getName("birth_date"),
+                    stage_name: formData.get("stage_name"),
+                    group_name: formData.get("group_name"),
+                    debut_date: formData.get("debut_date"),
+                    birth_date: formData.get("birth_date"),
                 };
 
                 const artistArray = [...get().artistArray, artist];
@@ -53,10 +53,10 @@ const useLinkUpStore = create()(
             },
             updateArtistInTemp: (artistId, formData) => {
                 const updatedArtist = {
-                    stage_name: formData.getName("stage_name"),
-                    group_name: formData.getName("group_name"),
-                    debut_date: formData.getName("debut_date"),
-                    birth_date: formData.getName("birth_date"),
+                    stage_name: formData.get("stage_name"),
+                    group_name: formData.get("group_name"),
+                    debut_date: formData.get("debut_date"),
+                    birth_date: formData.get("birth_date"),
                 };
 
                 const artistArray = get().artistArray.map((artist) =>
