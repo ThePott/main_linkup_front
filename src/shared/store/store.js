@@ -51,6 +51,21 @@ const useLinkUpStore = create()(
                 const artistArray = [...get().artistArray, artist];
                 set({ artistArray });
             },
+            addArtistInReal: (data) => {
+                const {
+                    artist_id: id,
+                    artist_name,
+                    message: _message,
+                    ...rest
+                } = data;
+
+                const artistArray = get().artistArray.map((artist) =>
+                    artist.stage_name === artist_name
+                        ? { ...artist, id, ...rest }
+                        : artist,
+                );
+                set({ artistArray });
+            },
             updateArtistInTemp: (artistId, formData) => {
                 const updatedArtist = {
                     stage_name: formData.get("stage_name"),
@@ -66,11 +81,19 @@ const useLinkUpStore = create()(
                 );
                 set({ artistArray });
             },
-            replaceArtistWithResponse: (responseData) => {
-                const filteredArtistArray = get().artistArray.filter(
-                    (artist) => artist.id,
+            updateArtistInReal: (data) => {
+                const {
+                    artist_id,
+                    artist_name: stage_name,
+                    message: _message,
+                    ...rest
+                } = data;
+
+                const artistArray = get().artistArray.map((artist) =>
+                    artist.id === artist_id
+                        ? { ...artist, stage_name, ...rest }
+                        : artist,
                 );
-                const artistArray = [...filteredArtistArray, responseData];
                 set({ artistArray });
             },
             deleteArtist: (artist) => {

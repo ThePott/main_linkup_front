@@ -52,12 +52,12 @@ const AgencyArtistModal = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
+
     const addArtistInTemp = useLinkUpStore((state) => state.addArtistInTemp);
+    const addArtistInReal = useLinkUpStore((state) => state.addArtistInReal);
+
     const updateArtistInTemp = useLinkUpStore(
         (state) => state.updateArtistInTemp,
-    );
-    const replaceArtistWithResponse = useLinkUpStore(
-        (state) => state.replaceArtistWithResponse,
     );
     const deleteArtist = useLinkUpStore((state) => state.deleteArtist);
 
@@ -73,23 +73,18 @@ const AgencyArtistModal = () => {
         onMutate: (formData) => {
             addArtistInTemp(formData);
         },
-        // onMutate: (formData) => addArtistInTemp(formData),
-        // onSuccess: (data) => replaceArtistWithResponse(data),
+        onSuccess: (data) => addArtistInReal(data),
     });
     const putMutation = useMutation({
-        mutationFn: async ({ body, id }) => {
-            const data = await axiosReturnsData(
+        mutationFn: async ({ body, id }) =>
+            axiosReturnsData(
                 "PUT",
                 `/api/companies/artists/with-images/${id}`,
                 body,
-            );
-            debugger;
-            return data;
-        },
+            ),
         onMutate: ({ id, body }) => {
             updateArtistInTemp(id, body);
         },
-        onSuccess: (data) => replaceArtistWithResponse(data),
     });
     const deleteMutation = useMutation({
         mutationFn: (id) => {
