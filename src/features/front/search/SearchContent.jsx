@@ -10,24 +10,19 @@ const SearchContent = () => {
     const recommendedGroupArray = useLinkUpStore(
         (state) => state.recommendedGroupArray
     );
-    const searchResultArray = useLinkUpStore(
-        (state) => state.searchResultArray
-    );
+
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
     const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-
-    const recommendedGroupArray = useLinkUpStore(
-        (state) => state.recommendedGroupArray
-    );
     const setRecommendedGroupArray = useLinkUpStore(
         (state) => state.setRecommendedGroupArray
     );
-
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
+    const searchResultArray = useLinkUpStore(
+        (state) => state.searchResultArray
+    );
     const setSearchResultArray = useLinkUpStore(
         (state) => state.setSearchResultArray
     );
@@ -180,7 +175,8 @@ const SearchContent = () => {
                         <div className={styles.scheduleList}>
                             {topSchedules.map((schedule, index) => (
                                 <RoundBox key={index}>
-                                    {schedule.owner} {schedule.title} - {schedule.sttime}
+                                    {schedule.owner} {schedule.title} -{" "}
+                                    {schedule.sttime}
                                 </RoundBox>
                             ))}
                         </div>
@@ -188,7 +184,6 @@ const SearchContent = () => {
                         <h4>그룹 팬포스트</h4>
                         <FanPostSection
                             posts={group.groupPostArray}
-
                             limit={12}
                             cols={3}
                             onClickPost={(postId) =>
