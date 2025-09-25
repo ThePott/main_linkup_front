@@ -18,12 +18,13 @@ const RecommendContent = () => {
         // 만약 달리 사용하고 싶으시면 기존처럼 useQuery에 직접 세팅하셔도 됩니다.
         // staleTime: 1000 * 60 * 3,
         onError: (error) => {
-            console.error(error);
+        console.error(error);
         },
     });
 
     useEffect(() => {
-        const result = data ? data.artists : [];
+        // 항상 배열로만 저장
+        const result = data && Array.isArray(data.artists) ? data.artists : [];
         setRecommendArtistArray(result);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
@@ -33,13 +34,13 @@ const RecommendContent = () => {
 
     return (
         <div className={styles.container}>
-            <GridContainer cols="auto" colMinWidth="200px">
-                {recommendArtistArray.map((artist) => (
-                    <SuggestedCard key={artist.id} artist={artist} />
-                ))}
-            </GridContainer>
+        <GridContainer cols="auto" colMinWidth="200px">
+            {(recommendArtistArray || []).map((artist) => (
+            <SuggestedCard key={artist.id} artist={artist} />
+            ))}
+        </GridContainer>
         </div>
     );
-};
+    };
 
 export default RecommendContent;

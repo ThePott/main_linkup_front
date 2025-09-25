@@ -14,25 +14,18 @@ const SideSection = ({ justify, children, ...props }) => (
 
 const FanMypageButton = () => {
     const navigate = useNavigate();
-    return (
-        <CustomButton onClick={() => navigate("/mypage")}>마이페이지</CustomButton> //유저 권한에 따라서 버튼 변경
-    );
+    return <CustomButton onClick={() => navigate("/mypage")}>마이페이지</CustomButton>; 
 };
 const AgencyMypageButton = () => {
     const navigate = useNavigate();
-    return (
-        <CustomButton onClick={() => navigate("/agency")}>소속사 페이지</CustomButton> //유저 권한에 따라서 버튼 변경
-    );
+    return <CustomButton onClick={() => navigate("/agency")}>소속사 페이지</CustomButton>;
 };
 const SuperuserMypageButton = () => {
     const navigate = useNavigate();
-    return (
-        <CustomButton onClick={() => navigate("/super-user")}>관리페이지</CustomButton> //유저 권한에 따라서 버튼 변경
-    );
+    return <CustomButton onClick={() => navigate("/super-user")}>관리페이지</CustomButton>;
 };
-
 const MyButton = ({ user }) => {
-    if (user) {
+    if (!user) {
         return null;
     }
     switch (user.user_type) {
@@ -42,14 +35,14 @@ const MyButton = ({ user }) => {
             return <AgencyMypageButton />;
         case "admin":
             return <SuperuserMypageButton />;
+        default:
+            return null;
     }
 };
 
 const Navbar = () => {
     const [, setSearchParams] = useSearchParams();
-
     const user = useLinkUpStore((state) => state.user);
-
     const { logout } = useNavbar();
 
     const handleSearch = (keyword) => {
@@ -71,7 +64,6 @@ const Navbar = () => {
                     onEnter={handleSearch}
                     className={styles.searchbar}
                 />
-                
                 <SideSection justify="end">
                     <MyButton user={user} />
                     <CustomButton onClick={logout}>로그아웃</CustomButton>
