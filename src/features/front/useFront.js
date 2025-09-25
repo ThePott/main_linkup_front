@@ -35,7 +35,7 @@ const useAuthMe = () => {
             case "company":
                 navigate("/agency");
                 break;
-            case "super_user":
+            case "admin":
                 navigate("/super-user");
                 break;
             default:

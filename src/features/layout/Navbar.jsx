@@ -41,6 +41,7 @@ const MyButton = ({ user }) => {
 };
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
     const user = useLinkUpStore((state) => state.user);
     const { logout } = useNavbar();
@@ -64,9 +65,13 @@ const Navbar = () => {
                     onEnter={handleSearch}
                     className={styles.searchbar}
                 />
+
                 <SideSection justify="end">
                     <MyButton user={user} />
-                    <CustomButton onClick={logout}>로그아웃</CustomButton>
+                    {user && <CustomButton onClick={logout}>로그아웃</CustomButton>}
+                    {!user && (
+                        <CustomButton onClick={() => navigate("/login")}>로그인</CustomButton>
+                    )}
                 </SideSection>
             </Hstack>
         </Hstack>
@@ -74,3 +79,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
