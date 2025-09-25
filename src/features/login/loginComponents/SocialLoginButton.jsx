@@ -4,7 +4,6 @@ import { Hstack } from "../../../package/layout";
 import FacebookIcon from "./FacebookIcon";
 import GoogleIcon from "./GoogleIcon";
 import KakaoIcon from "./KakaoIcon";
-import { useSocialLogin } from "../loginServices/useLogin";
 
 const providerToProps = {
     GOOGLE: {
@@ -26,6 +25,7 @@ const providerToProps = {
         },
     },
 };
+
 const providerToIcon = {
     GOOGLE: <GoogleIcon />,
     KAKAO: <KakaoIcon />,
@@ -37,7 +37,6 @@ const SocialLoginButtonLabel = ({ children, ...props }) => {
 };
 
 const SocialLoginButton = ({ provider }) => {
-    // const { error, isLoading, refetch } = useSocialLogin(provider);
     const props = providerToProps[provider];
     const Icon = providerToIcon[provider];
 
