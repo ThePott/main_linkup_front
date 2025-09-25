@@ -58,7 +58,7 @@ const Calendar = ({
     return (
         <CalendarContext.Provider value={contextValue}>
             <Vstack className={styles.calendar}>
-                <Hstack justify="start" items="center" gap="none" className={styles.bold}>
+                <Hstack justify="start" items="center" gap="xs" className={styles.bold}>
                     <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
                     <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
                     <div>

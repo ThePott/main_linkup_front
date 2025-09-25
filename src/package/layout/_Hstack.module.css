@@ -2,4 +2,5 @@
     display: flex;
     justify-content: var(--justify);
     align-items: var(--items);
+    gap: var(--gap);
 }

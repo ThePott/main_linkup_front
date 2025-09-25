@@ -3,6 +3,7 @@ import RoundBox from "../../../package/RoundBox";
 import useLinkUpStore from "../../../shared/store/store";
 import useAgencyCalendar from "../agencyServices/useAgencyCalendar";
 import styles from "./AgencyCalendar.module.css";
+import { BulkDownloadButton, BulkUploadButton } from "./AgencyCalendarAdditionalButtonMany";
 import AgencyCalendarModal from "./AgencyCalendarModal";
 
 const AgencyCalendar = () => {
@@ -19,6 +20,7 @@ const AgencyCalendar = () => {
                     eventArray={eventArray}
                     setModalKey={setModalKey}
                     setSelectedEvent={setSelectedEvent}
+                    additionalButtonArray={[<BulkDownloadButton />, <BulkUploadButton />]}
                 />
             </RoundBox>
         </>
