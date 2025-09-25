@@ -6,6 +6,7 @@
 
 .headerCell {
     padding: var(--spacing-xs);
+    text-align: center;
 }
 
 .businessDay {
