@@ -14,11 +14,16 @@ const SearchContent = () => {
     const queryParam = searchParams.get("query") || "";
 
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
+    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
+    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
     const eventArray = useLinkUpStore((state) => state.eventArray);
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
+
+    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
+    const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
 
     useEffect(() => {
         const fetchGroupsAndEvents = async () => {
@@ -29,18 +34,20 @@ const SearchContent = () => {
 
                     if (artist.artist_type === "individual" && artist.group_name) {
                         const groupRes = await fetch(
-                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`,
+                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`
                         );
                         const groupData = await groupRes.json();
                         setSearchResultArray([groupData]);
                         await fetchEvents({ artist_parent_group: groupData.id });
+                        await fetchFanPosts(groupData.id);
                     } else {
                         setSearchResultArray([artist]);
                         await fetchEvents({ artist_id: artist.id });
+                        await fetchFanPosts(artist.id); 
                     }
                 } else {
                     const res = await fetch(
-                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1",
+                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1"
                     );
                     const data = await res.json();
                     const artists = data.artists || [];
@@ -48,6 +55,7 @@ const SearchContent = () => {
                     setRecommendedGroupArray(artists);
                     setSearchResultArray([]);
                     setEventArray([]);
+                    setFanPostArray([]);
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
@@ -56,8 +64,11 @@ const SearchContent = () => {
 
         const fetchEvents = async (params) => {
             try {
-                const query = new URLSearchParams({ limit: 20, is_active: true, ...params,}).toString();
-
+                const query = new URLSearchParams({
+                    limit: 20,
+                    is_active: true,
+                    ...params
+                }).toString();
                 const res = await fetch(`http://3.35.210.2:8000/events/?${query}`);
                 const data = await res.json();
                 const events = data.events || [];
@@ -65,6 +76,23 @@ const SearchContent = () => {
             } catch (err) {
                 console.error("이벤트 API 호출 에러:", err);
                 setEventArray([]);
+            }
+        };
+
+        const fetchFanPosts = async (artistId) => {
+            try {
+                const query = new URLSearchParams({ limit: 20, artist_id: artistId }).toString();
+                const res = await fetch(`http://3.35.210.2:8000/api/posts/?${query}`);
+                const data = await res.json();
+                const posts = data.map((post) => ({
+                    postId: post.id,
+                    imgUrl: post.image_url ?? "",
+                    likes: post.likes_count
+                }));
+                setFanPostArray(posts);
+            } catch (err) {
+                console.error("팬포스트 API 호출 에러:", err);
+                setFanPostArray([]);
             }
         };
 
@@ -106,9 +134,7 @@ const SearchContent = () => {
         );
     }
 
-    const fanPostArray = [];
-    const groupMemberArray = []; 
-
+    const groupMemberArray = [];
     const groupThenMemberArray = [...searchResultArray, ...groupMemberArray];
 
     return (
@@ -124,7 +150,7 @@ const SearchContent = () => {
             <h4>일정</h4>
 
             <div className={styles.scheduleList}>
-                {eventArray.slice(0,3).map((schedule) => {
+                {eventArray.slice(0, 3).map((schedule) => {
                     const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
                     return (
                         <RoundBox key={schedule.id}>
