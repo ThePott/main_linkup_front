@@ -1,0 +1,13 @@
+.container {
+    width: var(--sizing-md);
+    height: var(--sizing-xl);
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    margin: 0;
+    padding-left: 0;
+}

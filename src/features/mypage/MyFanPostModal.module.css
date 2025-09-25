@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    gap: var(--spacing-md);
+    height: 100%;
+    min-height: 0;
+}
+
+.content {
+    text-align: left;
+    margin-left: var(--spacing-md);
+}
