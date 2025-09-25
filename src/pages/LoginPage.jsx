@@ -7,7 +7,7 @@ import { FullScreen, Vstack } from "../package/layout";
 import RoundBox from "../package/RoundBox";
 
 const LoginPage = () => {
-    const { error, isLoading, setBody } = useLogin();
+    const { error, isPending, postMutation } = useLogin();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -17,7 +17,7 @@ const LoginPage = () => {
             password: passwordHTMLElement.value,
         };
 
-        setBody(body);
+        postMutation.mutate(body);
     };
 
     return (

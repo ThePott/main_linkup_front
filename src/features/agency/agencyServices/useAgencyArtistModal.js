@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
 import useLinkUpStore from "../../../shared/store/store";
 import { useEffect } from "react";
 import { convertFormDataToArtist } from "../agencyUtils";
@@ -8,12 +7,11 @@ import {
     usePostMutation,
     usePutMutation,
 } from "../../../package/commonServices/tanstackQueryVariants";
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 
 const useAgentArtistModalQuery = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    const setSelectedArtist = useLinkUpStore(
-        (state) => state.setSelectedArtist,
-    );
+    const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
 
     const artistId = selectedArtist?.id ?? -1;
     const { data, isPending, error } = useQuery({

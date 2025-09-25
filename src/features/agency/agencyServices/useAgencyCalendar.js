@@ -1,21 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { axiosReturnsData } from "../../../package/commonServices/axiosVariants";
 import useLinkUpStore from "../../../shared/store/store";
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 
 const useAgencyCalendarQuery = () => {
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
 
     const { data, isPending, error, refetch } = useQuery({
-        queryKey: [
-            `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
-        ],
+        queryKey: [`/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`],
         queryFn: () =>
-            axiosReturnsData(
-                "GET",
-                `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`,
-            ),
+            axiosReturnsData("GET", `/api/companies/events?artist_id=${selectedArtist?.id ?? -1}`),
         refetchOnWindowFocus: false,
         enabled: false,
     });

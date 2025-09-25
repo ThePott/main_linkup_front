@@ -71,7 +71,7 @@ const Navbar = () => {
                     onEnter={handleSearch}
                     className={styles.searchbar}
                 />
-
+                
                 <SideSection justify="end">
                     <MyButton user={user} />
                     <CustomButton onClick={logout}>로그아웃</CustomButton>

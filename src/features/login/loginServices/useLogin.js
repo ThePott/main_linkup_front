@@ -1,69 +1,32 @@
-import { useEffect, useState } from "react";
-import { login, socialLogin } from "./loginApi";
-import { useQuery } from "@tanstack/react-query";
+
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useLinkUpStore from "../../../shared/store/store";
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 
 export const useLogin = () => {
-    const [body, setBody] = useState(null);
     const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
     const navigate = useNavigate();
+    const [isPending, setIsPending] = useState(false);
+    const [error, setError] = useState(null);
 
-    // data: token
-    const { data, isLoading, error, refetch } = useQuery({
-        queryKey: ["login"],
-        queryFn: () => login(body),
-        refetchOnWindowFocus: false,
-        enabled: false,
+    const postMutation = useMutation({
+        mutationFn: (body) => axiosReturnsData("POST", "/api/auth/login", body),
+        onMutate: () => {
+            setIsPending(true);
+            setError(null);
+        },
+        onSuccess: (data) => {
+            setAccessToken(data.access_token);
+            navigate("/");
+        },
+        onError: (error) => {
+            console.error(error);
+            setError(error);
+        },
+        onSettled: () => setIsPending(false),
     });
 
-    useEffect(() => {
-        if (!body) {
-            return;
-        }
-
-        refetch();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [body]);
-
-    useEffect(() => {
-        if (!data) {
-            return;
-        }
-        setAccessToken(data);
-        navigate("/");
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
-
-    useEffect(() => {
-        if (!error) {
-            return;
-        }
-        console.error(error);
-    }, [error]);
-
-    return { setBody, error, isLoading };
-};
-
-export const useSocialLogin = (provider) => {
-    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
-    const lowerCasedProvider = provider.toLowerCase();
-    // data: access_token
-    const { data, isLoading, error, refetch } = useQuery({
-        queryKey: ["socialLogin", lowerCasedProvider],
-        queryFn: () => socialLogin(lowerCasedProvider),
-        refetchOnWindowFocus: false,
-        enabled: false,
-    });
-
-    useEffect(() => {
-        if (!data) {
-            return;
-        }
-        setAccessToken(data);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
-
-    return { isLoading, error, refetch };
+    return { isPending, error, postMutation };
 };
