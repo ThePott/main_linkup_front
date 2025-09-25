@@ -1,0 +1,8 @@
+.item {
+    padding: var(--spacing-xs) var(--spacing-md);
+    background-color: var(--color-dimdimdim);
+    transition-property: background-color;
+}
+.item:hover {
+    background-color: var(--color-dimdim);
+}

@@ -16,6 +16,7 @@ import {
     startOfWeek,
     subDays,
 } from "date-fns";
+import Dropdown from "../../../package/dropdown/Dropdown.jsx";
 
 const getFirstDayOfMonth = (date) => {
     return new Date(getYear(date), getMonth(date), 1);
@@ -98,6 +99,15 @@ const ThePottTestPage = () => {
 
     return (
         <div>
+            <Dropdown>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+                <Dropdown.Item>어떤 길고 긴 메뉴</Dropdown.Item>
+            </Dropdown>
             <CalendarRowDebugButton />
             <Modal isOn={isOn} onBackgroundClick={handleClick}>
                 <p>anything here yayayay</p>
