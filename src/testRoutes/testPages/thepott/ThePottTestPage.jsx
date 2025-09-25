@@ -7,6 +7,69 @@ import Modal from "../../../package/modal/Modal.jsx";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer.jsx";
 import GridContainer from "../../../package/gridContainer/GridContainer.jsx";
 import CustomImage from "../../../package/customImage/CustomImage.jsx";
+import {
+    addDays,
+    eachDayOfInterval,
+    endOfWeek,
+    getMonth,
+    getYear,
+    startOfWeek,
+    subDays,
+} from "date-fns";
+
+const getFirstDayOfMonth = (date) => {
+    return new Date(getYear(date), getMonth(date), 1);
+};
+const getLastDateOfMonth = (date) => {
+    return new Date(getYear(date), getMonth(date) + 1, 0);
+};
+
+const getTrailingPrevMonthDateArray = (year, month, day) => {
+    const date = new Date(year, month - 1, day);
+    const startDay = getFirstDayOfMonth(date);
+    if (startDay.getDay() === 0) {
+        return [];
+    }
+
+    const result = eachDayOfInterval({
+        start: startOfWeek(getFirstDayOfMonth(date)),
+        end: subDays(getFirstDayOfMonth(date), 1),
+    });
+    return result;
+};
+
+const getLeadingNextMonthDateArray = (year, month, day) => {
+    const date = new Date(year, month - 1, day);
+    const lastDay = getLastDateOfMonth(date);
+    console.log({ lastDay });
+
+    if (lastDay.getDay() === 6) {
+        const result = [];
+        return result;
+    }
+    const result = eachDayOfInterval({
+        start: addDays(getLastDateOfMonth(date), 1),
+        end: endOfWeek(getLastDateOfMonth(date)),
+    });
+    return result;
+};
+
+const CalendarRowDebugButton = () => {
+    const checkAroundEnd = () => {
+        const endResult = getLeadingNextMonthDateArray(2025, 2, 2);
+        console.log({ endResult });
+    };
+    const checkAroundStart = () => {
+        const startResult = getTrailingPrevMonthDateArray(2025, 2, 2);
+        console.log({ startResult });
+    };
+    return (
+        <>
+            <CustomButton onClick={checkAroundStart}>check around start of the month</CustomButton>
+            <CustomButton onClick={checkAroundEnd}>check around end of the month</CustomButton>
+        </>
+    );
+};
 
 const CircleImage = () => {
     return (
@@ -35,6 +98,7 @@ const ThePottTestPage = () => {
 
     return (
         <div>
+            <CalendarRowDebugButton />
             <Modal isOn={isOn} onBackgroundClick={handleClick}>
                 <p>anything here yayayay</p>
                 <p>anything here yayayay</p>
@@ -119,6 +183,7 @@ const ThePottTestPage = () => {
                     <p>여기에 아무거나 있다고 치고</p>
                 </FlexOneContainer>
             </Hstack>
+
             <Vstack center>
                 <Skeleton widthInPixel={600} heightInPixel={100} />
                 <CustomButton>shape="RECTANGLE" - 기본값</CustomButton>

@@ -21,9 +21,14 @@ const getLastDateOfMonth = (date) => {
 };
 
 const getTrailingPrevMonthDateArray = (date) => {
+    const firstDay = getFirstDayOfMonth(date);
+    if (firstDay.getDay() === 0) {
+        return [];
+    }
+
     return eachDayOfInterval({
-        start: startOfWeek(getFirstDayOfMonth(date)),
-        end: subDays(getFirstDayOfMonth(date), 1),
+        start: startOfWeek(firstDay),
+        end: subDays(firstDay, 1),
     });
 };
 
@@ -34,9 +39,15 @@ const getSelecteMonthDateArray = (date) => {
     });
 };
 const getLeadingNextMonthDateArray = (date) => {
+    const lastDay = getLastDateOfMonth(date);
+    if (lastDay.getDay() === 6) {
+        return [];
+    }
+    const nextOfLastDay = addDays(lastDay, 1);
+
     return eachDayOfInterval({
-        start: addDays(getLastDateOfMonth(date), 1),
-        end: endOfWeek(getLastDateOfMonth(date)),
+        start: nextOfLastDay,
+        end: endOfWeek(nextOfLastDay),
     });
 };
 
@@ -52,11 +63,8 @@ const useCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const selectedMonth = getMonth(selectedDate);
 
-    const {
-        trailingPrevMonthDateArray,
-        selectedMonthDateArray,
-        leadingNextMonthDateArray,
-    } = useMemo(() => getMonthDateArrayDict(selectedDate), [selectedMonth]);
+    const { trailingPrevMonthDateArray, selectedMonthDateArray, leadingNextMonthDateArray } =
+        useMemo(() => getMonthDateArrayDict(selectedDate), [selectedMonth]);
 
     const goToPrevMonth = () => {
         setSelectedDate(subMonths(new Date(selectedDate), 1));
