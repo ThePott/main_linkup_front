@@ -1,11 +1,12 @@
 import useLinkUpStore from "../../shared/store/store";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import queryClient from "../../shared/services/queryClient";
 
 const useAuthMe = () => {
+    const navigate = useNavigate();
     const access_token = useLinkUpStore((state) => state.access_token);
     const setUser = useLinkUpStore((state) => state.setUser);
 
@@ -23,6 +24,23 @@ const useAuthMe = () => {
 
     useEffect(() => {
         setUser(data ?? null);
+
+        if (!data) {
+            return;
+        }
+        const user_type = data.user_type;
+        switch (user_type) {
+            case "fan":
+                break;
+            case "company":
+                navigate("/agency");
+                break;
+            case "super_user":
+                navigate("/super-user");
+                break;
+            default:
+                throw new Error("---- ERROR OCCURRED: 잘못된 유저 타입:", user_type);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
@@ -75,6 +93,8 @@ const useClearCacheAfterLogout = () => {
         if (!access_token) {
             queryClient.setQueryData(["/api/auth/me"], null);
             queryClient.setQueryData(["/api/subscriptions"], []);
+            // queryClient.setQueryData(["/api/auth/me"], null);
+            // queryClient.setQueryData(["/api/subscriptions"], []);
         }
     }, [access_token]);
 };

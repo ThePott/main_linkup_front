@@ -4,6 +4,7 @@ import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/store";
+import useNavbar from "./useNavbar";
 
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -16,17 +17,12 @@ const Navbar = () => {
     const [, setSearchParams] = useSearchParams();
 
     const user = useLinkUpStore((state) => state.user);
-    const setUser = useLinkUpStore((state) => state.setUser);
-    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
+
+    const { logout } = useNavbar();
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
         setSearchParams({ query: trimmed });
-    };
-
-    const handleLogout = () => {
-        setUser(null);
-        setAccessToken(null);
     };
 
     return (
@@ -50,14 +46,10 @@ const Navbar = () => {
                             <CustomButton onClick={() => navigate("/mypage")}>
                                 마이페이지
                             </CustomButton>
-                            <CustomButton onClick={handleLogout}>
-                                로그아웃
-                            </CustomButton>
+                            <CustomButton onClick={logout}>로그아웃</CustomButton>
                         </>
                     ) : (
-                        <CustomButton onClick={() => navigate("/login")}>
-                            로그인
-                        </CustomButton>
+                        <CustomButton onClick={() => navigate("/login")}>로그인</CustomButton>
                     )}
                 </SideSection>
             </Hstack>
