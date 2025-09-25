@@ -40,69 +40,11 @@ const useLinkUpStore = create()(
             setArtistArray: (artistArray) => {
                 set({ artistArray });
             },
-            addArtistInTemp: (formData) => {
-                const artist = {
-                    stage_name: formData.get("stage_name"),
-                    group_name: formData.get("group_name"),
-                    debut_date: formData.get("debut_date"),
-                    birth_date: formData.get("birth_date"),
-                };
 
-                const artistArray = [...get().artistArray, artist];
-                set({ artistArray });
+            recommendArtistArray: [],
+            setRecommendArtistArray: (recommendArtistArray) => {
+                set({ recommendArtistArray });
             },
-            addArtistInReal: (data) => {
-                const {
-                    artist_id: id,
-                    artist_name,
-                    message: _message,
-                    ...rest
-                } = data;
-
-                const artistArray = get().artistArray.map((artist) =>
-                    artist.stage_name === artist_name
-                        ? { ...artist, id, ...rest }
-                        : artist,
-                );
-                set({ artistArray });
-            },
-            updateArtistInTemp: (artistId, formData) => {
-                const updatedArtist = {
-                    stage_name: formData.get("stage_name"),
-                    group_name: formData.get("group_name"),
-                    debut_date: formData.get("debut_date"),
-                    birth_date: formData.get("birth_date"),
-                };
-
-                const artistArray = get().artistArray.map((artist) =>
-                    artist.id === artistId
-                        ? { ...artist, ...updatedArtist }
-                        : artist,
-                );
-                set({ artistArray });
-            },
-            updateArtistInReal: (data) => {
-                const {
-                    artist_id,
-                    artist_name: stage_name,
-                    message: _message,
-                    ...rest
-                } = data;
-
-                const artistArray = get().artistArray.map((artist) =>
-                    artist.id === artist_id
-                        ? { ...artist, stage_name, ...rest }
-                        : artist,
-                );
-                set({ artistArray });
-            },
-            deleteArtist: (id) => {
-                const artistArray = get().artistArray.filter(
-                    (artist) => artist.id !== id,
-                );
-                set({ artistArray });
-            },
-
 
             fanPostArray: [],
             setFanPostArray: (arr) => set({ fanPostArray: arr }),
@@ -121,8 +63,7 @@ const useLinkUpStore = create()(
             setGroupArray: (groupArray) => set({ groupArray }),
 
             recommendedGroupArray: [],
-            setRecommendedGroupArray: (arr) =>
-                set({ recommendedGroupArray: arr }),
+            setRecommendedGroupArray: (arr) => set({ recommendedGroupArray: arr }),
 
             searchResultArray: [],
             setSearchResultArray: (arr) => set({ searchResultArray: arr }),
@@ -142,7 +83,6 @@ const useLinkUpStore = create()(
                         }
                         : { subscribedArtistIdArray: [...current, artistId] };
                 }),
-
         }),
         {
             name: "linkup-session-storage", // Name for your storage item
