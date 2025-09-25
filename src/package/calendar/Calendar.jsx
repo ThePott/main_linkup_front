@@ -74,7 +74,7 @@ const Calendar = ({
                         <HeaderCell key={weekday} weekday={weekday} />
                     ))}
                 </GridContainer>
-                <GridContainer cols={7} rows={isSmall ? undefined : 5}>
+                <GridContainer cols={7} rows={isSmall ? undefined : 1}>
                     {dateWithIsDimArray.map(({ date, isDim }) => (
                         <DateCell
                             key={`${fullYear}__${month}__${date.toDateString()}`}
