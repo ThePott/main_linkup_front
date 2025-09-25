@@ -12,11 +12,7 @@ import queryClient from "../../shared/services/queryClient";
  *
  * <button onClick={() => postMutation.mutate(body)}>추가 버튼</button>
  */
-export const usePostMutation = (
-    mutationEndpoint,
-    queryEndpoint,
-    conversionFn,
-) => {
+export const usePostMutation = (mutationEndpoint, queryEndpoint, conversionFn) => {
     const postMutation = useMutation({
         mutationFn: (body) => axiosReturnsData("POST", mutationEndpoint, body),
         onMutate: async (body) => {
@@ -50,11 +46,8 @@ export const usePostMutation = (
  * 주의할 점: 불필요하더라도 body에 id를 넣어주셔야 합니다. 그래야 UI 상에서 알맞는 객체가 업데이트가 됩니다.
  *
  */
-export const usePutMutation = (
-    mutationEndpoint,
-    queryEndpoint,
-    conversionFn,
-) => {
+export const usePutMutation = (mutationEndpoint, queryEndpoint, conversionFn) => {
+    console.log({ mutationEndpoint });
     const putMutation = useMutation({
         mutationFn: (body) => axiosReturnsData("PUT", mutationEndpoint, body),
         onMutate: async (body) => {
@@ -64,9 +57,7 @@ export const usePutMutation = (
 
             const previous = queryClient.getQueryData([queryEndpoint]);
             const newOne = conversionFn ? conversionFn(body) : newOne;
-            const newArray = previous.map((el) =>
-                el.id === newOne.id ? newOne : el,
-            );
+            const newArray = previous.map((el) => (el.id === newOne.id ? newOne : el));
             queryClient.setQueryData([queryEndpoint], newArray);
 
             return { previous };

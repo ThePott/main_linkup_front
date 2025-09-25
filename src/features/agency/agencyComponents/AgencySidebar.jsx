@@ -18,7 +18,7 @@ const ArtistButton = ({ artist }) => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
 
-    const name = artist.stage_name ?? artist.group_name;
+    const name = artist.stage_name || artist.group_name;
 
     const handleClick = () => {
         setSelectedArtist(artist);

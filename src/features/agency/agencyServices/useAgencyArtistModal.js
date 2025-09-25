@@ -22,8 +22,10 @@ const useAgentArtistModalQuery = () => {
     });
 
     useEffect(() => {
-        const result = data ?? null;
-        setSelectedArtist(result);
+        if (!data) {
+            return;
+        }
+        setSelectedArtist(data);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
