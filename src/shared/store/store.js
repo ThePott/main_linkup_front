@@ -117,7 +117,6 @@ const useLinkUpStore = create()(
                 set({ selectedEvent });
             },
 
-            //dummyMijin.js
             groupArray: [],
             setGroupArray: (groupArray) => set({ groupArray }),
 
@@ -137,10 +136,10 @@ const useLinkUpStore = create()(
                     const current = state.subscribedArtistIdArray;
                     return current.includes(artistId)
                         ? {
-                              subscribedArtistIdArray: current.filter(
-                                  (id) => id !== artistId,
-                              ),
-                          }
+                            subscribedArtistIdArray: current.filter(
+                                (id) => id !== artistId,
+                            ),
+                        }
                         : { subscribedArtistIdArray: [...current, artistId] };
                 }),
 

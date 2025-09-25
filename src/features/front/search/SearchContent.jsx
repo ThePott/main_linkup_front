@@ -126,7 +126,7 @@ const SearchContent = () => {
             <h4>일정</h4>
 
             <div className={styles.scheduleList}>
-                {eventArray.map((schedule) => {
+                {eventArray.slice(0,3).map((schedule) => {
                     const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
                     return (
                         <RoundBox key={schedule.id}>
