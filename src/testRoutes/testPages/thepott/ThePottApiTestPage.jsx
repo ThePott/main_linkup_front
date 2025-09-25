@@ -67,6 +67,7 @@ const ThePottApiTestPage = () => {
         getThenLog(`${baseURL}/api/companies/events`, callback, accessToken);
     const getCompaniesEventsAespa = (callback) =>
         getThenLog(`${baseURL}/api/companies/events?artist_id=6`, callback, accessToken);
+    const getBulkEvent = (callback) => getThenLog(`${baseURL}/events/file/download-all`);
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
@@ -122,9 +123,11 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getCompaniesEventsAespa(callbackLog)}>
                             <p>get companies events</p>
                         </CustomButton>
-
-                        <CustomButton onClick={() => postFanPost()}>
+                        <CustomButton onClick={() => postFanPost(callbackLog)}>
                             <p>get posting</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getBulkEvent(callbackLog)}>
+                            <p>get bulk event</p>
                         </CustomButton>
                     </Vstack>
                 </RoundBoxGlobalShadow>
