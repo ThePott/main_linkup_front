@@ -1,101 +1,149 @@
-import React, { useState, useEffect } from "react";
-import "./SuperUserPage.css";
-import CustomButton from "../package/customButton/CustomButton.jsx";
+import { useEffect, useState } from "react";
+import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
+import CustomButton from "../package/customButton/CustomButton.jsx"; //커스텀 버튼 컴포넌트
+import Modal from "../package/modal/Modal.jsx"; //모달 공통 컴포넌트
 
 const SuperUserPage = () => {
-  const [emailSearch, setEmailSearch] = useState("");
-  const [nicknameSearch, setNicknameSearch] = useState("");
   const [users, setUsers] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [actionType, setActionType] = useState("");
+  const access_token = useLinkUpStore((state) => state.access_token);
 
-  // 유저 목록 불러오기
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const data = await fetchUsers();
-        setUsers(data);
-      } catch (error) {
-        console.error(error);
-        alert("유저 목록을 불러오지 못했습니다.");
+        if (!access_token) throw new Error("토큰이 없습니다.");
+        const data = await fetchUsers(access_token);
+        const usersArray = Array.isArray(data) ? data : data.users || [];
+        setUsers(usersArray);
+      } catch (err) {
+        console.error(err);
       }
     };
+
     loadUsers();
-  }, []);
+  }, [access_token]);
 
-  // 차단 / 차단 해제
-  const handleToggleBan = async (id, banned) => {
+  const openModal = (user, type) => {
+    setSelectedUser(user);
+    setActionType(type);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+    setActionType("");
+    setModalOpen(false);
+  };
+
+  const handleConfirm = async () => {
+    if (!selectedUser) return;
+
     try {
-      if (banned) {
-        await unbanUser(id);
-        alert(`유저 ${id} 차단을 해제했습니다.`);
-      } else {
-        await banUser(id);
-        alert(`유저 ${id}을(를) 차단했습니다.`);
+      if (actionType === "ban") {
+        await banUser(selectedUser.id, access_token);
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === selectedUser.id ? { ...u, user_type: "ban" } : u
+          )
+        );
+      } else if (actionType === "unban") {
+        await unbanUser(selectedUser.id, access_token);
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === selectedUser.id ? { ...u, user_type: "normal" } : u
+          )
+        );
       }
-
-      // 상태 업데이트
-      setUsers(users.map((u) => (u.id === id ? { ...u, banned: !banned } : u)));
-    } catch (error) {
-      console.error(error);
-      alert("처리 실패");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      closeModal();
     }
   };
 
-  // 검색 필터링
-  const filteredUsers = users.filter(
-    (user) =>
-      user.email.includes(emailSearch) && user.nickname.includes(nicknameSearch)
-  );
-
   return (
-    <div className="superuser-container">
-      <h1 className="title">유저 관리</h1>
-
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="이메일 검색"
-          value={emailSearch}
-          onChange={(e) => setEmailSearch(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="닉네임 검색"
-          value={nicknameSearch}
-          onChange={(e) => setNicknameSearch(e.target.value)}
-        />
-      </div>
-
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>닉네임</th>
-            <th>이메일 or 아이디</th>
-            <th>권한</th>
-            <th>상태</th>
-            <th>기능</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user.id}>
-              <td>{user.nickname}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.banned ? "차단됨" : "정상"}</td>
-              <td style={{ display: "flex", gap: "8px" }}>
-                <CustomButton
-                  color={user.banned ? "BLUE" : "RED"}
-                  shape="RECTANGLE"
-                  onClick={() => handleToggleBan(user.id, user.banned)}
-                >
-                  {user.banned ? "Unban" : "Ban"}
-                </CustomButton>
-              </td>
+    <div>
+      <h1>관리자 페이지</h1>
+      {users.length === 0 ? (
+        <p>유저 목록을 불러오지 못했습니다.</p>
+      ) : (
+        <table border="1" cellPadding="8" cellSpacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>이메일</th>
+              <th>닉네임</th>
+              <th>유저 타입</th>
+              <th>상태</th>
+              <th>기능</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.email}</td>
+                <td>{user.nickname}</td>
+                <td>{user.user_type}</td>
+                <td>{user.user_type === "ban" ? "차단됨" : "활성"}</td>
+                <td>
+                  {user.user_type === "ban" ? (
+                    <CustomButton
+                      shape="RECTANGLE"
+                      color="BLUE"
+                      isOn
+                      onClick={() => openModal(user, "unban")}
+                    >
+                      차단 해제
+                    </CustomButton>
+                  ) : (
+                    <CustomButton
+                      shape="RECTANGLE"
+                      isOn
+                      onClick={() => openModal(user, "ban")}
+                    >
+                      차단
+                    </CustomButton>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {/* 모달 */}
+      <Modal isOn={modalOpen} onBackgroundClick={closeModal}>
+        {selectedUser && (
+          <div style={{ textAlign: "center" }}>
+            <p>
+              정말로 {selectedUser.nickname} 유저를{" "}
+              {actionType === "ban" ? "차단" : "차단 해제"}하시겠습니까?
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginTop: "16px" }}>
+              <CustomButton
+                shape="RECTANGLE"
+                color="BLUE"
+                isOn
+                onClick={handleConfirm}
+              >
+                확인
+              </CustomButton>
+              <CustomButton
+                shape="RECTANGLE"
+                color="MONO"
+                isOn
+                onClick={closeModal}
+              >
+                취소
+              </CustomButton>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
