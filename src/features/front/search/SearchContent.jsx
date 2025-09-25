@@ -6,6 +6,7 @@ import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
 import ArtistCardNew from "../../../shared/ArtistCardNew/ArtistCardNew";
 import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
+import { format } from "date-fns";
 
 const SearchContent = () => {
     const navigate = useNavigate();
@@ -18,8 +19,11 @@ const SearchContent = () => {
     const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
+    const eventArray = useLinkUpStore((state) => state.eventArray);
+    const setEventArray = useLinkUpStore((state) => state.setEventArray);
+
     useEffect(() => {
-        const fetchGroups = async () => {
+        const fetchGroupsAndEvents = async () => {
             try {
                 if (queryParam) {
                     const res = await fetch(`http://3.35.210.2:8000/api/idol/${queryParam}`);
@@ -31,8 +35,10 @@ const SearchContent = () => {
                         );
                         const groupData = await groupRes.json();
                         setSearchResultArray([groupData]);
+                        await fetchEvents({ artist_parent_group: groupData.id });
                     } else {
                         setSearchResultArray([artist]);
+                        await fetchEvents({ artist_id: artist.id });
                     }
                 } else {
                     const res = await fetch(
@@ -43,13 +49,28 @@ const SearchContent = () => {
                     setGroupArray(artists);
                     setRecommendedGroupArray(artists);
                     setSearchResultArray([]);
+                    setEventArray([]);
                 }
             } catch (err) {
                 console.error("API 호출 에러:", err);
             }
         };
 
-        fetchGroups();
+        const fetchEvents = async (params) => {
+            try {
+                const query = new URLSearchParams({ limit: 20, is_active: true, ...params,}).toString();
+
+                const res = await fetch(`http://3.35.210.2:8000/events/?${query}`);
+                const data = await res.json();
+                const events = data.events || [];
+                setEventArray(events);
+            } catch (err) {
+                console.error("이벤트 API 호출 에러:", err);
+                setEventArray([]);
+            }
+        };
+
+        fetchGroupsAndEvents();
     }, [queryParam]);
 
     if (queryParam && searchResultArray.length === 0) {
@@ -74,31 +95,22 @@ const SearchContent = () => {
         );
     }
 
-    if (searchResultArray.lengh > 1) {
+    if (searchResultArray.length > 1) {
         return (
             <div className={styles.container}>
                 <h2>검색 결과</h2>
                 <GridCardContainer>
                     {searchResultArray.map((artist) => (
-                        <ArtistCardNew artist={artist} />
+                        <ArtistCardNew key={artist.id} artist={artist} />
                     ))}
                 </GridCardContainer>
             </div>
         );
     }
 
-    const eventArray = [
-        "스케줄은",
-        "events api를 이용해서",
-        "받아오셔야 합니다",
-        "스토어에 저장된",
-        "eventArray를 활용해주세요",
-    ];
+    const fanPostArray = [];
+    const groupMemberArray = []; 
 
-    const fanPostArray = []; // api로 받아오셔야 합니다
-
-    // 검색 성공 결과가 그룹인지 멤버인지 확인하셔야 합니다. 그룹이다 -> 추가 api 요청, 멤버이다 -> 불필요할 듯합니다?
-    const groupMemberArray = []; // api로 따로 받아오셔야 합니다
     const groupThenMemberArray = [...searchResultArray, ...groupMemberArray];
 
     return (
@@ -107,19 +119,21 @@ const SearchContent = () => {
 
             <GridCardContainer>
                 {groupThenMemberArray.map((artist) => (
-                    <ArtistCardNew artist={artist} />
+                    <ArtistCardNew key={artist.id} artist={artist} />
                 ))}
             </GridCardContainer>
 
             <h4>일정</h4>
 
             <div className={styles.scheduleList}>
-                {eventArray.map((schedule, index) => (
-                    <RoundBox key={index}>
-                        {schedule}
-                        {/* {schedule.owner} {schedule.title} - {schedule.sttime} */}
-                    </RoundBox>
-                ))}
+                {eventArray.map((schedule) => {
+                    const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
+                    return (
+                        <RoundBox key={schedule.id}>
+                            {schedule.title} — {dateOnly}
+                        </RoundBox>
+                    );
+                })}
             </div>
 
             <h4>그룹 팬포스트</h4>
