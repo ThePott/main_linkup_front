@@ -12,27 +12,19 @@ import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 const useAgentArtistModalQuery = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
+    const modalKey = useLinkUpStore((state) => state.modalKey);
 
     const artistId = selectedArtist?.id ?? -1;
     const { data, isPending, error } = useQuery({
-        queryKey: [`/api/companies/artists/${artistId}`],
-        queryFn: async () => {
-            if (artistId === -1) {
-                return null;
-            }
-            const data = await axiosReturnsData(
-                "GET",
-                `/api/companies/artists/${selectedArtist?.id ?? -1}`,
-            );
-            return data;
-        },
+        queryKey: [`/api/companies/artists/${artistId}`, modalKey],
+        queryFn: () => axiosReturnsData("GET", `/api/companies/artists/${artistId}`),
+        enabled: Boolean(modalKey) && artistId !== -1,
     });
 
     useEffect(() => {
-        if (!data) {
-            return;
-        }
-        setSelectedArtist(data);
+        const result = data ?? null;
+        setSelectedArtist(result);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     return { isPending, error };
@@ -43,12 +35,12 @@ const useAgentArtistModalMutate = () => {
     const id = selectedArtist?.id ?? -1;
 
     const postMutation = usePostMutation(
-        `/api/companies/artists/with-images`,
+        `/api/companies/artists`,
         "/api/companies/artists",
         convertFormDataToArtist,
     );
     const putMutation = usePutMutation(
-        `/api/companies/artists/with-images/${id}`,
+        `/api/companies/artists/${id}`,
         "/api/companies/artists",
         convertFormDataToArtist,
     );

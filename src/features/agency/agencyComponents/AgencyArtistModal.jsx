@@ -8,7 +8,6 @@ import useLinkUpStore from "../../../shared/store/store";
 import useAgentArtistModal from "../agencyServices/useAgencyArtistModal";
 import { useRef } from "react";
 import ImageInput from "../../../package/imageInput/ImageInput";
-import RoundBox from "../../../package/RoundBox";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -44,6 +43,15 @@ const ArtistInput = ({ selectedArtist, info }) => {
     );
 };
 
+const DebugButton = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const handleClick = () => {
+        console.log({ selectedArtist });
+        debugger;
+    };
+    return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
+};
+
 const AgencyArtistModal = () => {
     const formRef = useRef(null);
 
@@ -51,8 +59,7 @@ const AgencyArtistModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const { isPending, error, postMutation, putMutation, deleteMutation } =
-        useAgentArtistModal();
+    const { isPending, error, postMutation, putMutation, deleteMutation } = useAgentArtistModal();
 
     const dismiss = () => {
         setModalKey(null);
@@ -60,9 +67,7 @@ const AgencyArtistModal = () => {
 
     const handleDelete = () => {
         if (!selectedArtist) {
-            throw new Error(
-                "---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함",
-            );
+            throw new Error("---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함");
         }
 
         deleteMutation.mutate(selectedArtist.id);
@@ -121,25 +126,12 @@ const AgencyArtistModal = () => {
                 <GridContainer gap="MD" cols={4}>
                     <Vstack>
                         {inputFieldInfoArray.map((info) => (
-                            <ArtistInput
-                                key={info}
-                                selectedArtist={selectedArtist}
-                                info={info}
-                            />
+                            <ArtistInput key={info} selectedArtist={selectedArtist} info={info} />
                         ))}
                     </Vstack>
-                    <ImageInput
-                        name="face_image"
-                        defaultSrc={selectedArtist?.face_image}
-                    />
-                    <ImageInput
-                        name="torso_image"
-                        defaultSrc={selectedArtist?.torso_image}
-                    />
-                    <ImageInput
-                        name="banner_image"
-                        defaultSrc={selectedArtist?.banner_image}
-                    />
+                    <ImageInput name="face_image" defaultSrc={selectedArtist?.face_url} />
+                    <ImageInput name="torso_image" defaultSrc={selectedArtist?.torso_url} />
+                    <ImageInput name="banner_image" defaultSrc={selectedArtist?.banner_url} />
 
                     <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (
@@ -149,6 +141,7 @@ const AgencyArtistModal = () => {
                     )}
                 </GridContainer>
             </form>
+            <DebugButton />
         </Modal>
     );
 };

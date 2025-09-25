@@ -77,10 +77,8 @@ const useLinkUpStore = create()(
                     const current = state.subscribedArtistIdArray;
                     return current.includes(artistId)
                         ? {
-                            subscribedArtistIdArray: current.filter(
-                                (id) => id !== artistId,
-                            ),
-                        }
+                              subscribedArtistIdArray: current.filter((id) => id !== artistId),
+                          }
                         : { subscribedArtistIdArray: [...current, artistId] };
                 }),
         }),
