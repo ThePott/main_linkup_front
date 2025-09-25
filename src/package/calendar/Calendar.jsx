@@ -11,9 +11,7 @@ import { CalendarContext } from "./CalendarContext";
 const formatToYmd = (date) => format(date, "yyyyMMdd");
 
 const groupEventArrayBySttime = (eventArray) => {
-    const groupedEvent = Object.groupBy(eventArray, (event) =>
-        formatToYmd(event.start_time),
-    );
+    const groupedEvent = Object.groupBy(eventArray, (event) => formatToYmd(event.start_time));
     return groupedEvent;
 };
 
@@ -28,6 +26,7 @@ const Calendar = ({
     isSmall,
     setModalKey,
     setSelectedEvent,
+    additionalButtonArray = [],
 }) => {
     const {
         selectedDate,
@@ -59,17 +58,16 @@ const Calendar = ({
     return (
         <CalendarContext.Provider value={contextValue}>
             <Vstack className={styles.calendar}>
-                <Hstack
-                    justify="end"
-                    items="center"
-                    gap="none"
-                    className={styles.bold}
-                >
+                <Hstack justify="start" items="center" gap="none" className={styles.bold}>
+                    <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
+                    <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
                     <div>
                         {fullYear}년 {month}월
                     </div>
-                    <CustomButton onClick={goToPrevMonth}>{"<"}</CustomButton>
-                    <CustomButton onClick={goToNextMonth}>{">"}</CustomButton>
+                    <div className="grow" />
+                    {additionalButtonArray.map((button) => (
+                        <>{button}</>
+                    ))}
                 </Hstack>
                 <GridContainer cols={7}>
                     {weekDayArray.map((weekday) => (
@@ -79,7 +77,7 @@ const Calendar = ({
                 <GridContainer cols={7} rows={isSmall ? undefined : 5}>
                     {dateWithIsDimArray.map(({ date, isDim }) => (
                         <DateCell
-                            key={date}
+                            key={`${fullYear}__${month}__${date.toDateString()}`}
                             isDim={isDim}
                             date={date}
                             eventArray={groupedEvent[formatToYmd(date)] ?? []}

@@ -101,10 +101,7 @@ const ThePottTestPage = () => {
                 >
                     sidebar
                 </div>
-                <FlexOneContainer
-                    style={{ backgroundColor: "var(--color-blue)" }}
-                    isYScrollable
-                >
+                <FlexOneContainer style={{ backgroundColor: "var(--color-blue)" }} isYScrollable>
                     <p>여기에 아무거나 있다고 치고</p>
                     <p>여기에 아무거나 있다고 치고</p>
                     <p>여기에 아무거나 있다고 치고</p>
@@ -140,7 +137,15 @@ const ThePottTestPage = () => {
                 <CustomButton isOn={isOn} color="BLUE" onClick={handleClick}>
                     color="BLUE"
                 </CustomButton>
-                <Calendar />
+                <Calendar
+                    additionalButtonArray={[
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                    ]}
+                />
                 <Vstack items="center" style={{ alignItems: "center" }}>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
