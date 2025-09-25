@@ -4,13 +4,6 @@ import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
 
-// 예시 데이터
-const items = [
-  { id: 1, title: "항목 A", description: "설명 A" },
-  { id: 2, title: "항목 B", description: "설명 B" },
-  { id: 3, title: "항목 C", description: "설명 C" },
-];
-
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
