@@ -45,28 +45,30 @@ const MyPage = () => {
     queryKey: ["userInfo", accessToken],
     queryFn: async () => await apiAuthMe("GET"),
     enabled: !!accessToken,
-    refetchInterval: 5000, // 실시간 갱신 및 동기화
   });
 
   // 내 포스트
-  const { data: myPosts = [], isLoading: isPostsLoading } = useQuery({
+  const { data: myPosts = [], isFetching: isPostsFetching } = useQuery({
     queryKey: ["myPosts", accessToken, userInfo?.id],
     queryFn: fetchMyPosts,
     enabled: !!accessToken && !!userInfo,
-    refetchInterval: 5000,
+    refetchInterval: 5000, // 갱신 시간 설정, 늘리기 가능, 현재는 5초마다 갱신
+    keepPreviousData: true, // 이전 데이터 유지
   });
 
   // 내 구독
-  const { data: subscriptions = [], isLoading: isSubsLoading } = useQuery({
+  const { data: subscriptions = [], isFetching: isSubsFetching } = useQuery({
     queryKey: ["subscriptions", accessToken],
     queryFn: fetchSubscriptions,
     enabled: !!accessToken,
-    refetchInterval: 5000,
+    refetchInterval: 5000, // 갱신 시간 설정, 늘리기 가능, 현재는 5초마다 갱신
+    keepPreviousData: true, // 이전 데이터 유지
   });
 
   if (!accessToken) return <div>로그인이 필요합니다.</div>;
-  if (isUserLoading || isPostsLoading || isSubsLoading) return <div>로딩 중...</div>;
+  if (isUserLoading) return <div>로딩 중...</div>; // 사용자 정보만 로딩 표시
 
+  // 통계
   const subscriptionsCount = subscriptions.length;
   const postsCount = myPosts.length;
   const likesCount = myPosts.reduce((sum, post) => sum + (post.likes_count ?? 0), 0);
@@ -87,6 +89,7 @@ const MyPage = () => {
               <span>구독: {subscriptionsCount}</span>
               <span>포스트: {postsCount}</span>
               <span>좋아요: {likesCount}</span>
+              {(isPostsFetching || isSubsFetching) && <small>갱신 중...</small>}
             </div>
           </div>
         </div>
