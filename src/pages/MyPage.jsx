@@ -45,6 +45,7 @@ const MyPage = () => {
     queryKey: ["userInfo", accessToken],
     queryFn: async () => await apiAuthMe("GET"),
     enabled: !!accessToken,
+    refetchInterval: 5000, // 실시간 갱신 및 동기화
   });
 
   // 내 포스트
@@ -52,6 +53,7 @@ const MyPage = () => {
     queryKey: ["myPosts", accessToken, userInfo?.id],
     queryFn: fetchMyPosts,
     enabled: !!accessToken && !!userInfo,
+    refetchInterval: 5000,
   });
 
   // 내 구독
@@ -59,6 +61,7 @@ const MyPage = () => {
     queryKey: ["subscriptions", accessToken],
     queryFn: fetchSubscriptions,
     enabled: !!accessToken,
+    refetchInterval: 5000,
   });
 
   if (!accessToken) return <div>로그인이 필요합니다.</div>;
