@@ -52,17 +52,17 @@ const MyPage = () => {
     queryKey: ["myPosts", accessToken, userInfo?.id],
     queryFn: fetchMyPosts,
     enabled: !!accessToken && !!userInfo,
-    refetchInterval: 5000, // 갱신 시간 설정, 늘리기 가능, 현재는 5초마다 갱신
+    // refetchInterval: 5000, // 주석 처리: 서버 요청 최소화
     keepPreviousData: true, // 이전 데이터 유지
   });
 
-  // 내 구독
-  const { data: subscriptions = [], isFetching: isSubsFetching } = useQuery({
+  // 내 구독 (실시간 갱신 제거)
+  const { data: subscriptions = [] } = useQuery({
     queryKey: ["subscriptions", accessToken],
     queryFn: fetchSubscriptions,
     enabled: !!accessToken,
-    refetchInterval: 5000, // 갱신 시간 설정, 늘리기 가능, 현재는 5초마다 갱신
-    keepPreviousData: true, // 이전 데이터 유지
+    // refetchInterval: 5000, // 주석 처리: 서버 요청 최소화
+    keepPreviousData: true,
   });
 
   if (!accessToken) return <div>로그인이 필요합니다.</div>;
@@ -89,7 +89,7 @@ const MyPage = () => {
               <span>구독: {subscriptionsCount}</span>
               <span>포스트: {postsCount}</span>
               <span>좋아요: {likesCount}</span>
-              {(isPostsFetching || isSubsFetching) && <small>갱신 중...</small>}
+              {isPostsFetching && <small>갱신 중...</small>}
             </div>
           </div>
         </div>
