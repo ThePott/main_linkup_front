@@ -7,18 +7,6 @@ import { apiAuthMe } from "../shared/services/linkupApi.js";
 import "./MyPage.css";
 import MyFanPost from "../features/mypage/MyFanPost.jsx";
 
-// 카드 데이터 (임시)
-const cardData = [
-    { id: 1, title: "카드 1" },
-    { id: 2, title: "카드 2" },
-    { id: 3, title: "카드 3" },
-    { id: 4, title: "카드 4" },
-    { id: 5, title: "카드 5" },
-    { id: 6, title: "카드 6" },
-    { id: 7, title: "카드 7" },
-    { id: 8, title: "카드 8" },
-];
-
 const MyPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
@@ -68,7 +56,6 @@ const MyPage = () => {
                         <span className="user-name">{userInfo.name}</span>
                         <div className="user-stats">
                             <span>팔로잉: {userStats.following}</span>
-                            <span>좋아요: {userStats.likes}</span>
                             <span>포스트: {userStats.posts}</span>
                         </div>
                     </div>
