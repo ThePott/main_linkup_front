@@ -14,9 +14,7 @@ const SearchContent = () => {
     const queryParam = searchParams.get("query") || "";
 
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
     const eventArray = useLinkUpStore((state) => state.eventArray);
