@@ -15,7 +15,7 @@ const useAuthMe = () => {
         error: errorAuthMe,
         isPending: isPendingAuthMe,
     } = useQuery({
-        queryKey: [endpointAuthMe],
+        queryKey: [endpointAuthMe, access_token],
         queryFn: () => axiosReturnsData("GET", endpointAuthMe),
         refetchOnWindowFocus: false,
         enabled: Boolean(access_token),
@@ -39,7 +39,7 @@ const useSubscriptions = () => {
         error: errorSubscriptions,
         isPending: isPendingSubscriptions,
     } = useQuery({
-        queryKey: [endpoint],
+        queryKey: [endpoint, access_token],
         queryFn: () => axiosReturnsData("GET", endpoint),
         refetchOnWindowFocus: false,
         enabled: Boolean(access_token),
