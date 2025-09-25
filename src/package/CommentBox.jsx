@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./CommentArray.module.css";
+import styles from "./CommentBox.module.css";
 
-const CommentArray = ({ item }) => {
+const CommentBox = ({ item }) => {
     const { text, date } = item;
 
     return (
@@ -12,4 +12,4 @@ const CommentArray = ({ item }) => {
     );
 };
 
-export default CommentArray;
+export default CommentBox;
