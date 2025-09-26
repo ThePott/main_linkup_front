@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
-import CustomButton from "../package/customButton/CustomButton.jsx"; //커스텀 버튼 컴포넌트
-import Modal from "../package/modal/Modal.jsx"; //모달 공통 컴포넌트
-import "./SuperUserPage.module.css"; // 스타일 컴포넌트
+import CustomButton from "../package/customButton/CustomButton.jsx";
+import Modal from "../package/modal/Modal.jsx";
+import styles from "./SuperUserPage.module.css"; // CSS Module 적용
 
 const SuperUserPage = () => {
   const [users, setUsers] = useState([]);
@@ -66,12 +66,12 @@ const SuperUserPage = () => {
   };
 
   return (
-    <div>
-      <h1>관리자 페이지</h1>
+    <div className={styles.superuserContainer}>
+      <h1 className={styles.title}>관리 페이지</h1>
       {users.length === 0 ? (
         <p>유저 목록을 불러오지 못했습니다.</p>
       ) : (
-        <table border="1" cellPadding="8" cellSpacing="0">
+        <table className={styles.userTable}>
           <thead>
             <tr>
               <th>ID</th>
@@ -124,7 +124,14 @@ const SuperUserPage = () => {
               정말로 {selectedUser.nickname} 유저를{" "}
               {actionType === "ban" ? "차단" : "차단 해제"}하시겠습니까?
             </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginTop: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "12px",
+                marginTop: "16px",
+              }}
+            >
               <CustomButton
                 shape="RECTANGLE"
                 color="BLUE"
