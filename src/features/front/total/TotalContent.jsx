@@ -3,39 +3,28 @@ import RoundBox from "../../../package/RoundBox";
 import CustomImageBanner from "../../../shared/CustomImageBanner/CustomImageBanner";
 import CustomImageIcon from "../../../shared/CustomImageIcon/CustomImageIcon";
 import styles from "./TotalContent.module.css";
-import mockData from "../../../shared/store/dummyHeehaa.json";
-import axiosInstance from "../../../shared/services/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { useNavigate } from "react-router";
-
-// CustomImageIcon - 구독 api와 연결이 필요.
-// 현재 artist_id는 undefined임 mockdata로 연결되어 있기 때문
-// 구독한 아이돌의 일정을 가져와야 하는데 우선은 /events/ 주소로 연결하여
-// 일정 가져옴 - 구독에 따른 일정을 가져와야 하기때문에 로직 추가가 필요할 거 같음
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+import useLinkUpStore from "../../../shared/store/store";
 
 const TotalContent = () => {
-    const subscribeArray1 = mockData;
-    const url = subscribeArray1[0].img_banner;
-
+    const artistArray = useLinkUpStore((state) => state.artistArray);
     const [page, setPage] = useState(1);
     const itemsPerPage = 5;
     const navigate = useNavigate();
 
-    const getSchedule = async () => {
-        const res = await axiosInstance.get("events");
-        return res.data.events;
-    };
-
+    const endpoint = "/api/events";
     const {
         isPending,
         error,
-        data: subscribeArray,
+        data: scheduleArray,
     } = useQuery({
-        queryKey: ["events"],
-        queryFn: () => getSchedule(),
-        staleTime: 1000 * 60 * 3,
+        queryKey: [endpoint],
+        queryFn: () => axiosReturnsData("GET", endpoint),
+        onError: (error) => console.error(error),
     });
 
     if (isPending) return <p>데이터를 불러오는 중입니다...</p>;
@@ -43,19 +32,18 @@ const TotalContent = () => {
 
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentItems = subscribeArray?.slice(startIndex, endIndex) ?? [];
-    const totalPages = Math.ceil((subscribeArray?.length ?? 0) / itemsPerPage);
+    const currentItems = scheduleArray.events?.slice(startIndex, endIndex) ?? [];
+    const totalPages = Math.ceil((scheduleArray.events?.length ?? 0) / itemsPerPage);
+
+    //배너 이미지 api가 모호하여 임의로 지정
+    const url = artistArray[0].artist_image_url;
 
     return (
-        // fanPostArray를 받아와서 FanPostGrid에 넣으시면 됩니다. 스타일은 건드리지 않으셔도 될 겁니다.
-        // 스타일 수정이 필요한 부분이 생기면 이슈로 남겨주시거나 채팅으로 알려주시면 감사하겠습니다!
-        // -- 하흥주
-        // unique key가 필요 - 커스텀이미지아이콘 & currentItems
         <div className={styles.container}>
-            {subscribeArray1.map((artist) => (
+            {artistArray.map((artist) => (
                 <CustomImageIcon
-                    key={artist.id}
-                    url={artist.img_face}
+                    key={artist.artist_id}
+                    url={artist.artist_image_url}
                     className={styles.circleIcon}
                     onClick={() => {
                         navigate(`/detail/artist/${artist.artist_id}`);
