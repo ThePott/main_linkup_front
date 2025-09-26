@@ -41,8 +41,8 @@ const FanPostCard = ({ fanPost, isBlurred }) => {
         console.log({ fanPostClickMessage: "modalKey를 바꿔 구독을 유도합니다" });
     };
 
-    const url = fanPost?.image || import.meta.env.VITE_PLACEHOLDER_IMAGE;
-    const alt = fanPost.stage_name ?? fanPost.group_name ?? "도대체 뭘 받은 거니...";
+    const url = fanPost?.image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE;
+    const alt = fanPost.artist_name ?? fanPost.group_name ?? "도대체 뭘 받은 거니...";
 
     const style = {};
     style["--blur"] = isBlurred ? "var(--spacing-sm)" : 0;
