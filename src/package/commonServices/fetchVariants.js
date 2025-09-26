@@ -39,6 +39,24 @@ export const getFileThenDownload = (url, callback, access_token) => {
             }
         });
 };
+
+export const postFileThenLog = (url, formData, access_token) => {
+    const init = {
+        method: "POST", // Specify the method as POST
+        headers: {
+            Authorization: access_token, // Inform the server about the data format
+        },
+        body: formData, // Convert the JavaScript object to a JSON string
+    };
+
+    fetch(url, init)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => console.error("Error:", error));
+};
+
 export const getThenLog = (url, callback, access_token) => {
     const init = {
         method: "GET",

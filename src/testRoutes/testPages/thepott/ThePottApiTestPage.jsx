@@ -4,6 +4,7 @@ import RoundBox from "../../../package/RoundBox";
 import {
     getFileThenDownload,
     getThenLog,
+    postFileThenLog,
     postThenLog,
 } from "../../../package/commonServices/fetchVariants";
 import { useState } from "react";
@@ -56,6 +57,8 @@ const ThePottApiTestPage = () => {
     const [user, setUser] = useState(null);
 
     const getMe = (callback) => getThenLog(`${baseURL}/api/auth/me`, callback, accessToken);
+    const getFanSubscriptionWithName = (callback) =>
+        getThenLog(`${baseURL}/api/subscriptions/?include_image=true`, callback, accessToken);
     const getFanSubscription = (callback) =>
         getThenLog(`${baseURL}/api/subscriptions`, callback, accessToken);
     const getEvents = (callback) =>
@@ -83,6 +86,12 @@ const ThePottApiTestPage = () => {
     };
     const callbackLog = (data) => {
         console.log({ data });
+    };
+
+    const handleBulkUpload = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        postFileThenLog(`${baseURL}/api/events/file/upload-all`, formData, accessToken);
     };
 
     return (
@@ -113,6 +122,9 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getEvents(callbackLog)}>
                             <p>get events</p>
                         </CustomButton>
+                        <CustomButton onClick={() => getFanSubscriptionWithName(callbackLog)}>
+                            <p>get subscription with name</p>
+                        </CustomButton>
                         <CustomButton onClick={() => getFanSubscription(callbackLog)}>
                             <p>get subscription</p>
                         </CustomButton>
@@ -134,6 +146,12 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getBulkEvent(callbackLog)}>
                             <p>get bulk event</p>
                         </CustomButton>
+                        <RoundBox>
+                            <form onSubmit={handleBulkUpload}>
+                                <input type="file" name="file" />
+                                <CustomButton>upload</CustomButton>
+                            </form>
+                        </RoundBox>
                     </Vstack>
                 </RoundBoxGlobalShadow>
             </FlexOneContainer>
