@@ -1,14 +1,11 @@
-.container {
+.addCard {
     display: flex;
-    gap: var(--spacing-md);
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: var(--sizing-lg);
 }
 
-.addBtn,
-.fanpostItem {
-    display: inline-block;
-    width: var(--sizing-md);
-    height: var(--sizing-md);
-    border: 5px solid var(--color-blue);
-    border-radius: var(--spacing-xs);
+.plusIcon {
+    width: var(--sizing-xs);
+    color: var(--color-vivid);
 }

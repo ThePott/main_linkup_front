@@ -54,6 +54,9 @@ const useLinkUpStore = create()(
                 set({ fanPostArray: [newPost, ...prev] });
             },
 
+            selectedFanPost: null,
+            setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
+
             selectedEvent: null,
             setSelectedEvent: (selectedEvent) => {
                 set({ selectedEvent });

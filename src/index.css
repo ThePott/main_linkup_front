@@ -47,6 +47,7 @@
         0px 3px 3px -1.5px var(--color-dimdimdim), 0px 6px 6px -3px var(--color-dimdimdim),
         0px 12px 12px -6px var(--color-dimdimdim), 0px 24px 24px -12px var(--color-dimdimdim);
 
+    --sizing-xs: 100px;
     --sizing-sm: 200px;
     --sizing-md: 300px;
     --sizing-lg: 400px;
