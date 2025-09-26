@@ -1,8 +1,10 @@
 .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: var(--spacing-lg);
     width: var(--sizing-lg);
     height: var(--sizing-lg);
-    padding-top: calc(var(--spacing-xl) * 3);
 }
 
 .title {
