@@ -1,7 +1,11 @@
 import CustomButton from "../../../package/customButton/CustomButton";
 import { FullScreen, Vstack } from "../../../package/layout";
 import RoundBox from "../../../package/RoundBox";
-import { getThenLog, postThenLog } from "../../../package/commonServices/fetchVariants";
+import {
+    getFileThenDownload,
+    getThenLog,
+    postThenLog,
+} from "../../../package/commonServices/fetchVariants";
 import { useState } from "react";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
@@ -57,7 +61,7 @@ const ThePottApiTestPage = () => {
     const getEvents = (callback) =>
         getThenLog(
             // `${baseURL}/events/?artist_parent_group=1`,
-            `${baseURL}/events/`,
+            `${baseURL}/api/events/`,
             callback,
             accessToken,
         );
@@ -67,7 +71,8 @@ const ThePottApiTestPage = () => {
         getThenLog(`${baseURL}/api/companies/events`, callback, accessToken);
     const getCompaniesEventsAespa = (callback) =>
         getThenLog(`${baseURL}/api/companies/events?artist_id=6`, callback, accessToken);
-    const getBulkEvent = (callback) => getThenLog(`${baseURL}/events/file/download-all`);
+    const getBulkEvent = (callback) =>
+        getFileThenDownload(`${baseURL}/api/events/file/download-all`, callback, accessToken);
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
