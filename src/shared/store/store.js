@@ -36,6 +36,15 @@ const useLinkUpStore = create()(
                 set({ eventArray });
             },
 
+            selectedEvent: null,
+            setSelectedEvent: (selectedEvent) => {
+                set({ selectedEvent });
+            },
+
+            selectedMonthEventArray: [],
+            setSelectedMonthEventArray: (selectedMonthEventArray) =>
+                set({ selectedMonthEventArray }),
+
             artistArray: [],
             setArtistArray: (artistArray) => {
                 set({ artistArray });
@@ -56,11 +65,6 @@ const useLinkUpStore = create()(
 
             selectedFanPost: null,
             setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
-
-            selectedEvent: null,
-            setSelectedEvent: (selectedEvent) => {
-                set({ selectedEvent });
-            },
 
             groupArray: [],
             setGroupArray: (groupArray) => set({ groupArray }),

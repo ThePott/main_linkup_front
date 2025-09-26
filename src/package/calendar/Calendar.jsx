@@ -7,6 +7,7 @@ import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
 import { format } from "date-fns";
 import { CalendarContext } from "./CalendarContext";
+import { useEffect } from "react";
 
 const formatToYmd = (date) => format(date, "yyyyMMdd");
 
@@ -27,16 +28,21 @@ const Calendar = ({
     setModalKey,
     setSelectedEvent,
     additionalButtonArray = [],
+    onDateChange,
 }) => {
     const {
         selectedDate,
-        // setCurrentDate,
         trailingPrevMonthDateArray,
         selectedMonthDateArray,
         leadingNextMonthDateArray,
         goToPrevMonth,
         goToNextMonth,
     } = useCalendar();
+
+    useEffect(() => {
+        onDateChange(selectedDate);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDate]);
 
     const dateWithIsDimArray = [
         ...trailingPrevMonthDateArray.map((date) => ({ date, isDim: true })),
