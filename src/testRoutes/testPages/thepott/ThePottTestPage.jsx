@@ -140,7 +140,7 @@ const ThePottTestPage = () => {
                 <CircleImage />
             </Hstack>
 
-            <GridContainer cols="auto" colMinWidth={"var(--sizing-md)"}>
+            <GridContainer cols="auto" colMinWidth={"md"}>
                 <SampleImage />
                 <SampleImage />
                 <SampleImage />
