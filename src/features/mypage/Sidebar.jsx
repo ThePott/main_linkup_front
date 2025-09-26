@@ -20,26 +20,17 @@ const fetchSubscriptions = async (accessToken) => {
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const accessToken = useLinkUpStore((state) => state.access_token);
+  const modalKey = useLinkUpStore((state) => state.modalKey);
+  const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
   // 구독 목록 조회
   const { data: subscriptions = [], isLoading: isSubsLoading } = useQuery({
     queryKey: ["subscriptions", accessToken],
     queryFn: () => fetchSubscriptions(accessToken),
     enabled: !!accessToken,
-    // refetchInterval: 5000, // 필요 시 자동 갱신 가능
   });
-
-  const handleDeleteClick = () => setShowDeleteModal(true);
-  const handleConfirmDelete = () => {
-    setShowDeleteModal(false);
-    alert("탈퇴가 완료되었습니다."); // API 호출 자리
-  };
-
-  const handlePasswordChangeClick = () => setShowPasswordModal(true);
 
   return (
     <div className="sidebar">
@@ -55,7 +46,6 @@ const Sidebar = () => {
             {subscriptions.map((sub) => (
               <div key={sub.id} className="item">
                 <div className="item-info">
-                  {/* title, description 형식으로 표시 (artist_id 대신 임의 이름 매핑 가능) */}
                   <span className="item-title">아티스트 {sub.artist_id}</span>
                   <span className="item-description">구독 중</span>
                 </div>
@@ -81,7 +71,7 @@ const Sidebar = () => {
             <CustomButton
               color="MONO"
               shape="RECTANGLE"
-              onClick={handlePasswordChangeClick}
+              onClick={() => setModalKey("passwordChange")}
             >
               비밀번호 변경
             </CustomButton>
@@ -102,7 +92,7 @@ const Sidebar = () => {
             <CustomButton
               color="RED"
               shape="RECTANGLE"
-              onClick={handleDeleteClick}
+              onClick={() => setModalKey("deleteAccount")}
             >
               회원 탈퇴
             </CustomButton>
@@ -112,13 +102,12 @@ const Sidebar = () => {
 
       {/* 모달들 */}
       <PasswordChangeModal
-        isOpen={showPasswordModal}
-        onClose={() => setShowPasswordModal(false)}
+        isOn={modalKey === "passwordChange"}
+        onClose={() => setModalKey(null)}
       />
       <DeleteAccountModal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        onConfirm={handleConfirmDelete}
+        isOn={modalKey === "deleteAccount"}
+        onClose={() => setModalKey(null)}
       />
     </div>
   );
