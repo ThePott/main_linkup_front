@@ -3,6 +3,7 @@ import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 import CustomButton from "../package/customButton/CustomButton.jsx"; //커스텀 버튼 컴포넌트
 import Modal from "../package/modal/Modal.jsx"; //모달 공통 컴포넌트
+import "./SuperUserPage.module.css"; // 스타일 컴포넌트
 
 const SuperUserPage = () => {
   const [users, setUsers] = useState([]);
