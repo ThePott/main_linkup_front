@@ -8,10 +8,10 @@ import axiosInstance from "../../shared/services/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import styles from "./FanPostWriteContent.module.css";
 
-import subscribeArray from "../../shared/store/dummy2Heehaa.json";
-
 const FanPostWriteContent = () => {
     const addFanPost = useLinkUpStore((state) => state.addFanPost);
+    const artistArray = useLinkUpStore((state) => state.artistArray);
+    console.log("fanpost_artistArray", artistArray);
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -43,10 +43,7 @@ const FanPostWriteContent = () => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const imageFile = formData.get("image_url");
-        if (
-            !imageFile ||
-            (imageFile.size !== undefined && imageFile.size === 0)
-        ) {
+        if (!imageFile || (imageFile.size !== undefined && imageFile.size === 0)) {
             setShowImageModal(true);
             return;
         }
@@ -97,18 +94,10 @@ const FanPostWriteContent = () => {
                     </CustomButton>
                 </div>
                 <div className={styles.content}>
-                    <select
-                        name="artist_id"
-                        ref={inputRef}
-                        className={styles.select}
-                        required
-                    >
-                        {subscribeArray.map((artist) => (
-                            <option
-                                key={artist.artist_id}
-                                value={artist.artist_id}
-                            >
-                                {artist.artist_name}
+                    <select name="artist_id" ref={inputRef} className={styles.select} required>
+                        {artistArray.map((artist) => (
+                            <option key={artist.artist_id} value={artist.artist_id}>
+                                {artist.group_name || artist.stage_name}
                             </option>
                         ))}
                     </select>
@@ -129,50 +118,31 @@ const FanPostWriteContent = () => {
             </form>
 
             {exitConfirmModalOpen && (
-                <Modal
-                    isOn={exitConfirmModalOpen}
-                    onBackgroundClick={handleExitConfirmNo}
-                >
+                <Modal isOn={exitConfirmModalOpen} onBackgroundClick={handleExitConfirmNo}>
                     <p className={styles.exitText}>
                         정말 페이지를 벗어나시겠습니까?
                         <br /> 내용이 저장되지 않습니다.
                     </p>
                     <div className={styles.exitModalBtn}>
-                        <CustomButton onClick={handleExitConfirmYes}>
-                            네
-                        </CustomButton>
-                        <CustomButton onClick={handleExitConfirmNo}>
-                            아니오
-                        </CustomButton>
+                        <CustomButton onClick={handleExitConfirmYes}>네</CustomButton>
+                        <CustomButton onClick={handleExitConfirmNo}>아니오</CustomButton>
                     </div>
                 </Modal>
             )}
 
             {showImageModal && (
-                <Modal
-                    isOn={showImageModal}
-                    onBackgroundClick={handleCloseImageModal}
-                >
+                <Modal isOn={showImageModal} onBackgroundClick={handleCloseImageModal}>
                     <p>이미지를 첨부해주세요.</p>
-                    <CustomButton onClick={handleCloseImageModal}>
-                        닫기
-                    </CustomButton>
+                    <CustomButton onClick={handleCloseImageModal}>닫기</CustomButton>
                 </Modal>
             )}
 
             {confirmModalOpen && (
-                <Modal
-                    isOn={confirmModalOpen}
-                    onBackgroundClick={handleCancelConfirm}
-                >
+                <Modal isOn={confirmModalOpen} onBackgroundClick={handleCancelConfirm}>
                     <p>정말 출간하시겠습니까?</p>
                     <div className={styles.confirmModalBtn}>
-                        <CustomButton onClick={handleConfirm}>
-                            확인
-                        </CustomButton>
-                        <CustomButton onClick={handleCancelConfirm}>
-                            아니오
-                        </CustomButton>
+                        <CustomButton onClick={handleConfirm}>확인</CustomButton>
+                        <CustomButton onClick={handleCancelConfirm}>아니오</CustomButton>
                     </div>
                 </Modal>
             )}
