@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import "./Sidebar.css";
+import "./Sidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
