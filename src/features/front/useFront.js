@@ -51,7 +51,7 @@ const useSubscriptions = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
     const access_token = useLinkUpStore((state) => state.access_token);
 
-    const endpoint = "/api/subscriptions";
+    const endpoint = "/api/subscriptions?include_image=true";
     const {
         data,
         error: errorSubscriptions,
@@ -62,9 +62,11 @@ const useSubscriptions = () => {
         refetchOnWindowFocus: false,
         enabled: Boolean(access_token),
     });
-
     useEffect(() => {
-        setArtistArray(data ?? []);
+        if (!data) {
+            return;
+        }
+        setArtistArray(data);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
