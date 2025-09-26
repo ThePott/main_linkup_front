@@ -5,9 +5,9 @@ import SuggestedCard from "../../../shared/SuggestedCard";
 import styles from "./RecommendContent.module.css";
 import { useEffect } from "react";
 import useLinkUpStore from "../../../shared/store/store";
-import Skeleton from "../../../package/skeleton/Skeleton";
 import RoundBox from "../../../package/RoundBox";
 import ErrorComponent from "../../../package/ErrorComponent";
+import RecommendContentSkeleton from "./RecommendContentSkeleton";
 
 const RecommendContent = () => {
     const recommendArtistArray = useLinkUpStore((state) => state.recommendArtistArray);
@@ -35,25 +35,7 @@ const RecommendContent = () => {
     if (isPending)
         return (
             <div className={styles.container}>
-                <GridContainer cols="auto" colMinWidth="200px">
-                    {Array.from({ length: 6 }).map((_, idx) => (
-                        <RoundBox
-                            key={idx}
-                            style={{
-                                width: "fit-content",
-                                overflow: "hidden",
-                                cursor: "default",
-                            }}
-                        >
-                            <Skeleton
-                                skeletonVariant="BOX"
-                                heightInPixel={200}
-                                widthInPixel={180}
-                                className="my-skeleton-card"
-                            />
-                        </RoundBox>
-                    ))}
-                </GridContainer>
+                <RecommendContentSkeleton />
             </div>
         );
     if (error)
