@@ -2,12 +2,13 @@ import useLinkUpStore from "../../shared/store/store";
 import FanPostGrid from "../../shared/FanPostGrid";
 
 const MyFanPost = () => {
-    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
-    console.log("myfanpost", fanPostArray);
+    const user = useLinkUpStore((state) => state.user);
+    console.log("myfanpost", user);
+    const fanPostArray = user.posts;
 
     return (
         <>
-            <FanPostGrid isMine fanPostArray={fanPostArray} />
+            <FanPostGrid isMine fanPostArray={fanPostArray} isBlurred={false} />
         </>
     );
 };
