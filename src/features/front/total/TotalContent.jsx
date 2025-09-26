@@ -47,6 +47,9 @@ const TotalContent = () => {
     const totalPages = Math.ceil((subscribeArray?.length ?? 0) / itemsPerPage);
 
     return (
+        // fanPostArray를 받아와서 FanPostGrid에 넣으시면 됩니다. 스타일은 건드리지 않으셔도 될 겁니다.
+        // 스타일 수정이 필요한 부분이 생기면 이슈로 남겨주시거나 채팅으로 알려주시면 감사하겠습니다!
+        // -- 하흥주
         // unique key가 필요 - 커스텀이미지아이콘 & currentItems
         <div className={styles.container}>
             {subscribeArray1.map((artist) => (
@@ -67,17 +70,12 @@ const TotalContent = () => {
                 <Calendar className={styles.calendar} />
                 <span className={styles.dailyScheduleContainer}>
                     {currentItems.map((schedule) => (
-                        <RoundBox
-                            className={styles.dailySchedyleRoundbox}
-                            key={schedule.id}
-                        >
+                        <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
                             <li className={styles.dailySchedule}>
                                 <span className={styles.date}>
                                     {schedule.start_time.slice(0, 10)}
                                 </span>
-                                <span className={styles.scheduleTitle}>
-                                    {schedule.title}
-                                </span>
+                                <span className={styles.scheduleTitle}>{schedule.title}</span>
                             </li>
                         </RoundBox>
                     ))}
@@ -93,9 +91,7 @@ const TotalContent = () => {
                             {page} / {totalPages}
                         </span>
                         <CustomButton
-                            onClick={() =>
-                                setPage((p) => Math.min(p + 1, totalPages))
-                            }
+                            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                             disabled={page === totalPages}
                         >
                             다음
