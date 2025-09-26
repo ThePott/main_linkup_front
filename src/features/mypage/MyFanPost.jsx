@@ -1,4 +1,3 @@
-import { React } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import FanPostGrid from "../../shared/FanPostGrid";
 
@@ -8,7 +7,7 @@ const MyFanPost = () => {
 
     return (
         <>
-            <FanPostGrid fanPostArray={fanPostArray} />
+            <FanPostGrid isMine fanPostArray={fanPostArray} />
         </>
     );
 };

@@ -9,3 +9,12 @@
     width: var(--sizing-xs);
     color: var(--color-vivid);
 }
+
+.fanPostCardShell {
+    overflow: hidden;
+    border-radius: var(--rounded-md);
+}
+
+.fanPostCard {
+    filter: blur(var(--blur));
+}
