@@ -50,7 +50,7 @@ const subscribedArtistResultArray = [
                     is_active: true,
                     ...params,
                 }).toString();
-                const res = await fetch(`http://3.35.210.2:8000/events/?${query}`);
+                const res = await fetch(`http://3.35.210.2:8000/api/events/?${query}`);
                 const data = await res.json();
                 setEventArray(data.events || []);
             } catch (err) {
