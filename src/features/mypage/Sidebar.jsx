@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import "./Sidebar.module.css";
+import styles from "./Sidebar.module.css"; // CSS Module 적용
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
@@ -33,21 +33,23 @@ const Sidebar = () => {
   });
 
   return (
-    <div className="sidebar">
+    <div className={styles.sidebar}>
       {/* 구독 항목 섹션 */}
-      <div className="section">
+      <div className={styles.section}>
         <h2>구독 중인 아티스트</h2>
         {isSubsLoading ? (
           <p>로딩 중...</p>
         ) : subscriptions.length === 0 ? (
           <p>구독 중인 아티스트가 없습니다.</p>
         ) : (
-          <div className="item-list">
+          <div className={styles["item-list"]}>
             {subscriptions.map((sub) => (
-              <div key={sub.id} className="item">
-                <div className="item-info">
-                  <span className="item-title">아티스트 {sub.artist_id}</span>
-                  <span className="item-description">구독 중</span>
+              <div key={sub.id} className={styles.item}>
+                <div className={styles["item-info"]}>
+                  <span className={styles["item-title"]}>
+                    아티스트 {sub.artist_id}
+                  </span>
+                  <span className={styles["item-description"]}>구독 중</span>
                 </div>
                 <CustomButton color="BLUE" shape="RECTANGLE">
                   선택
@@ -59,15 +61,15 @@ const Sidebar = () => {
       </div>
 
       {/* 개인 정보 수정 섹션 */}
-      <div className="section">
+      <div className={styles.section}>
         <h2
-          className="collapsible-header"
+          className={styles.collapsibleHeader}
           onClick={() => setPersonalOpen(!personalOpen)}
         >
           개인 정보 수정 {personalOpen ? "▲" : "▼"}
         </h2>
         {personalOpen && (
-          <div className="collapsible-content">
+          <div className={styles.collapsibleContent}>
             <CustomButton
               color="MONO"
               shape="RECTANGLE"
@@ -80,15 +82,15 @@ const Sidebar = () => {
       </div>
 
       {/* 회원 탈퇴 섹션 */}
-      <div className="section danger-section">
+      <div className={`${styles.section} ${styles.dangerSection}`}>
         <h2
-          className="collapsible-header"
+          className={styles.collapsibleHeader}
           onClick={() => setDangerOpen(!dangerOpen)}
         >
           회원 탈퇴 {dangerOpen ? "▲" : "▼"}
         </h2>
         {dangerOpen && (
-          <div className="collapsible-content">
+          <div className={styles.collapsibleContent}>
             <CustomButton
               color="RED"
               shape="RECTANGLE"
