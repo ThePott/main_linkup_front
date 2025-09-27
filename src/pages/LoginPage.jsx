@@ -1,13 +1,13 @@
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
 import { loginInputPropsEntryArray } from "../features/login/loginServices/loginInputProps";
-import { useLogin } from "../features/login/loginServices/useLogin";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { FullScreen, Vstack } from "../package/layout";
 import RoundBox from "../package/RoundBox";
+import useAuth from "../shared/services/useAuth";
 
 const LoginPage = () => {
-    const { error, isPending, postMutation } = useLogin();
+    const { errorLogin, isPendingLogin, postLoginMutation } = useAuth();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -17,7 +17,7 @@ const LoginPage = () => {
             password: passwordHTMLElement.value,
         };
 
-        postMutation.mutate(body);
+        postLoginMutation.mutate(body);
     };
 
     return (

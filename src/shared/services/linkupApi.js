@@ -42,7 +42,7 @@ export const apiAuthMe = async (method, body) => {
  * @param {string} body.password
  */
 export const apiAuthLogin = async (body) => {
-    const data = await axiosReturnsData("GET", "/api/auth/login", body);
+    const data = await axiosReturnsData("POST", "/api/auth/login", body);
     const access_token = data.access_token;
     useLinkUpStore.setState({ access_token });
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import useLinkUpStore from "../../../shared/store/store";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import { apiAuthLogin } from "./linkupApi";
+import useLinkUpStore from "../store/store";
+import { axiosReturnsData } from "./axiosInstance";
 
 // const profileMutation = () => {};
 // const deleteAccount = () => {};
@@ -45,7 +45,7 @@ const useAuthLogin = () => {
     const [errorLogin, setErrorLogin] = useState(null);
     const navigate = useNavigate();
 
-    const postEmailLoginMutation = useMutation({
+    const postLoginMutation = useMutation({
         mutationFn: (body) => apiAuthLogin(body),
         onMutate: () => {
             setIsPendingLogin(true);
@@ -73,7 +73,7 @@ const useAuthLogin = () => {
         onSettled: () => setIsPendingLogin(false),
     });
 
-    return { isPendingLogin, errorLogin, postEmailLoginMutation };
+    return { isPendingLogin, errorLogin, postLoginMutation };
 };
 
 const useAuth = () => {
