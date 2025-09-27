@@ -2,6 +2,7 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInputLabeled from "../../../package/CustomInputLabeled";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
+import { axiosDownloadFile } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
 
 const UploadModal = () => {
@@ -12,10 +13,15 @@ const UploadModal = () => {
         return null;
     }
 
+    const handleTemplateDownload = () => {
+        const url = "/api/companies/artists/upload-template";
+        axiosDownloadFile(url);
+    };
+
     return (
         <Modal isOn={modalKey === "upload"} onBackgroundClick={() => setModalKey(null)}>
             <Vstack gap="xl">
-                <CustomButton>템플릿 다운로드</CustomButton>
+                <CustomButton onClick={handleTemplateDownload}>템플릿 다운로드</CustomButton>
                 <CustomInputLabeled
                     inputProps={{ name: "upload", type: "file" }}
                     label={`${selectedArtist.stage_name || selectedArtist.group_name} 일정 업로드`}
