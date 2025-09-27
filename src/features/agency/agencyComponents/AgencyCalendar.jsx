@@ -1,9 +1,12 @@
 import Calendar from "../../../package/calendar/Calendar";
 import RoundBox from "../../../package/RoundBox";
+import {
+    BulkDownloadButton,
+    BulkUploadButton,
+} from "../../../shared/ArtistCalendar/AdditionalCalendarButtons";
 import useLinkUpStore from "../../../shared/store/store";
 import useAgencyCalendar from "../agencyServices/useAgencyCalendar";
 import styles from "./AgencyCalendar.module.css";
-import { BulkDownloadButton, BulkUploadButton } from "./AgencyCalendarAdditionalButtonMany";
 import AgencyCalendarModal from "./AgencyCalendarModal";
 
 const AgencyCalendar = () => {

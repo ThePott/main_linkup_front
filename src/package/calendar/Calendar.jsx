@@ -7,7 +7,7 @@ import styles from "./calendar.module.css";
 import CustomButton from "../customButton/CustomButton";
 import { format } from "date-fns";
 import { CalendarContext } from "./CalendarContext";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
 const formatToYmd = (date) => format(date, "yyyyMMdd");
 
@@ -71,8 +71,8 @@ const Calendar = ({
                         {fullYear}년 {month}월
                     </div>
                     <div className="grow" />
-                    {additionalButtonArray.map((button) => (
-                        <>{button}</>
+                    {additionalButtonArray.map((button, index) => (
+                        <Fragment key={index}>{button}</Fragment>
                     ))}
                 </Hstack>
                 <GridContainer cols={7}>

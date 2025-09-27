@@ -47,7 +47,6 @@ export const usePostMutation = (mutationEndpoint, queryEndpoint, conversionFn) =
  *
  */
 export const usePutMutation = (mutationEndpoint, queryEndpoint, conversionFn) => {
-    console.log({ mutationEndpoint });
     const putMutation = useMutation({
         mutationFn: (body) => axiosReturnsData("PUT", mutationEndpoint, body),
         onMutate: async (body) => {
