@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Calendar from "../../package/calendar/Calendar";
 import useLinkUpStore from "../store/store";
+import { BulkDownloadButton } from "./AdditionalCalendarButtons";
 
 const filterEventArray = (eventArray, selectedYear, selectedMonth) => {
     const filteredEventArray = eventArray.filter((event) => {
@@ -42,6 +43,7 @@ const ArtistCalendar = ({ isMedium = false }) => {
             size={isMedium ? "md" : "lg"}
             eventArray={eventArray}
             onDateChange={handleDateChange}
+            additionalButtonArray={[<BulkDownloadButton />]}
         />
     );
 };
