@@ -12,6 +12,11 @@ const filterEventArray = (eventArray, selectedYear, selectedMonth) => {
     return filteredEventArray;
 };
 
+/**
+ * @param {boolean} isMedium
+ *
+ * store에 저장된 eventArray를 자동으로 꺼내옶니다
+ */
 const ArtistCalendar = ({ isMedium = false }) => {
     const eventArray = useLinkUpStore((state) => state.eventArray);
     const setSelectedMonthEventArray = useLinkUpStore((state) => state.setSelectedMonthEventArray);
