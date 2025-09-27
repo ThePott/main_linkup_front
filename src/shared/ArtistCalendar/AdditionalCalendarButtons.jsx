@@ -35,10 +35,3 @@ export const BulkDownloadButton = () => {
 
     return <CustomButton onClick={handleClick}>다운로드</CustomButton>;
 };
-
-export const BulkUploadButton = () => {
-    const handleClick = () => {
-        console.log("---- upload clicked");
-    };
-    return <CustomButton onClick={handleClick}>업로드</CustomButton>;
-};

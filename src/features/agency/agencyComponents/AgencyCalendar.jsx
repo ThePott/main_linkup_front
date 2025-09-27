@@ -1,13 +1,20 @@
 import Calendar from "../../../package/calendar/Calendar";
+import CustomButton from "../../../package/customButton/CustomButton";
 import RoundBox from "../../../package/RoundBox";
-import {
-    BulkDownloadButton,
-    BulkUploadButton,
-} from "../../../shared/ArtistCalendar/AdditionalCalendarButtons";
+import { BulkDownloadButton } from "../../../shared/ArtistCalendar/AdditionalCalendarButtons";
 import useLinkUpStore from "../../../shared/store/store";
 import useAgencyCalendar from "../agencyServices/useAgencyCalendar";
 import styles from "./AgencyCalendar.module.css";
 import AgencyCalendarModal from "./AgencyCalendarModal";
+import UploadModal from "./UploadModal";
+
+const UploadButton = () => {
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
+    const handleClick = () => {
+        setModalKey("upload");
+    };
+    return <CustomButton onClick={handleClick}>업로드</CustomButton>;
+};
 
 const AgencyCalendar = () => {
     const eventArray = useLinkUpStore((state) => state.eventArray);
@@ -18,12 +25,13 @@ const AgencyCalendar = () => {
     return (
         <>
             <AgencyCalendarModal />
+            <UploadModal />
             <RoundBox className={styles.agencyRoundBoxForCalender}>
                 <Calendar
                     eventArray={eventArray}
                     setModalKey={setModalKey}
                     setSelectedEvent={setSelectedEvent}
-                    additionalButtonArray={[<BulkDownloadButton />, <BulkUploadButton />]}
+                    additionalButtonArray={[<BulkDownloadButton />, <UploadButton />]}
                 />
             </RoundBox>
         </>
