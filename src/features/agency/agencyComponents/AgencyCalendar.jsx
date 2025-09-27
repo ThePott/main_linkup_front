@@ -1,6 +1,5 @@
 import Calendar from "../../../package/calendar/Calendar";
 import RoundBox from "../../../package/RoundBox";
-import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar";
 import useLinkUpStore from "../../../shared/store/store";
 import useAgencyCalendar from "../agencyServices/useAgencyCalendar";
 import styles from "./AgencyCalendar.module.css";
@@ -17,13 +16,12 @@ const AgencyCalendar = () => {
         <>
             <AgencyCalendarModal />
             <RoundBox className={styles.agencyRoundBoxForCalender}>
-                <ArtistCalendar isMedium eventArray={eventArray} />
-                {/* <Calendar */}
-                {/*     eventArray={eventArray} */}
-                {/*     setModalKey={setModalKey} */}
-                {/*     setSelectedEvent={setSelectedEvent} */}
-                {/*     additionalButtonArray={[<BulkDownloadButton />, <BulkUploadButton />]} */}
-                {/* /> */}
+                <Calendar
+                    eventArray={eventArray}
+                    setModalKey={setModalKey}
+                    setSelectedEvent={setSelectedEvent}
+                    additionalButtonArray={[<BulkDownloadButton />, <BulkUploadButton />]}
+                />
             </RoundBox>
         </>
     );
