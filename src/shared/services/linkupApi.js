@@ -3,7 +3,8 @@
 // 2. 함수를 작성할 땐 모든 메소드의 경우를 포함합니다
 // 3. 함수를 작성한 이후엔 jsdoc을 작성합니다
 
-import axiosInstance from "./axiosInstance";
+import useLinkUpStore from "../store/store";
+import axiosInstance, { axiosReturnsData } from "./axiosInstance";
 
 /**
  * @param {"GET" | "PUT" | "DELETE"} method
@@ -35,6 +36,22 @@ export const apiAuthMe = async (method, body) => {
     return data;
 };
 
+/**
+ * @param {object} body
+ * @param {string} body.email
+ * @param {string} body.password
+ */
+export const apiAuthLogin = async (body) => {
+    const data = await axiosReturnsData("GET", "/api/auth/login", body);
+    const access_token = data.access_token;
+    useLinkUpStore.setState({ access_token });
+
+    const user = await axiosReturnsData("GET", "/api/auth/me", access_token);
+    useLinkUpStore.setState({ user });
+
+    return user;
+};
+
 /** // 비밀번호 변경 용 함수
  * @param {string} currentPassword 기존 비밀번호
  * @param {string} newPassword 새 비밀번호
@@ -49,4 +66,3 @@ export const apiChangePassword = async (currentPassword, newPassword, newPasswor
     });
     return response.data;
 };
-
