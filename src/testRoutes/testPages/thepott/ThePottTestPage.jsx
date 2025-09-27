@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton.jsx";
 import Skeleton from "../../../package/skeleton/Skeleton.jsx";
 import { Hstack, Vstack } from "../../../package/layout/";
@@ -16,6 +16,9 @@ import {
     startOfWeek,
     subDays,
 } from "date-fns";
+import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar.jsx";
+import axiosInstance, { axiosReturnsData } from "../../../shared/services/axiosInstance.js";
+import useLinkUpStore from "../../../shared/store/store.js";
 
 const getFirstDayOfMonth = (date) => {
     return new Date(getYear(date), getMonth(date), 1);
@@ -90,11 +93,21 @@ const SampleImage = () => {
     );
 };
 
+const getEvents = async () => {
+    const data = await axiosReturnsData("GET", "/api/events");
+    const eventArray = data.events;
+    useLinkUpStore.setState({ eventArray });
+};
+
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
     const handleClick = () => {
         setIsOn(!isOn);
     };
+
+    useEffect(() => {
+        getEvents();
+    }, []);
 
     return (
         <div>
@@ -217,6 +230,7 @@ const ThePottTestPage = () => {
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                 </Vstack>
+                <ArtistCalendar />
             </Vstack>
         </div>
     );

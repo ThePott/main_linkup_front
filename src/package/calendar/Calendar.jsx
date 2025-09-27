@@ -28,7 +28,7 @@ const Calendar = ({
     setModalKey,
     setSelectedEvent,
     additionalButtonArray = [],
-    onDateChange,
+    onDateChange = () => {},
 }) => {
     const {
         selectedDate,

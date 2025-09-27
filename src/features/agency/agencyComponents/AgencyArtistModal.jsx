@@ -47,7 +47,6 @@ const DebugButton = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const handleClick = () => {
         console.log({ selectedArtist });
-        debugger;
     };
     return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
 };

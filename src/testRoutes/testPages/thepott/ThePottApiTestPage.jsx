@@ -76,6 +76,12 @@ const ThePottApiTestPage = () => {
         getThenLog(`${baseURL}/api/companies/events?artist_id=6`, callback, accessToken);
     const getBulkEvent = (callback) =>
         getFileThenDownload(`${baseURL}/api/events/file/download-all`, callback, accessToken);
+    const getCompanyUploadTemplate = (callback) =>
+        getFileThenDownload(
+            `${baseURL}/api/companies/artists/upload-template`,
+            callback,
+            accessToken,
+        );
 
     const callbackLogin = (data) => {
         setAccessToken(data.access_token);
@@ -152,6 +158,9 @@ const ThePottApiTestPage = () => {
                                 <CustomButton>upload</CustomButton>
                             </form>
                         </RoundBox>
+                        <CustomButton onClick={() => getCompanyUploadTemplate(callbackLog)}>
+                            <p>get upload template </p>
+                        </CustomButton>
                     </Vstack>
                 </RoundBoxGlobalShadow>
             </FlexOneContainer>
