@@ -12,7 +12,7 @@ const filterEventArray = (eventArray, selectedYear, selectedMonth) => {
     return filteredEventArray;
 };
 
-const ArtistCalendar = ({ isBig = false }) => {
+const ArtistCalendar = ({ isMedium = false }) => {
     const eventArray = useLinkUpStore((state) => state.eventArray);
     const setSelectedMonthEventArray = useLinkUpStore((state) => state.setSelectedMonthEventArray);
 
@@ -29,9 +29,16 @@ const ArtistCalendar = ({ isBig = false }) => {
 
     useEffect(() => {
         handleDateChange();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [eventArray]);
 
-    return <Calendar eventArray={eventArray} onDateChange={handleDateChange} />;
+    return (
+        <Calendar
+            size={isMedium ? "md" : "lg"}
+            eventArray={eventArray}
+            onDateChange={handleDateChange}
+        />
+    );
 };
 
 export default ArtistCalendar;

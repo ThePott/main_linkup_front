@@ -17,7 +17,7 @@ const AgencyCalendar = () => {
         <>
             <AgencyCalendarModal />
             <RoundBox className={styles.agencyRoundBoxForCalender}>
-                <ArtistCalendar eventArray={eventArray} />
+                <ArtistCalendar isMedium eventArray={eventArray} />
                 {/* <Calendar */}
                 {/*     eventArray={eventArray} */}
                 {/*     setModalKey={setModalKey} */}

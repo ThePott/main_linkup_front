@@ -1,6 +1,10 @@
 import styles from "./calendar.module.css";
 import { useCalendarContext } from "./CalendarContext";
 
+export const EventDot = () => {
+    return <div className={styles.eventDot} />;
+};
+
 const EventBox = ({ event }) => {
     const { setModalKey, setSelectedEvent } = useCalendarContext();
     const { id, start_time, end_time, title, subjectId, subjectName } = event;
@@ -15,11 +19,7 @@ const EventBox = ({ event }) => {
         setModalKey("agencyCalendar");
     };
     return (
-        <div
-            className={styles.eventBox}
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
-        >
+        <div className={styles.eventBox} onClick={handleClick} onDoubleClick={handleDoubleClick}>
             {title}
         </div>
     );

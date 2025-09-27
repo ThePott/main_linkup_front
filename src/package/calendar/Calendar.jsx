@@ -19,12 +19,11 @@ const groupEventArrayBySttime = (eventArray) => {
 /**
  * @param {object} props
  * @param {Event[]} props.eventArray
- * @param {"SM" | "MD" | "LG"} props.size
- * @param {boolean} props.isSmall
+ * @param {"sm" | "md" | "lg"} props.size
  */
 const Calendar = ({
     eventArray = [],
-    isSmall,
+    size = "lg",
     setModalKey,
     setSelectedEvent,
     additionalButtonArray = [],
@@ -59,6 +58,7 @@ const Calendar = ({
     const contextValue = {
         setModalKey,
         setSelectedEvent,
+        size,
     };
 
     return (
@@ -80,7 +80,7 @@ const Calendar = ({
                         <HeaderCell key={weekday} weekday={weekday} />
                     ))}
                 </GridContainer>
-                <GridContainer cols={7} rows={isSmall ? undefined : 1}>
+                <GridContainer cols={7} rows={size === "sm" ? undefined : 1}>
                     {dateWithIsDimArray.map(({ date, isDim }) => (
                         <DateCell
                             key={`${fullYear}__${month}__${date.toDateString()}`}

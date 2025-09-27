@@ -1,18 +1,19 @@
 import hstackStyles from "./_Hstack.module.css";
 
+/**
+ * @param {"xs" | "sm" | "md" | "lg" | "xl"} gap
+ */
 const Hstack = ({ gap = "md", justify, items, style, className, children, ...props }) => {
-    const defaultClassName = hstackStyles.hstack;
-
-    const hstackStyle = {};
-    hstackStyle["--justify"] = justify ? justify : "start";
-    hstackStyle["--items"] = items ? items : "stretch";
-    hstackStyles["--gap"] = gap === "none" ? 0 : `var(--sizing-${gap.toLowerCase()})`;
+    const defaultStyle = {};
+    defaultStyle["--justify"] = justify ? justify : "start";
+    defaultStyle["--items"] = items ? items : "stretch";
+    defaultStyle["--gap"] = gap === "none" ? 0 : `var(--spacing-${gap})`;
 
     return (
         <div
             {...props}
-            style={{ ...hstackStyle, ...style }}
-            className={`${defaultClassName} ${className}`}
+            style={{ ...defaultStyle, ...style }}
+            className={`${hstackStyles.hstack} ${className}`}
         >
             {children}
         </div>
