@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { apiAuthLogin } from "./linkupApi";
 import useLinkUpStore from "../store/store";
 import { axiosReturnsData } from "./axiosInstance";
+import queryClient from "./queryClient";
 
 // const profileMutation = () => {};
 // const deleteAccount = () => {};
@@ -29,7 +30,7 @@ const useAuthMeQuery = () => {
     });
 
     useEffect(() => {
-        if (data === undefined) {
+        if (!data) {
             return;
         }
 
@@ -76,11 +77,30 @@ const useAuthLogin = () => {
     return { isPendingLogin, errorLogin, postLoginMutation };
 };
 
+const useAuthLogout = () => {
+    const setAccessToken = useLinkUpStore((state) => state.setAccessToken);
+    const setUser = useLinkUpStore((state) => state.setUser);
+    const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
+
+    const logout = useCallback(() => {
+        queryClient.setQueryData(["/api/auth/me"], null);
+        queryClient.setQueryData(["/api/subscriptions"], []);
+
+        setAccessToken(null);
+        setUser(null);
+        setArtistArray([]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return { logout };
+};
+
 const useAuth = () => {
     const authMeQueryReturn = useAuthMeQuery();
     const authLoginReturn = useAuthLogin();
+    const authLogoutReturn = useAuthLogout();
 
-    return { ...authMeQueryReturn, ...authLoginReturn };
+    return { ...authMeQueryReturn, ...authLoginReturn, ...authLogoutReturn };
 };
 
 export default useAuth;

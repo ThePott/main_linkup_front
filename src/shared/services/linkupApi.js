@@ -47,7 +47,8 @@ export const apiAuthLogin = async (body) => {
     useLinkUpStore.setState({ access_token });
 
     const user = await axiosReturnsData("GET", "/api/auth/me", access_token);
-    useLinkUpStore.setState({ user });
+    const setUser = useLinkUpStore.getState().setUser;
+    setUser(user);
 
     return user;
 };
