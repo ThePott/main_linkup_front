@@ -10,6 +10,7 @@ import {
     checkAdditionalEmailValidity,
     checkAdditionalPasswordValidity,
 } from "../features/signup/signupCheckValidity";
+import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
@@ -66,54 +67,58 @@ const SignupPage = () => {
     const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";
 
     return (
-        <FullScreen center>
-            <RoundBox padding="LG">
-                <Vstack center>
-                    <Hstack gap="none">
-                        <CustomButton
-                            isOn={!isForAgency}
-                            className={styles.grow}
-                            onClick={() => setIsForAgency(false)}
-                        >
-                            팬
-                        </CustomButton>
-                        <CustomButton
-                            isOn={isForAgency}
-                            className={styles.grow}
-                            onClick={() => setIsForAgency(true)}
-                        >
-                            소속사
-                        </CustomButton>
-                    </Hstack>
+        <div className={styles.container}>
+            <RoundBox padding="XL">
+                <form onSubmit={handleSubmit}>
+                    <Vstack center gap="lg">
+                        <Hstack gap="none">
+                            <CustomButton
+                                isOn={!isForAgency}
+                                className={styles.grow}
+                                onClick={() => setIsForAgency(false)}
+                                type="button"
+                            >
+                                팬
+                            </CustomButton>
+                            <CustomButton
+                                isOn={isForAgency}
+                                className={styles.grow}
+                                onClick={() => setIsForAgency(true)}
+                                type="button"
+                            >
+                                소속사
+                            </CustomButton>
+                        </Hstack>
 
-                    <form onSubmit={handleSubmit}>
-                        <Vstack style={{ width: "400px" }}>
-                            <Hstack style={{ width: "100%" }} items="end">
-                                <CustomInputLabeled
-                                    label="이메일"
-                                    vstackProps={{ className: styles.grow }}
-                                    inputProps={{
-                                        ref: emailRef,
-                                        ...inputPropsDict["이메일"],
-                                    }}
-                                />
-                                <CustomButton type="button" onClick={handleVerificationClick}>
-                                    {verifyEmailButtonLabel}
-                                </CustomButton>
-                            </Hstack>
-                            {inputPropsEntryArray.slice(1).map((entry) => (
-                                <CustomInputLabeled
-                                    key={entry[0]}
-                                    label={entry[0]}
-                                    inputProps={entry[1]}
-                                />
-                            ))}
-                            <CustomButton>회원가입</CustomButton>
-                        </Vstack>
-                    </form>
-                </Vstack>
+                        <Hstack style={{ width: "100%" }} items="end">
+                            <CustomInputLabeled
+                                label="이메일"
+                                vstackProps={{ className: styles.grow }}
+                                inputProps={{
+                                    ref: emailRef,
+                                    ...inputPropsDict["이메일"],
+                                }}
+                            />
+                            <CustomButton
+                                type="button"
+                                onClick={handleVerificationClick}
+                                className={styles.certificateButton}
+                            >
+                                {verifyEmailButtonLabel}
+                            </CustomButton>
+                        </Hstack>
+                        {inputPropsEntryArray.slice(1).map((entry) => (
+                            <CustomInputLabeled
+                                key={entry[0]}
+                                label={entry[0]}
+                                inputProps={entry[1]}
+                            />
+                        ))}
+                        <CustomButton>회원가입</CustomButton>
+                    </Vstack>
+                </form>
             </RoundBox>
-        </FullScreen>
+        </div>
     );
 };
 
