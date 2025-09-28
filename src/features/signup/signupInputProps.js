@@ -20,20 +20,6 @@ export const inputPropsDict = {
         pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$",
         title: "소문자, 대문자, 특수문자를 하나 이상 씩 써주세요",
     },
-    "비밀번호 확인": {
-        name: "passwordConfirm",
-        type: "password",
-        autoComplete: "off",
-    },
-    "핸드폰 번호": {
-        name: "phone_number",
-        type: "tel",
-        autoComplete: "tel",
-        minLength: 4,
-        maxLength: 20,
-        pattern: "^[0-9]{4,20}$",
-        title: "- 없이 숫자만 입력하세요",
-    },
     닉네임: {
         name: "nickname",
         type: "text",
