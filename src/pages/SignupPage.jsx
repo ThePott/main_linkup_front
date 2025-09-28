@@ -11,6 +11,8 @@ import {
     checkAdditionalPasswordValidity,
 } from "../features/signup/signupCheckValidity";
 import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer";
+import LabelGroup from "../package/labelGroup/LabelGroup";
+import CustomInput from "../package/CustomInput";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
@@ -107,6 +109,11 @@ const SignupPage = () => {
                                 {verifyEmailButtonLabel}
                             </CustomButton>
                         </Hstack>
+                        <LabelGroup>
+                            <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
+                            <CustomInput />
+                            <LabelGroup.SmallLabel>올바르지 않은 형식입니다</LabelGroup.SmallLabel>
+                        </LabelGroup>
                         {inputPropsEntryArray.slice(1).map((entry) => (
                             <CustomInputLabeled
                                 key={entry[0]}
