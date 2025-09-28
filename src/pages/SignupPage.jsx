@@ -1,7 +1,7 @@
 import styles from "./SignupPage.module.css";
 import { useState } from "react";
 import RoundBox from "../package/RoundBox";
-import { FullScreen, Hstack, Vstack } from "../package/layout";
+import { Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { useSignup } from "../features/signup/useSignup";
@@ -10,21 +10,13 @@ import {
     checkAdditionalEmailValidity,
     checkAdditionalPasswordValidity,
 } from "../features/signup/signupCheckValidity";
-import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer";
 import LabelGroup from "../package/labelGroup/LabelGroup";
 import CustomInput from "../package/CustomInput";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
 
-    const {
-        verifiedEmail,
-        setVerifiedEmail,
-        emailRef,
-        refetchVerification,
-        setBody,
-        refetchSignup,
-    } = useSignup();
+    const { verifiedEmail, setVerifiedEmail, emailRef, refetchVerification, setBody } = useSignup();
 
     const handleVerificationClick = () => {
         if (!emailRef.current) {
@@ -109,17 +101,12 @@ const SignupPage = () => {
                                 {verifyEmailButtonLabel}
                             </CustomButton>
                         </Hstack>
-                        <LabelGroup>
-                            <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
-                            <CustomInput />
-                            <LabelGroup.SmallLabel>올바르지 않은 형식입니다</LabelGroup.SmallLabel>
-                        </LabelGroup>
                         {inputPropsEntryArray.slice(1).map((entry) => (
-                            <CustomInputLabeled
-                                key={entry[0]}
-                                label={entry[0]}
-                                inputProps={entry[1]}
-                            />
+                            <LabelGroup>
+                                <LabelGroup.BigLabel>{entry[0]}</LabelGroup.BigLabel>
+                                <CustomInput {...entry[1]} />
+                                <LabelGroup.SmallLabel></LabelGroup.SmallLabel>
+                            </LabelGroup>
                         ))}
                         <CustomButton>회원가입</CustomButton>
                     </Vstack>
