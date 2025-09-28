@@ -15,7 +15,7 @@ const BaseVstack = ({
     const vstackStyle = {};
     vstackStyle["--justify"] = justify;
     vstackStyle["--items"] = items;
-    vstackStyle["--gap"] = `var(--spacing-${gap})`;
+    vstackStyle["--gap"] = gap === "non" ? 0 : `var(--spacing-${gap})`;
 
     return (
         <div
