@@ -6,14 +6,6 @@ import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/store";
 import useAuth from "../../shared/services/useAuth";
 
-const DebugButton = () => {
-    const access_token = useLinkUpStore((state) => state.access_token);
-    const user = useLinkUpStore((state) => state.user);
-    const handleClick = () => {
-        console.log({ access_token, user });
-    };
-    return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
-};
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
         {children}
@@ -62,7 +54,6 @@ const Navbar = () => {
     return (
         <Hstack justify="center" items="center">
             <Hstack items="center" justify="space-between" className={styles.navbar}>
-                <DebugButton />
                 <SideSection justify="start">
                     <Link to="/" className={styles.logo}>
                         Logo
