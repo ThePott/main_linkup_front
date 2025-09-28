@@ -5,10 +5,7 @@ import { FullScreen, Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { useSignup } from "../features/signup/useSignup";
-import {
-    inputPropsDict,
-    inputPropsEntryArray,
-} from "../features/signup/signupInputProps";
+import { inputPropsDict, inputPropsEntryArray } from "../features/signup/signupInputProps";
 import {
     checkAdditionalEmailValidity,
     checkAdditionalPasswordValidity,
@@ -41,20 +38,10 @@ const SignupPage = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const {
-            email,
-            verification_code,
-            password,
-            passwordConfirm,
-            phone_number,
-            nickname,
-        } = event.target;
+        const { email, verification_code, password, passwordConfirm, phone_number, nickname } =
+            event.target;
 
-        const isEmailValid = checkAdditionalEmailValidity(
-            verifiedEmail,
-            email,
-            setVerifiedEmail,
-        );
+        const isEmailValid = checkAdditionalEmailValidity(verifiedEmail, email, setVerifiedEmail);
         if (!isEmailValid) {
             return;
         }
@@ -64,14 +51,11 @@ const SignupPage = () => {
             password: password.value,
             phone_number: phone_number.value,
             nickname: nickname.value,
-            user_type: "fan",
+            user_type: isForAgency ? "company" : "fan",
             verification_code: verification_code.value,
         };
 
-        const isPasswordValid = checkAdditionalPasswordValidity(
-            password,
-            passwordConfirm,
-        );
+        const isPasswordValid = checkAdditionalPasswordValidity(password, passwordConfirm);
         if (!isPasswordValid) {
             return;
         }
@@ -113,10 +97,7 @@ const SignupPage = () => {
                                         ...inputPropsDict["이메일"],
                                     }}
                                 />
-                                <CustomButton
-                                    type="button"
-                                    onClick={handleVerificationClick}
-                                >
+                                <CustomButton type="button" onClick={handleVerificationClick}>
                                     {verifyEmailButtonLabel}
                                 </CustomButton>
                             </Hstack>
