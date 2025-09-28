@@ -28,7 +28,7 @@ const LoginPage = () => {
                 <Vstack gap="xl">
                     <Vstack style={{ width: "400px" }}>
                         <form onSubmit={handleSubmit}>
-                            <Vstack>
+                            <Vstack gap="xl">
                                 {loginInputPropsEntryArray.map((entry) => (
                                     <CustomInputLabeled
                                         key={entry[0]}

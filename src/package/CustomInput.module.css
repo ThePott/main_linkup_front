@@ -8,6 +8,10 @@
     font-size: var(--text-md);
 }
 
+.input:hover {
+    border-color: var(--color-dim);
+}
+
 .input:focus {
     border-color: var(--color-dim);
 }
