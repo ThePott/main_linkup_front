@@ -1,3 +1,6 @@
+/** label을 사용한 뒤 나머지를 쉽게 spread 하려면 애초에 둘이 분리되어야 하고
+ * 이를 제일 쉽게 하는 법은 dict의 key value로 나누는 것이다
+ */
 export const inputPropsDict = {
     이메일: {
         name: "email",
