@@ -21,8 +21,8 @@ const EventBox = ({ event }) => {
     return (
         <RoundBox padding="lg" isShadowed={false} textAlign="start">
             <p>{event.start_time.slice(0, 10)}</p>
-            <p style={{ fontWeight: "var(--font-weight-semibold)" }}>{event.title}</p>
-            <p style={{ color: "var(--color-muted)" }}>{event.description}</p>
+            <p className={styles.title}>{event.title}</p>
+            <p className={styles.description}>{event.description}</p>
         </RoundBox>
     );
 };
@@ -40,9 +40,7 @@ const EventColumnSkeleton = () => {
 const EventColumn = ({ artistName, eventArray }) => {
     return (
         <Vstack className={styles.eventColumn}>
-            <p style={{ fontSize: "var(--text-lg)", fontWeight: "var(--font-weight-semibold)" }}>
-                {artistName}
-            </p>
+            <p className={styles.artistName}>{artistName}</p>
             <FlexOneContainer isYScrollable>
                 <Vstack>
                     {eventArray.length === 0 && <RoundBoxFull>등록된 일정이 없어요</RoundBoxFull>}
