@@ -68,6 +68,18 @@ const useLinkUpStore = create()(
                 set({ fanPostArray: [newPost, ...prev] });
             },
 
+            commentsByPostId: {},
+            addComment: (postId, comment) =>
+                set((state) => {
+                    const existingComments = state.commentsByPostId[postId] ?? [];
+                    return {
+                        commentsByPostId: {
+                            ...state.commentsByPostId,
+                            [postId]: [...existingComments, comment],
+                        },
+                    };
+                }),
+
             selectedFanPost: null,
             setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
 
