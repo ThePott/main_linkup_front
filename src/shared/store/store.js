@@ -36,6 +36,11 @@ const useLinkUpStore = create()(
                 set({ eventArray });
             },
 
+            eventDict: {},
+            setEventDict: (eventDict) => {
+                set({ eventDict });
+            },
+
             selectedEvent: null,
             setSelectedEvent: (selectedEvent) => {
                 set({ selectedEvent });

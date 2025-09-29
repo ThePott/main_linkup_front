@@ -1,49 +1,77 @@
-import { useEffect } from "react";
+import styles from "./SearchContent.module.css";
 import { Vstack } from "../../../package/layout";
-import ArtistCardNew from "../../../shared/ArtistCardNew/ArtistCardNew";
-import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
-import CustomButton from "../../../package/customButton/CustomButton";
+import useEventsForSearch from "./useEventsForSearch";
+import RoundBox from "../../../package/RoundBox";
+import GridContainer from "../../../package/gridContainer/GridContainer";
+import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard";
+import Skeleton from "../../../package/skeleton/Skeleton";
 
-const getEventsOfArtist = async (artist) => {
-    const data = await axiosReturnsData("GET", `/api/events/?artist_id=${artist.id}`);
-    return data.events;
+const EventBoxEmpty = () => {
+    return (
+        <RoundBox padding="lg" isShadowed={false} className={styles.eventBoxEmpty}>
+            <p>등록된 일정이 없어요</p>
+        </RoundBox>
+    );
 };
 
-const getEventArrayOfManyArtist = async (artistArray) => {
-    const promiseArray = artistArray.map((artist) => getEventsOfArtist(artist));
+const EventBox = ({ event }) => {
+    return (
+        <RoundBox padding="lg" isShadowed={false}>
+            <p>{event.start_time}</p>
+            <p>{event.title}</p>
+            <p>{event.description}</p>
+        </RoundBox>
+    );
+};
 
-    const resolvedArray = await Promise.all(promiseArray);
-    const eventArray = resolvedArray.flat();
-    useLinkUpStore.setState({ eventArray });
+const EventColumn = ({ eventArray }) => {
+    if (eventArray.length === 0) {
+        return <EventBoxEmpty />;
+    }
+    return (
+        <Vstack className={styles.eventColumn}>
+            {eventArray.map((event) => (
+                <EventBox event={event} />
+            ))}
+        </Vstack>
+    );
+};
+
+const EventColumnSkeleton = () => {
+    return (
+        <Vstack>
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+        </Vstack>
+    );
+};
+
+const SearchResult = ({ artist, isPending }) => {
+    const imageUrl =
+        artist.banner_url || artist.torso_url || artist.face_url || artist.profile_image;
+    const eventDict = useLinkUpStore((state) => state.eventDict);
+    const eventArray = eventDict[artist.id] ?? [];
+    return (
+        <>
+            <CustomImageCard url={imageUrl} style={{ boxShadow: "var(--drop-shadow-md)" }} />
+            {isPending && eventArray.length === 0 && <EventColumnSkeleton />}
+            {!isPending && <EventColumn eventArray={eventArray} />}
+        </>
+    );
 };
 
 const SearchContent = () => {
+    const { isPendingEvents, errorEvents } = useEventsForSearch();
     const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
 
-    const eventArray = useLinkUpStore((state) => state.eventArray);
-    useEffect(() => {
-        getEventArrayOfManyArtist(searchResultArray);
-    }, [searchResultArray]);
-
     return (
-        <Vstack gap="lg">
-            <GridCardContainer>
-                {searchResultArray.map((artist) => (
-                    <ArtistCardNew key={artist.id} artist={artist} />
-                ))}
-            </GridCardContainer>
-            {eventArray.map((event) => (
-                <CustomButton>
-                    <p>
-                        {event.start_time} {event.title}
-                    </p>
-                    <p>{event.description}</p>
-                </CustomButton>
+        <GridContainer cols={2} gap="xl">
+            {searchResultArray.map((artist) => (
+                <SearchResult artist={artist} isPending={isPendingEvents} />
             ))}
-            <p>팬 포스트</p>
-        </Vstack>
+        </GridContainer>
     );
 };
 
