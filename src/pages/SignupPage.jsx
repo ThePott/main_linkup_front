@@ -12,9 +12,20 @@ import {
 } from "../features/signup/signupCheckValidity";
 import LabelGroup from "../package/labelGroup/LabelGroup";
 import CustomInput from "../package/CustomInput";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "../shared/validations/zodSchema";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
+
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ resolver: zodResolver(signupSchema) });
 
     const { verifiedEmail, setVerifiedEmail, emailRef, refetchVerification, setBody } = useSignup();
 
@@ -31,39 +42,22 @@ const SignupPage = () => {
         refetchVerification();
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const { email, verification_code, password, passwordConfirm, phone_number, nickname } =
-            event.target;
+    const onSubmit = (data) => {
+        const body = { ...data, user_type: isForAgency ? "company" : "fan" };
 
-        const isEmailValid = checkAdditionalEmailValidity(verifiedEmail, email, setVerifiedEmail);
-        if (!isEmailValid) {
-            return;
-        }
-
-        const tempBody = {
-            email: email.value,
-            password: password.value,
-            phone_number: phone_number.value,
-            nickname: nickname.value,
-            user_type: isForAgency ? "company" : "fan",
-            verification_code: verification_code.value,
-        };
-
-        const isPasswordValid = checkAdditionalPasswordValidity(password, passwordConfirm);
-        if (!isPasswordValid) {
-            return;
-        }
-
-        setBody(tempBody);
+        setBody(body);
     };
 
     const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";
+    const passwordLabel =
+        isPasswordFocused || errors.password
+            ? "비밀번호 - 8자 이상, 대소문자, 특수문자 필수"
+            : "비밀번호";
 
     return (
         <div className={styles.container}>
             <RoundBox padding="XL">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Vstack center gap="lg">
                         <Hstack gap="none">
                             <CustomButton
@@ -85,14 +79,15 @@ const SignupPage = () => {
                         </Hstack>
 
                         <Hstack style={{ width: "100%" }} items="end">
-                            <CustomInputLabeled
-                                label="이메일"
-                                vstackProps={{ className: styles.grow }}
-                                inputProps={{
-                                    ref: emailRef,
-                                    ...inputPropsDict["이메일"],
-                                }}
-                            />
+                            <LabelGroup isRed={errors.email}>
+                                <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
+                                <CustomInput {...register("email")} />
+                                {errors.email && (
+                                    <LabelGroup.SmallLabel>
+                                        {errors.email.message}
+                                    </LabelGroup.SmallLabel>
+                                )}
+                            </LabelGroup>
                             <CustomButton
                                 type="button"
                                 onClick={handleVerificationClick}
@@ -101,13 +96,47 @@ const SignupPage = () => {
                                 {verifyEmailButtonLabel}
                             </CustomButton>
                         </Hstack>
-                        {inputPropsEntryArray.slice(1).map((entry) => (
-                            <LabelGroup>
-                                <LabelGroup.BigLabel>{entry[0]}</LabelGroup.BigLabel>
-                                <CustomInput {...entry[1]} />
-                                <LabelGroup.SmallLabel></LabelGroup.SmallLabel>
-                            </LabelGroup>
-                        ))}
+                        <LabelGroup isRed={errors.verification_code}>
+                            <LabelGroup.BigLabel>인증 번호</LabelGroup.BigLabel>
+                            <CustomInput {...register("verification_code")} />
+                            {errors.verification_code && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.verification_code.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.password}>
+                            <LabelGroup.BigLabel>{passwordLabel}</LabelGroup.BigLabel>
+                            <CustomInput
+                                {...register("password")}
+                                type="password"
+                                onFocus={() => setIsPasswordFocused(true)}
+                                onBlur={() => setIsPasswordFocused(false)}
+                            />
+                            {errors.password && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.password.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.passwordConfirm}>
+                            <LabelGroup.BigLabel>비밀번호 확인</LabelGroup.BigLabel>
+                            <CustomInput {...register("passwordConfirm")} type="password" />
+                            {errors.passwordConfirm && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.passwordConfirm.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.nickname}>
+                            <LabelGroup.BigLabel>닉네임</LabelGroup.BigLabel>
+                            <CustomInput {...register("nickname")} />
+                            {errors.nickname && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.nickname.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
                         <CustomButton>회원가입</CustomButton>
                     </Vstack>
                 </form>
