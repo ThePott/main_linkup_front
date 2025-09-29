@@ -44,7 +44,6 @@ const postCompanyLogin = (callback) =>
         },
         callback,
     );
-const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
 
 const postFanPost = () =>
     axiosReturnsData("POST", "/api/posts", {
@@ -68,6 +67,9 @@ const ThePottApiTestPage = () => {
             callback,
             accessToken,
         );
+    const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
+    const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
+
     const getCompaniesArtists = (callback) =>
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
     const getCompaniesEvents = (callback) =>
@@ -136,6 +138,9 @@ const ThePottApiTestPage = () => {
                         </CustomButton>
                         <CustomButton onClick={() => getIdol(callbackLog)}>
                             <p>get idol</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
+                            <p>get idol without token</p>
                         </CustomButton>
                         <CustomButton onClick={() => getCompaniesArtists(callbackLog)}>
                             <p>get companies artists</p>
