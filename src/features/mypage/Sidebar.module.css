@@ -49,7 +49,7 @@ h2 {
   color: gray;
 }
 
-.collapsible-header {
+.collapsibleHeader {
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -58,13 +58,13 @@ h2 {
   color: gray;
 }
 
-.collapsible-content {
+.collapsibleContent {
   margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.danger-section h2 {
+.dangerSection h2 {
   color: darkred;
 }

@@ -8,34 +8,37 @@ import CustomImageCard from "../../shared/CustomImageCard/CustomImageCard";
 import ArrowLeft from "../ArrowLeft";
 import ArrowRight from "../ArrowRight";
 
-const MyFanPostModal = ({ isOn, onClose }) => {
-    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
-    const [page, setPage] = useState(0);
-    const totalPages = fanPostArray.length;
+const MyFanPostModal = () => {
+    const selectedFanPost = useLinkUpStore((state) => state.selectedFanPost);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
+    const modalKey = useLinkUpStore((state) => state.modalKey);
 
-    console.log("myfanpost-modal", fanPostArray);
-    if (!isOn) return null;
+    const handleClose = () => setModalKey(null);
 
-    const currentPost = fanPostArray[page];
+    if (!selectedFanPost) return null;
 
-    const imgSrc =
-        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    // const [page, setPage] = useState(0);
+    // const totalPages = fanPostArray.length;
+    // const currentPost = fanPostArray[page];
+
+    const artist =
+        selectedFanPost.artist_name || selectedFanPost.group_name || "구독 아이돌 정보가 없습니다.";
+    const content = selectedFanPost.content || "작성한 메시지가 없습니다.";
 
     return (
-        <Modal isOn={isOn} onBackgroundClick={onClose}>
+        <Modal isOn={modalKey === "fanPost"} onBackgroundClick={handleClose}>
             <div className={styles.container}>
                 <section>
-                    <CustomImageCard url={imgSrc} />
+                    <CustomImageCard url={selectedFanPost.image_url} />
                     <Like />
-                    {/* api연동 시, 고쳐야 함 */}
-                    <div className={styles.content}>
-                        <div>구독 아이돌</div>
-                        <div>작성한 메시지</div>
-                    </div>
+                    <section className={styles.content}>
+                        <div>{artist}</div>
+                        <div>{content}</div>
+                    </section>
                 </section>
                 <CommentColumn />
 
-                {page > 0 && (
+                {/* {page > 0 && (
                     <button
                         className={styles.arrowLeft}
                         onClick={() => setPage((p) => p - 1)}
@@ -52,7 +55,7 @@ const MyFanPostModal = ({ isOn, onClose }) => {
                     >
                         <ArrowRight />
                     </button>
-                )}
+                )} */}
             </div>
         </Modal>
     );

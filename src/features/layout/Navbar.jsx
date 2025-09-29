@@ -1,10 +1,11 @@
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import styles from "./Navbar.module.css";
 import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/store";
-import useNavbar from "./useNavbar";
+import useAuth from "../../shared/services/useAuth";
+import useIdol from "../../shared/services/useIdol";
 
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -14,7 +15,7 @@ const SideSection = ({ justify, children, ...props }) => (
 
 const FanMypageButton = () => {
     const navigate = useNavigate();
-    return <CustomButton onClick={() => navigate("/mypage")}>마이페이지</CustomButton>; 
+    return <CustomButton onClick={() => navigate("/mypage")}>마이페이지</CustomButton>;
 };
 const AgencyMypageButton = () => {
     const navigate = useNavigate();
@@ -41,13 +42,26 @@ const MyButton = ({ user }) => {
 };
 
 const Navbar = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
+
     const user = useLinkUpStore((state) => state.user);
-    const { logout } = useNavbar();
+
+    const { logout } = useAuth();
+    useIdol();
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
+        if (!trimmed) {
+            return;
+        }
+
+        const pathname = location.pathname;
+        if (pathname !== "/") {
+            navigate("/");
+        }
+
         setSearchParams({ query: trimmed });
     };
 
@@ -65,7 +79,7 @@ const Navbar = () => {
                     onEnter={handleSearch}
                     className={styles.searchbar}
                 />
-                
+
                 <SideSection justify="end">
                     <MyButton user={user} />
                     {user && <CustomButton onClick={logout}>로그아웃</CustomButton>}

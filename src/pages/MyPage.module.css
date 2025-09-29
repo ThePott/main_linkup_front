@@ -1,23 +1,23 @@
-.mypage-wrapper {
+.mypageWrapper {
   display: flex;
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
 }
 
-.search-top {
+.searchTop {
   display: flex;
   justify-content: center;
   padding: 15px 20px;
   border-bottom: 1px solid #ccc;
 }
 
-.search-box {
+.searchBox {
   width: 100%;
   max-width: 400px;
 }
 
-.search-box input {
+.searchBox input {
   width: 100%;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -28,20 +28,20 @@
   box-sizing: border-box;
 }
 
-.search-box input::placeholder {
+.searchBox input::placeholder {
   color: #999;
   font-style: italic;
 }
 
 /* NavBar 아래 사용자 프로필 */
-.profile-feed {
+.profileFeed {
   display: flex;
   justify-content: center;
   padding: 20px;
-  margin-top: 70px; /*Layout.jsx navbar와 안겹치게 하기 위한 마진 */
+  margin-top: 70px; /* Layout.jsx navbar와 안 겹치게 하기 위한 마진 */
 }
 
-.profile-box {
+.profileBox {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -49,7 +49,7 @@
   border-radius: 10px;
 }
 
-.user-profile {
+.userProfile {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -57,18 +57,18 @@
   border: 1px solid #ccc;
 }
 
-.user-info {
+.userInfo {
   display: flex;
   flex-direction: column;
 }
 
-.user-name {
+.userName {
   font-weight: bold;
   font-size: 16px;
   color: white;
 }
 
-.user-stats {
+.userStats {
   font-size: 13px;
   color: #555;
   display: flex;
@@ -76,21 +76,21 @@
 }
 
 /* 본문 영역(없어지면 사이드바에 영향을 줌) */
-.mypage-container {
+.mypageContainer {
   display: flex;
   flex: 1;
   width: 100%;
 }
 
-.mypage-content {
+.mypageContent {
   flex: 1;
   padding: 20px 40px;
   min-width: 0;
   color: black;
 }
-/* -------------------------- */
 
-.card-grid {
+/* -------------------------- */
+.cardGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -122,18 +122,18 @@
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* 반응형 */
 @media (max-width: 1024px) {
-  .card-grid {
+  .cardGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .card-grid {
+  .cardGrid {
     grid-template-columns: 1fr;
   }
 }

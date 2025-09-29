@@ -1,0 +1,5 @@
+.label {
+    font-weight: var(--font-weight-semibold);
+    text-align: start;
+    color: var(--color-muted);
+}

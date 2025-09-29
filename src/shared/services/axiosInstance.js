@@ -23,7 +23,11 @@ export default axiosInstance;
  * @param {"GET" | "POST" | "PUT" | "PATCH" | "DELETE"} method
  * @param {any} body
  */
-export const axiosReturnsData = async (method, url, body) => {
+export const axiosReturnsData = async (method, url, body, access_token) => {
+    if (access_token) {
+        axiosInstance.headers = { Authorization: `Bearer ${access_token}` };
+    }
+
     switch (method) {
         case "GET": {
             const response = await axiosInstance.get(url);
@@ -47,5 +51,25 @@ export const axiosReturnsData = async (method, url, body) => {
         }
         default:
             throw new Error("---- ERROR OCCURRED: 잘못된 메소드입니다");
+    }
+};
+
+export const axiosDownloadFile = async (url) => {
+    try {
+        const response = await axiosInstance.get(url, { responseType: "blob" });
+
+        const downloadUrl = window.URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = "";
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+        console.error(error);
+        debugger;
     }
 };

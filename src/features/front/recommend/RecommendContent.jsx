@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import GridContainer from "../../../package/gridContainer/GridContainer";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import SuggestedCard from "../../../shared/SuggestedCard";
 import styles from "./RecommendContent.module.css";
@@ -8,6 +7,7 @@ import useLinkUpStore from "../../../shared/store/store";
 import RoundBox from "../../../package/RoundBox";
 import ErrorComponent from "../../../package/ErrorComponent";
 import RecommendContentSkeleton from "./RecommendContentSkeleton";
+import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
 
 const RecommendContent = () => {
     const recommendArtistArray = useLinkUpStore((state) => state.recommendArtistArray);
@@ -47,11 +47,11 @@ const RecommendContent = () => {
 
     return (
         <div className={styles.container}>
-            <GridContainer cols="auto" colMinWidth="200px">
+            <GridCardContainer>
                 {(recommendArtistArray || []).map((artist) => (
                     <SuggestedCard key={artist.id} artist={artist} />
                 ))}
-            </GridContainer>
+            </GridCardContainer>
         </div>
     );
 };

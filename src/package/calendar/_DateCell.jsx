@@ -1,5 +1,5 @@
-import { Vstack } from "../layout";
-import EventBox from "./_EventBox";
+import { Hstack, Vstack } from "../layout";
+import EventBox, { EventDot } from "./_EventBox";
 import styles from "./calendar.module.css";
 import { useCalendarContext } from "./CalendarContext";
 
@@ -62,8 +62,31 @@ const DayCircle = ({ date, isHolyday, isToday }) => {
     );
 };
 
+const EventBoxMany = ({ eventArray }) => {
+    return (
+        <>
+            {eventArray.map((event) => (
+                <EventBox key={event.id} event={event} />
+            ))}
+        </>
+    );
+};
+const EventDotMany = ({ eventArray }) => {
+    const isTooMuch = eventArray.length > 4;
+    if (isTooMuch) {
+        return <EventDot />;
+    }
+    return (
+        <Hstack gap="xs">
+            {eventArray.map(() => (
+                <EventDot />
+            ))}
+        </Hstack>
+    );
+};
+
 const DateCell = ({ date, eventArray, isDim, isToday }) => {
-    const { setSelectedEvent, setModalKey } = useCalendarContext();
+    const { setSelectedEvent, setModalKey, size } = useCalendarContext();
 
     const isHolyday = false;
 
@@ -79,9 +102,8 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     return (
         <Vstack className={className} onDoubleClick={handleDoubleClick}>
             <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
-            {eventArray.map((event) => (
-                <EventBox key={event.id} event={event} />
-            ))}
+            {size === "lg" && <EventBoxMany eventArray={eventArray} />}
+            {size === "md" && <EventDotMany eventArray={eventArray} />}
         </Vstack>
     );
 };

@@ -1,9 +1,11 @@
 * {
-    padding: 0;
-    margin: 0;
+    padding: 0px;
+    margin: 0px;
     list-style: none;
     box-sizing: border-box;
     scrollbar-color: oklch(0.5 0 0) transparent;
+    /* transition-duration: 0.2s; */
+    /* transition-timing-function: cubic-bezier(0.01, 0.81, 0.09, 1.13); */
 }
 
 :root {
@@ -47,6 +49,7 @@
         0px 3px 3px -1.5px var(--color-dimdimdim), 0px 6px 6px -3px var(--color-dimdimdim),
         0px 12px 12px -6px var(--color-dimdimdim), 0px 24px 24px -12px var(--color-dimdimdim);
 
+    --sizing-xs: 100px;
     --sizing-sm: 200px;
     --sizing-md: 300px;
     --sizing-lg: 400px;

@@ -1,30 +1,33 @@
 import styles from "./SignupPage.module.css";
 import { useState } from "react";
 import RoundBox from "../package/RoundBox";
-import { FullScreen, Hstack, Vstack } from "../package/layout";
+import { Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
 import { useSignup } from "../features/signup/useSignup";
-import {
-    inputPropsDict,
-    inputPropsEntryArray,
-} from "../features/signup/signupInputProps";
+import { inputPropsDict, inputPropsEntryArray } from "../features/signup/signupInputProps";
 import {
     checkAdditionalEmailValidity,
     checkAdditionalPasswordValidity,
 } from "../features/signup/signupCheckValidity";
+import LabelGroup from "../package/labelGroup/LabelGroup";
+import CustomInput from "../package/CustomInput";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "../shared/validations/zodSchema";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
 
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
     const {
-        verifiedEmail,
-        setVerifiedEmail,
-        emailRef,
-        refetchVerification,
-        setBody,
-        refetchSignup,
-    } = useSignup();
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ resolver: zodResolver(signupSchema) });
+
+    const { verifiedEmail, setVerifiedEmail, emailRef, refetchVerification, setBody } = useSignup();
 
     const handleVerificationClick = () => {
         if (!emailRef.current) {
@@ -39,100 +42,106 @@ const SignupPage = () => {
         refetchVerification();
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const {
-            email,
-            verification_code,
-            password,
-            passwordConfirm,
-            phone_number,
-            nickname,
-        } = event.target;
+    const onSubmit = (data) => {
+        const body = { ...data, user_type: isForAgency ? "company" : "fan" };
 
-        const isEmailValid = checkAdditionalEmailValidity(
-            verifiedEmail,
-            email,
-            setVerifiedEmail,
-        );
-        if (!isEmailValid) {
-            return;
-        }
-
-        const tempBody = {
-            email: email.value,
-            password: password.value,
-            phone_number: phone_number.value,
-            nickname: nickname.value,
-            user_type: "fan",
-            verification_code: verification_code.value,
-        };
-
-        const isPasswordValid = checkAdditionalPasswordValidity(
-            password,
-            passwordConfirm,
-        );
-        if (!isPasswordValid) {
-            return;
-        }
-
-        setBody(tempBody);
+        setBody(body);
     };
 
     const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";
+    const passwordLabel =
+        isPasswordFocused || errors.password
+            ? "비밀번호 - 8자 이상, 대소문자, 특수문자 필수"
+            : "비밀번호";
 
     return (
-        <FullScreen center>
-            <RoundBox padding="LG">
-                <Vstack center>
-                    <Hstack gap="none">
-                        <CustomButton
-                            isOn={!isForAgency}
-                            className={styles.grow}
-                            onClick={() => setIsForAgency(false)}
-                        >
-                            팬
-                        </CustomButton>
-                        <CustomButton
-                            isOn={isForAgency}
-                            className={styles.grow}
-                            onClick={() => setIsForAgency(true)}
-                        >
-                            소속사
-                        </CustomButton>
-                    </Hstack>
+        <div className={styles.container}>
+            <RoundBox padding="XL">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Vstack center gap="lg">
+                        <Hstack gap="none">
+                            <CustomButton
+                                isOn={!isForAgency}
+                                className={styles.grow}
+                                onClick={() => setIsForAgency(false)}
+                                type="button"
+                            >
+                                팬
+                            </CustomButton>
+                            <CustomButton
+                                isOn={isForAgency}
+                                className={styles.grow}
+                                onClick={() => setIsForAgency(true)}
+                                type="button"
+                            >
+                                소속사
+                            </CustomButton>
+                        </Hstack>
 
-                    <form onSubmit={handleSubmit}>
-                        <Vstack style={{ width: "400px" }}>
-                            <Hstack style={{ width: "100%" }} items="end">
-                                <CustomInputLabeled
-                                    label="이메일"
-                                    vstackProps={{ className: styles.grow }}
-                                    inputProps={{
-                                        ref: emailRef,
-                                        ...inputPropsDict["이메일"],
-                                    }}
-                                />
-                                <CustomButton
-                                    type="button"
-                                    onClick={handleVerificationClick}
-                                >
-                                    {verifyEmailButtonLabel}
-                                </CustomButton>
-                            </Hstack>
-                            {inputPropsEntryArray.slice(1).map((entry) => (
-                                <CustomInputLabeled
-                                    key={entry[0]}
-                                    label={entry[0]}
-                                    inputProps={entry[1]}
-                                />
-                            ))}
-                            <CustomButton>회원가입</CustomButton>
-                        </Vstack>
-                    </form>
-                </Vstack>
+                        <Hstack style={{ width: "100%" }} items="end">
+                            <LabelGroup isRed={errors.email}>
+                                <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
+                                <CustomInput {...register("email")} />
+                                {errors.email && (
+                                    <LabelGroup.SmallLabel>
+                                        {errors.email.message}
+                                    </LabelGroup.SmallLabel>
+                                )}
+                            </LabelGroup>
+                            <CustomButton
+                                type="button"
+                                onClick={handleVerificationClick}
+                                className={styles.certificateButton}
+                            >
+                                {verifyEmailButtonLabel}
+                            </CustomButton>
+                        </Hstack>
+                        <LabelGroup isRed={errors.verification_code}>
+                            <LabelGroup.BigLabel>인증 번호</LabelGroup.BigLabel>
+                            <CustomInput {...register("verification_code")} />
+                            {errors.verification_code && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.verification_code.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.password}>
+                            <LabelGroup.BigLabel>{passwordLabel}</LabelGroup.BigLabel>
+                            <CustomInput
+                                {...register("password")}
+                                type="password"
+                                onFocus={() => setIsPasswordFocused(true)}
+                                onBlur={() => setIsPasswordFocused(false)}
+                            />
+                            {errors.password && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.password.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.passwordConfirm}>
+                            <LabelGroup.BigLabel>비밀번호 확인</LabelGroup.BigLabel>
+                            <CustomInput {...register("passwordConfirm")} type="password" />
+                            {errors.passwordConfirm && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.passwordConfirm.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.nickname}>
+                            <LabelGroup.BigLabel>닉네임</LabelGroup.BigLabel>
+                            <CustomInput {...register("nickname")} />
+                            {errors.nickname && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.nickname.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <CustomButton>회원가입</CustomButton>
+                    </Vstack>
+                </form>
             </RoundBox>
-        </FullScreen>
+        </div>
     );
 };
 

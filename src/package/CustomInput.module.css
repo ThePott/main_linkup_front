@@ -1,0 +1,17 @@
+.input {
+    border-radius: var(--rounded-md);
+    border: 1px solid var(--color-dimdim);
+    padding: var(--spacing-md);
+    background-color: var(--color-bg);
+    outline: none;
+    transition-property: border-color;
+    font-size: var(--text-md);
+}
+
+.input:hover {
+    border-color: var(--color-dim);
+}
+
+.input:focus {
+    border-color: var(--color-dim);
+}

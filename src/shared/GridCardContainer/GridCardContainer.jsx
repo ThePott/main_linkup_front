@@ -1,13 +1,12 @@
 import GridContainer from "../../package/gridContainer/GridContainer.jsx";
 
-const GridCardContainer = ({ children, ...props}) => {
-  return (
-    <div>
-      <GridContainer {...props} cols="auto" colMinWidth="var(--sizing-md)" >
-        {children}
-      </GridContainer>
-    </div>
-  );
+const GridCardContainer = ({ children }) => {
+    return (
+        <GridContainer cols="auto" colMinWidth="sm">
+            {children}
+        </GridContainer>
+    );
 };
 
 export default GridCardContainer;
+

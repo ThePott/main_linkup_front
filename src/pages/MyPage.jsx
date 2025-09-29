@@ -5,7 +5,7 @@ import RoundBox from "../package/RoundBox.jsx";
 import DeleteAccountModal from "../features/mypage/DeleteAccountModal.jsx";
 import useLinkUpStore from "../shared/store/store";
 import { apiAuthMe } from "../shared/services/linkupApi.js";
-import "./MyPage.css";
+import styles from "./MyPage.module.css";
 import MyFanPost from "../features/mypage/MyFanPost.jsx";
 
 // 내 포스트 API
@@ -74,18 +74,18 @@ const MyPage = () => {
   const likesCount = myPosts.reduce((sum, post) => sum + (post.likes_count ?? 0), 0);
 
   return (
-    <div className="mypage-wrapper">
+    <div className={styles.mypageWrapper}>
       {/* 사용자 프로필 */}
-      <div className="profile-feed">
-        <div className="profile-box">
+      <div className={styles.profileFeed}>
+        <div className={styles.profileBox}>
           <img
             src={userInfo?.profile || "default-profile.png"}
             alt={userInfo?.nickname}
-            className="user-profile"
+            className={styles.userProfile}
           />
-          <div className="user-info">
-            <span className="user-name">{userInfo?.nickname}</span>
-            <div className="user-stats">
+          <div className={styles.userInfo}>
+            <span className={styles.userName}>{userInfo?.nickname}</span>
+            <div className={styles.userStats}>
               <span>구독: {subscriptionsCount}</span>
               <span>포스트: {postsCount}</span>
               <span>좋아요: {likesCount}</span>
@@ -96,9 +96,9 @@ const MyPage = () => {
       </div>
 
       {/* 본문 영역 */}
-      <div className="mypage-container">
-        <div className="mypage-content">
-          <div className="card-grid">
+      <div className={styles.mypageContainer}>
+        <div className={styles.mypageContent}>
+          <div className={styles.cardGrid}>
             <MyFanPost posts={myPosts} />
           </div>
         </div>

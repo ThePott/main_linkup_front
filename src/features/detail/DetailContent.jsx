@@ -8,28 +8,24 @@ import FanPostSection from "../../shared/FanPostSection.jsx";
 import RoundBox from "../../package/RoundBox.jsx";
 import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
+import FanPostGrid from "../../shared/FanPostGrid";
 
 const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
 
     const groupArray = useLinkUpStore((state) => state.groupArray);
-    const subscribedArtistIdArray = useLinkUpStore(
-        (state) => state.subscribedArtistIdArray || []
-    );
+    const subscribedArtistIdArray = useLinkUpStore((state) => state.subscribedArtistIdArray || []);
     const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
 
     // 현재 URL 선택된 그룹/ 아티스트 상세 정보
     const [selectedArtistResult, setSelectedArtistResult] = useState(null);
     // 그룹 일정 + 멤버 일정 종합
-    const [mergedScheduleResultArray, setMergedScheduleResultArray] = useState(
-        []
-    );
+    const [mergedScheduleResultArray, setMergedScheduleResultArray] = useState([]);
     // 그룹/ 아티스트 팬포스트 배열
     const [postResultArray, setPostResultArray] = useState([]);
     // 구독 중인 그룹/멤버 정보(스토어에서 필터링한거)
-    const [subscribedArtistResultArray, setSubscribedArtistResultArray] =
-        useState([]);
+    const [subscribedArtistResultArray, setSubscribedArtistResultArray] = useState([]);
     // 구독취소 모달
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,18 +47,16 @@ const DetailContent = () => {
                 type === "group"
                     ? [
                           // 그룹 일정
-                          ...selectedItem.groupScheduleArray.map(
-                              (schedule) => ({
-                                  ...schedule,
-                                  owner: selectedItem.name,
-                              })
-                          ),
+                          ...selectedItem.groupScheduleArray.map((schedule) => ({
+                              ...schedule,
+                              owner: selectedItem.name,
+                          })),
                           // 멤버 일정
                           ...selectedItem.memberArray.flatMap((member) =>
                               member.scheduleArray.map((schedule) => ({
                                   ...schedule,
                                   owner: member.name,
-                              }))
+                              })),
                           ),
                       ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime))
                     : selectedItem.scheduleArray.map((schedule) => ({
@@ -71,9 +65,7 @@ const DetailContent = () => {
                       }));
 
             setMergedScheduleResultArray(newMergedScheduleResultArray);
-            setPostResultArray(
-                selectedItem.groupPostArray || selectedItem.postArray || []
-            );
+            setPostResultArray(selectedItem.groupPostArray || selectedItem.postArray || []);
         } else {
             setMergedScheduleResultArray([]);
             setPostResultArray([]);
@@ -92,12 +84,7 @@ const DetailContent = () => {
     };
 
     if (!selectedArtistResult) {
-        return (
-            <div>
-                해당 {type === "group" ? "그룹" : "아티스트"}를 찾을 수
-                없습니다.
-            </div>
-        );
+        return <div>해당 {type === "group" ? "그룹" : "아티스트"}를 찾을 수 없습니다.</div>;
     }
 
     return (
@@ -111,7 +98,7 @@ const DetailContent = () => {
                             navigate(
                                 `/detail/${
                                     artistItem.isGroup ? "group" : "artist"
-                                }/${artistItem.id}`
+                                }/${artistItem.id}`,
                             )
                         }
                         className={styles.subscribedItem}
@@ -143,34 +130,22 @@ const DetailContent = () => {
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {mergedScheduleResultArray
-                        .slice(0, 3)
-                        .map((schedule, index) => (
-                            <RoundBox key={index} padding="MD">
-                                {schedule.owner} {schedule.title} -{" "}
-                                {schedule.sttime}
-                            </RoundBox>
-                        ))}
+                    {mergedScheduleResultArray.slice(0, 3).map((schedule, index) => (
+                        <RoundBox key={index} padding="MD">
+                            {schedule.owner} {schedule.title} - {schedule.sttime}
+                        </RoundBox>
+                    ))}
                 </div>
             </div>
 
             {/* 4. 팬포스트 */}
-            <FanPostSection
-                posts={postResultArray}
-                limit={24}
-                cols={4}
-                onClickPost={(postId) => navigate(`/post/${postId}`)}
-            />
+            {/* isBlurred: 구독한 아티스트면 false, 아니면 true */}
+            <FanPostGrid fanPostArray={postResultArray} isBlurred={false} />
 
             {/* 모달 */}
-            <Modal
-                isOn={isModalOpen}
-                onBackgroundClick={() => setIsModalOpen(false)}
-            >
+            <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
                 <h3>구독을 취소하시겠습니까?</h3>
-                <div
-                    style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}
-                >
+                <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
                     <CustomButton
                         shape="RECTANGLE"
                         color="RED"

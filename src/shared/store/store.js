@@ -36,6 +36,20 @@ const useLinkUpStore = create()(
                 set({ eventArray });
             },
 
+            eventDict: {},
+            setEventDict: (eventDict) => {
+                set({ eventDict });
+            },
+
+            selectedEvent: null,
+            setSelectedEvent: (selectedEvent) => {
+                set({ selectedEvent });
+            },
+
+            selectedMonthEventArray: [],
+            setSelectedMonthEventArray: (selectedMonthEventArray) =>
+                set({ selectedMonthEventArray }),
+
             artistArray: [],
             setArtistArray: (artistArray) => {
                 set({ artistArray });
@@ -54,10 +68,8 @@ const useLinkUpStore = create()(
                 set({ fanPostArray: [newPost, ...prev] });
             },
 
-            selectedEvent: null,
-            setSelectedEvent: (selectedEvent) => {
-                set({ selectedEvent });
-            },
+            selectedFanPost: null,
+            setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
 
             groupArray: [],
             setGroupArray: (groupArray) => set({ groupArray }),
@@ -83,8 +95,8 @@ const useLinkUpStore = create()(
                 }),
         }),
         {
-            name: "linkup-session-storage", // Name for your storage item
-            storage: createJSONStorage(() => sessionStorage),
+            name: "linkup-local-storage", // Name for your storage item
+            storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 access_token: state.access_token,
                 user: state.user,
