@@ -2,10 +2,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosReturnsData } from "./axiosInstance";
 import { useEffect } from "react";
 import useLinkUpStore from "../store/store";
-import {
-    useDeleteMutation,
-    usePostMutation,
-} from "../../package/commonServices/tanstackQueryVariants";
 import queryClient from "./queryClient";
 
 const useSubscriptionsQuery = () => {
@@ -25,6 +21,7 @@ const useSubscriptionsQuery = () => {
             return;
         }
         setArtistArray(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     return { isPendingSubscriptions, errorSubscriptions };
 };
