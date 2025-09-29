@@ -6,6 +6,7 @@ import RoundBox from "../../../package/RoundBox";
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard";
 import Skeleton from "../../../package/skeleton/Skeleton";
+import { useNavigate } from "react-router";
 
 const EventBoxEmpty = () => {
     return (
@@ -49,13 +50,24 @@ const EventColumnSkeleton = () => {
 };
 
 const SearchResult = ({ artist, isPending }) => {
+    const navigate = useNavigate();
+
     const imageUrl =
         artist.banner_url || artist.torso_url || artist.face_url || artist.profile_image;
     const eventDict = useLinkUpStore((state) => state.eventDict);
     const eventArray = eventDict[artist.id] ?? [];
+
+    const handleClick = () => {
+        navigate(`/detail/artist/${artist.id}`);
+    };
+
     return (
         <>
-            <CustomImageCard url={imageUrl} style={{ boxShadow: "var(--drop-shadow-md)" }} />
+            <CustomImageCard
+                onClick={handleClick}
+                url={imageUrl}
+                style={{ boxShadow: "var(--drop-shadow-md)" }}
+            />
             {isPending && eventArray.length === 0 && <EventColumnSkeleton />}
             {!isPending && <EventColumn eventArray={eventArray} />}
         </>
