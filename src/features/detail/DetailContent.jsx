@@ -32,9 +32,7 @@ const DetailContent = () => {
 
     const isSubscribed = subscribedArtistIdArray.includes(Number(id));
 
-    const artistArray = groupArray.flatMap(
-        (groupItem) => groupItem.memberArray || []
-    );
+    const artistArray = groupArray.flatMap((groupItem) => groupItem.memberArray || []);
     const subscribeArray1 = mockData;
     const url = subscribeArray1[0]?.img_banner;
 
@@ -43,7 +41,6 @@ const DetailContent = () => {
             try {
                 const query = new URLSearchParams({
                     limit: 20,
-                    is_active: true,
                     ...params,
                 }).toString();
                 const data = await axiosReturnsData("GET", `/api/events/?${query}`);
@@ -58,13 +55,12 @@ const DetailContent = () => {
             try {
                 const query = new URLSearchParams({
                     limit: 20,
-                    artist_id: artistId,
+                    artist_id: Number(artistId),
                 }).toString();
                 const data = await axiosReturnsData("GET", `/api/posts/?${query}`);
                 const posts = data.map((post) => ({
                     postId: post.id,
-                    imgUrl: post.image_url || null,
-                    title: post.content,
+                    imgUrl: post.image_url,
                     likes: post.likes_count ?? 0,
                 }));
                 setFanPostArray(posts);
@@ -74,13 +70,8 @@ const DetailContent = () => {
             }
         };
 
-        if (type === "group") {
-            fetchEvents({ artist_parent_group: id });
-            fetchFanPosts(id);
-        } else if (type === "artist") {
-            fetchEvents({ artist_id: id });
-            fetchFanPosts(id);
-        }
+        fetchEvents({ artist_id: id });
+        fetchFanPosts(id);
     }, [type, id, setEventArray, setFanPostArray]);
 
     return (
@@ -141,10 +132,7 @@ const DetailContent = () => {
             />
 
             {/* 6. 모달 */}
-            <Modal
-                isOn={modalKey === "subscribeModal"}
-                onBackgroundClick={() => setModalKey(null)}
-            >
+            <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
                 <div>
                     <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
                     <CustomButton
