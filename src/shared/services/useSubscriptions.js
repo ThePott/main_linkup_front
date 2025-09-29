@@ -6,6 +6,7 @@ import queryClient from "./queryClient";
 
 const useSubscriptionsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
+    const user = useLinkUpStore((state) => state.user);
     const endpoint = "/api/subscriptions";
     const {
         data,
@@ -14,6 +15,7 @@ const useSubscriptionsQuery = () => {
     } = useQuery({
         queryKey: [endpoint],
         queryFn: () => axiosReturnsData("GET", endpoint),
+        enabled: user?.user_type === "fan",
     });
 
     useEffect(() => {

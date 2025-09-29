@@ -32,7 +32,7 @@ const EventColumn = ({ eventArray }) => {
     return (
         <Vstack className={styles.eventColumn}>
             {eventArray.map((event) => (
-                <EventBox event={event} />
+                <EventBox key={event.id} event={event} />
             ))}
         </Vstack>
     );
@@ -69,7 +69,7 @@ const SearchContent = () => {
     return (
         <GridContainer cols={2} gap="xl">
             {searchResultArray.map((artist) => (
-                <SearchResult artist={artist} isPending={isPendingEvents} />
+                <SearchResult key={artist.id} artist={artist} isPending={isPendingEvents} />
             ))}
         </GridContainer>
     );
