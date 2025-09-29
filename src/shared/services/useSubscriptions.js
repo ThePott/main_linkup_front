@@ -7,7 +7,7 @@ import queryClient from "./queryClient";
 const useSubscriptionsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
     const user = useLinkUpStore((state) => state.user);
-    const endpoint = "/api/subscriptions";
+    const endpoint = "/api/subscriptions?include_image=true";
     const {
         data,
         isPending: isPendingSubscriptions,
