@@ -8,7 +8,8 @@ const useIdolQuery = () => {
     const endpoint = "/api/idol";
     const [searchParams, _setSearchParams] = useSearchParams();
     const queryParams = searchParams.get("query");
-    const queryKey = queryParams ? `${endpoint}/${queryParams}` : endpoint;
+    // const queryKey = queryParams ? `${endpoint}/${queryParams}` : endpoint;
+    const queryKey = queryParams ? `${endpoint}?artist_name=${queryParams}` : endpoint;
 
     const setRecommendArtistArray = useLinkUpStore((state) => state.setRecommendArtistArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
@@ -27,8 +28,9 @@ const useIdolQuery = () => {
             return;
         }
         if (queryParams) {
-            const resultArray = typeof data === "object" ? [data] : data;
-            setSearchResultArray(resultArray);
+            // const resultArray = typeof data === "object" ? [data] : data;
+            // setSearchResultArray(resultArray);
+            setSearchResultArray(data.artists);
             return;
         }
 
