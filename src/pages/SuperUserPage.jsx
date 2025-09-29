@@ -36,8 +36,10 @@ const SuperUserPage = () => {
     loadUsers();
   }, [access_token]);
 
+  // 모달 열기
   const openModal = (user, type) => {
-    setSelectedUser(user);
+    // unban 시 원래 타입(prevType)을 기억
+    setSelectedUser({ ...user, prevType: user.user_type === "ban" ? "fan" : user.user_type });
     setActionType(type);
     setModalOpen(true);
   };
@@ -48,6 +50,7 @@ const SuperUserPage = () => {
     setModalOpen(false);
   };
 
+  // 차단 / 차단 해제 처리
   const handleConfirm = async () => {
     if (!selectedUser) return;
 
@@ -63,7 +66,9 @@ const SuperUserPage = () => {
         await unbanUser(selectedUser.id, access_token);
         setUsers((prev) =>
           prev.map((u) =>
-            u.id === selectedUser.id ? { ...u, user_type: "normal" } : u
+            u.id === selectedUser.id
+              ? { ...u, user_type: selectedUser.prevType || "fan" }
+              : u
           )
         );
       }
