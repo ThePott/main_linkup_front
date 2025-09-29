@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import styles from "./Navbar.module.css";
 import CustomInput from "../../package/CustomInput";
 import { Hstack } from "../../package/layout";
@@ -41,6 +41,7 @@ const MyButton = ({ user }) => {
 };
 
 const Navbar = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
     const user = useLinkUpStore((state) => state.user);
@@ -48,6 +49,15 @@ const Navbar = () => {
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
+        if (!trimmed) {
+            return;
+        }
+
+        const pathname = location.pathname;
+        if (pathname !== "/") {
+            navigate("/");
+        }
+
         setSearchParams({ query: trimmed });
     };
 
