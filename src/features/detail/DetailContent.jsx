@@ -29,18 +29,9 @@ const DetailContent = () => {
 
     const isSubscribed = subscribedArtistIdArray.includes(Number(id));
 
-const subscribedArtistResultArray = [
-    ...groupArray.map(groupItem => ({
-        ...groupItem,
-        _type: "group",
-    })),
-    ...groupArray.flatMap(groupItem =>
-        (groupItem.memberArray || []).map(memberItem => ({
-            ...memberItem,
-            _type: "artist",
-        }))
-    ),
-].filter(artistItem => subscribedArtistIdArray.includes(artistItem.id));
+    const artistArray = groupArray.flatMap(
+        (groupItem) => groupItem.memberArray || []
+    );
 
     useEffect(() => {
         const fetchEvents = async (params) => {
@@ -91,20 +82,16 @@ const subscribedArtistResultArray = [
         <div className={styles.container}>
             {/* 1. 상단 */}
             <div className={styles.topBar}>
-                {subscribedArtistResultArray.map(artistItem => (
-                    <div
-                        key={artistItem.id}
-                        onClick={() => navigate(`/detail/${artistItem._type}/${artistItem.id}`)}
-                        className={styles.subscribedItem}
-                    >
-                        <CustomImageIcon
-                            url={artistItem.imgFace}
-                            alt={artistItem.name}
-                            className={styles.subscribedImage}
-                        />
-                    </div>
+                {artistArray.map((artist) => (
+                    <CustomImageIcon
+                        key={artist.artist_id}
+                        url={artist.artist_image_url}
+                        className={styles.circleIcon}
+                        onClick={() => {
+                            navigate(`/detail/artist/${artist.artist_id}`);
+                        }}
+                    />
                 ))}
-
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
@@ -117,10 +104,10 @@ const subscribedArtistResultArray = [
                 </div>
             </div>
 
-            {/* 2. 달력 */}
+            {/* 3. 달력 */}
             <Calendar schedules={eventArray} />
 
-            {/* 3. 최신 일정 */}
+            {/* 4. 최신 일정 */}
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
@@ -135,7 +122,7 @@ const subscribedArtistResultArray = [
                 </div>
             </div>
 
-            {/* 4. 팬포스트 */}
+            {/* 5. 팬포스트 */}
             <FanPostSection
                 posts={fanPostArray}
                 limit={24}
@@ -143,7 +130,7 @@ const subscribedArtistResultArray = [
                 onClickPost={postId => navigate(`/post/${postId}`)}
             />
 
-            {/* 5. 모달 */}
+            {/* 6. 모달 */}
             <Modal
                 isOn={modalKey === "subscribeModal"}
                 onBackgroundClick={() => setModalKey(null)}
