@@ -13,6 +13,11 @@ import mockData from "../../shared/store/dummyHeehaa.json";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 
+const getSubscriptions = async () => {
+    const data = await axiosReturnsData("GET", "/api/subscriptions");
+    useLinkUpStore.setState({ artistArray: data });
+};
+
 const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
@@ -23,18 +28,21 @@ const DetailContent = () => {
     const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
     const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
 
-    const groupArray = useLinkUpStore((state) => state.groupArray);
-    const subscribedArtistIdArray = useLinkUpStore((state) => state.subscribedArtistIdArray || []);
+    const artistArray = useLinkUpStore((state) => state.artistArray);
+
     const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
 
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const isSubscribed = subscribedArtistIdArray.includes(Number(id));
+    const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
 
-    const artistArray = groupArray.flatMap((groupItem) => groupItem.memberArray || []);
     const subscribeArray1 = mockData;
     const url = subscribeArray1[0]?.img_banner;
+
+    useEffect(() => {
+        getSubscriptions();
+    }, []);
 
     useEffect(() => {
         const fetchEvents = async (params) => {
@@ -78,14 +86,12 @@ const DetailContent = () => {
         <div className={styles.container}>
             {/* 1. 상단 */}
             <div className={styles.topBar}>
-                {artistArray.map((artist) => (
+                {artistArray.map((artistItem) => (
                     <CustomImageIcon
-                        key={artist.artist_id}
-                        url={artist.artist_image_url}
+                        key={artistItem.artist_id}
+                        url={artistItem.artist_image_url}
                         className={styles.circleIcon}
-                        onClick={() => {
-                            navigate(`/detail/artist/${artist.artist_id}`);
-                        }}
+                        onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
                     />
                 ))}
                 <div className={styles.buttonRight}>
@@ -136,8 +142,8 @@ const DetailContent = () => {
                 <div>
                     <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
                     <CustomButton
-                        onClick={() => {
-                            toggleSubscribe(Number(id));
+                        onClick={async () => {
+                            await toggleSubscribe(Number(id));
                             setModalKey(null);
                         }}
                     >
