@@ -3,7 +3,8 @@ import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 import CustomButton from "../package/customButton/CustomButton.jsx";
 import Modal from "../package/modal/Modal.jsx";
-import styles from "./SuperUserPage.module.css"; // CSS Module 적용
+import Navbar from "../features/layout/Navbar.jsx"; // ✅ Navbar 추가
+import styles from "./SuperUserPage.module.css";
 
 const SuperUserPage = () => {
   const [users, setUsers] = useState([]);
@@ -67,7 +68,14 @@ const SuperUserPage = () => {
 
   return (
     <div className={styles.superuserContainer}>
-      <h1 className={styles.title}>관리 페이지</h1>
+      {/* ✅ 상단 바: 관리 페이지 타이틀 + Navbar */}
+      <div className={styles.topBar}>
+        <h1 className={styles.title}>관리 페이지</h1>
+        <div className={styles.navbarWrapper}>
+          <Navbar />
+        </div>
+      </div>
+
       {users.length === 0 ? (
         <p>유저 목록을 불러오지 못했습니다.</p>
       ) : (
