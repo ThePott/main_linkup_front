@@ -13,8 +13,11 @@ const SearchContent = () => {
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query") || "";
 
+    // const groupArray = useLinkUpStore((state) => state.groupArray);
     const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
+    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
     const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
+    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
     const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
 
     const eventArray = useLinkUpStore((state) => state.eventArray);
@@ -32,7 +35,7 @@ const SearchContent = () => {
 
                     if (artist.artist_type === "individual" && artist.group_name) {
                         const groupRes = await fetch(
-                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`
+                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`,
                         );
                         const groupData = await groupRes.json();
                         setSearchResultArray([groupData]);
@@ -41,11 +44,11 @@ const SearchContent = () => {
                     } else {
                         setSearchResultArray([artist]);
                         await fetchEvents({ artist_id: artist.id });
-                        await fetchFanPosts(artist.id); 
+                        await fetchFanPosts(artist.id);
                     }
                 } else {
                     const res = await fetch(
-                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1"
+                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1",
                     );
                     const data = await res.json();
                     const artists = data.artists || [];
@@ -65,7 +68,7 @@ const SearchContent = () => {
                 const query = new URLSearchParams({
                     limit: 20,
                     is_active: true,
-                    ...params
+                    ...params,
                 }).toString();
                 const res = await fetch(`http://3.35.210.2:8000/events/?${query}`);
                 const data = await res.json();
@@ -85,7 +88,7 @@ const SearchContent = () => {
                 const posts = data.map((post) => ({
                     postId: post.id,
                     imgUrl: post.image_url ?? "",
-                    likes: post.likes_count
+                    likes: post.likes_count,
                 }));
                 setFanPostArray(posts);
             } catch (err) {
@@ -171,3 +174,4 @@ const SearchContent = () => {
 };
 
 export default SearchContent;
+
