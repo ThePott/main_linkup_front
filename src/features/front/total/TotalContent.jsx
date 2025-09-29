@@ -9,6 +9,7 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import { useNavigate } from "react-router";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
+import { Vstack } from "../../../package/layout";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
@@ -56,7 +57,7 @@ const TotalContent = () => {
             <p className={styles.text}>스케줄</p>
             <section className={styles.calendarContainer}>
                 <Calendar className={styles.calendar} />
-                <span className={styles.dailyScheduleContainer}>
+                <Vstack className={styles.dailyScheduleContainer}>
                     {currentItems.map((schedule) => (
                         <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
                             <li className={styles.dailySchedule}>
@@ -85,7 +86,7 @@ const TotalContent = () => {
                             다음
                         </CustomButton>
                     </div>
-                </span>
+                </Vstack>
             </section>
         </div>
     );

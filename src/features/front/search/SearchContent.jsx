@@ -7,35 +7,23 @@ import GridContainer from "../../../package/gridContainer/GridContainer";
 import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard";
 import Skeleton from "../../../package/skeleton/Skeleton";
 import { useNavigate } from "react-router";
+import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
-const EventBoxEmpty = () => {
+const RoundBoxFull = ({ children }) => {
     return (
         <RoundBox padding="lg" isShadowed={false} className={styles.eventBoxEmpty}>
-            <p>등록된 일정이 없어요</p>
+            {children}
         </RoundBox>
     );
 };
 
 const EventBox = ({ event }) => {
     return (
-        <RoundBox padding="lg" isShadowed={false}>
-            <p>{event.start_time}</p>
-            <p>{event.title}</p>
-            <p>{event.description}</p>
+        <RoundBox padding="lg" isShadowed={false} textAlign="start">
+            <p>{event.start_time.slice(0, 10)}</p>
+            <p style={{ fontWeight: "var(--font-weight-semibold)" }}>{event.title}</p>
+            <p style={{ color: "var(--color-muted)" }}>{event.description}</p>
         </RoundBox>
-    );
-};
-
-const EventColumn = ({ eventArray }) => {
-    if (eventArray.length === 0) {
-        return <EventBoxEmpty />;
-    }
-    return (
-        <Vstack className={styles.eventColumn}>
-            {eventArray.map((event) => (
-                <EventBox key={event.id} event={event} />
-            ))}
-        </Vstack>
     );
 };
 
@@ -49,7 +37,25 @@ const EventColumnSkeleton = () => {
     );
 };
 
-const SearchResult = ({ artist, isPending }) => {
+const EventColumn = ({ artistName, eventArray }) => {
+    return (
+        <Vstack className={styles.eventColumn}>
+            <p style={{ fontSize: "var(--text-lg)", fontWeight: "var(--font-weight-semibold)" }}>
+                {artistName}
+            </p>
+            <FlexOneContainer isYScrollable>
+                <Vstack>
+                    {eventArray.length === 0 && <RoundBoxFull>등록된 일정이 없어요</RoundBoxFull>}
+                    {eventArray.map((event) => (
+                        <EventBox key={event.id} event={event} />
+                    ))}
+                </Vstack>
+            </FlexOneContainer>
+        </Vstack>
+    );
+};
+
+const SearchResult = ({ artist, isPending, error }) => {
     const navigate = useNavigate();
 
     const imageUrl =
@@ -57,20 +63,19 @@ const SearchResult = ({ artist, isPending }) => {
     const eventDict = useLinkUpStore((state) => state.eventDict);
     const eventArray = eventDict[artist.id] ?? [];
 
+    const artistName = artist.stage_name || artist.group_name || artist.name;
+
     const handleClick = () => {
         navigate(`/detail/artist/${artist.id}`);
     };
 
     return (
-        <>
-            <CustomImageCard
-                onClick={handleClick}
-                url={imageUrl}
-                style={{ boxShadow: "var(--drop-shadow-md)" }}
-            />
+        <GridContainer cols={2} onClick={handleClick}>
+            <CustomImageCard url={imageUrl} style={{ boxShadow: "var(--drop-shadow-md)" }} />
             {isPending && eventArray.length === 0 && <EventColumnSkeleton />}
-            {!isPending && <EventColumn eventArray={eventArray} />}
-        </>
+            {!isPending && error && <RoundBoxFull>오류가 발생했어요</RoundBoxFull>}
+            {!isPending && <EventColumn artistName={artistName} eventArray={eventArray} />}
+        </GridContainer>
     );
 };
 
@@ -79,11 +84,16 @@ const SearchContent = () => {
     const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
 
     return (
-        <GridContainer cols={2} gap="xl">
+        <Vstack gap="xl">
             {searchResultArray.map((artist) => (
-                <SearchResult key={artist.id} artist={artist} isPending={isPendingEvents} />
+                <SearchResult
+                    key={artist.id}
+                    artist={artist}
+                    isPending={isPendingEvents}
+                    error={errorEvents}
+                />
             ))}
-        </GridContainer>
+        </Vstack>
     );
 };
 
