@@ -11,6 +11,7 @@ import styles from "./DetailContent.module.css";
 import { format } from "date-fns";
 import mockData from "../../shared/store/dummyHeehaa.json";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
+import { axiosReturnsData } from "../../shared/services/axiosInstance";
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -45,8 +46,7 @@ const DetailContent = () => {
                     is_active: true,
                     ...params,
                 }).toString();
-                const res = await fetch(`http://3.35.210.2:8000/api/events/?${query}`);
-                const data = await res.json();
+                const data = await axiosReturnsData("GET", `/api/events/?${query}`);
                 setEventArray(data.events || []);
             } catch (err) {
                 console.error("이벤트 API 호출 에러:", err);
@@ -56,15 +56,16 @@ const DetailContent = () => {
 
         const fetchFanPosts = async (artistId) => {
             try {
-                const query = new URLSearchParams({ limit: 20, artist_id: artistId }).toString();
-                const res = await fetch(`http://3.35.210.2:8000/api/posts/?${query}`);
-                const data = await res.json();
-                const posts = data.map(post => ({
+                const query = new URLSearchParams({
+                    limit: 20,
+                    artist_id: artistId,
+                }).toString();
+                const data = await axiosReturnsData("GET", `/api/posts/?${query}`);
+                const posts = data.map((post) => ({
                     postId: post.id,
                     imgUrl: post.image_url || null,
                     title: post.content,
                     likes: post.likes_count ?? 0,
-                    comments: post.comments?.length ?? 0,
                 }));
                 setFanPostArray(posts);
             } catch (err) {
@@ -120,7 +121,7 @@ const DetailContent = () => {
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {eventArray.map(schedule => {
+                    {eventArray.map((schedule) => {
                         const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
                         return (
                             <RoundBox key={schedule.id}>
@@ -136,7 +137,7 @@ const DetailContent = () => {
                 posts={fanPostArray}
                 limit={24}
                 cols={4}
-                onClickPost={postId => navigate(`/post/${postId}`)}
+                onClickPost={(postId) => navigate(`/post/${postId}`)}
             />
 
             {/* 6. 모달 */}
