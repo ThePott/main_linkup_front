@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"; // react-router로 import
 import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 import CustomButton from "../package/customButton/CustomButton.jsx";
 import Modal from "../package/modal/Modal.jsx";
-import Navbar from "../features/layout/Navbar.jsx"; // ✅ Navbar 추가
+import Navbar from "../features/layout/Navbar.jsx";
 import styles from "./SuperUserPage.module.css";
 
 const SuperUserPage = () => {
@@ -12,6 +13,14 @@ const SuperUserPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [actionType, setActionType] = useState("");
   const access_token = useLinkUpStore((state) => state.access_token);
+  const navigate = useNavigate();
+
+  // 토큰 없으면 메인 페이지로 이동
+  useEffect(() => {
+    if (!access_token) {
+      navigate("/");
+    }
+  }, [access_token, navigate]);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -24,7 +33,6 @@ const SuperUserPage = () => {
         console.error(err);
       }
     };
-
     loadUsers();
   }, [access_token]);
 
@@ -68,7 +76,7 @@ const SuperUserPage = () => {
 
   return (
     <div className={styles.superuserContainer}>
-      {/* ✅ 상단 바: 관리 페이지 타이틀 + Navbar */}
+      {/* 상단 바 */}
       <div className={styles.topBar}>
         <h1 className={styles.title}>관리 페이지</h1>
         <div className={styles.navbarWrapper}>
