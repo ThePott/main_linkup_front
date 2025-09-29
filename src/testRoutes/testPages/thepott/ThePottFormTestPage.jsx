@@ -2,14 +2,15 @@ import { useForm } from "react-hook-form";
 import CustomInput from "../../../package/CustomInput";
 import CustomButton from "../../../package/customButton/CustomButton";
 import LabelGroup from "../../../package/labelGroup/LabelGroup";
-import { inputNameToValidationProps } from "../../../shared/utils/validation";
+import { signupSchema } from "../../../shared/validations/zodSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const TutorialForm = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({ resolver: zodResolver(signupSchema) });
     const onSubmit = (data) => {
         console.log({ data });
         if (errors) {
@@ -21,39 +22,41 @@ const TutorialForm = () => {
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
         <form onSubmit={handleSubmit(onSubmit)}>
             {/* register your input into the hook by invoking the "register" function */}
-            <LabelGroup>
+            <LabelGroup isRed={errors.email}>
                 <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
-                <CustomInput {...register("email", { type: "email", minLength: 100 })} />
+                <CustomInput {...register("email")} />
                 {errors.email && (
-                    <LabelGroup.SmallLabel>This field is required</LabelGroup.SmallLabel>
+                    <LabelGroup.SmallLabel>{errors.email.message}</LabelGroup.SmallLabel>
                 )}
             </LabelGroup>
-            <LabelGroup>
+            <LabelGroup isRed={errors.verification_code}>
                 <LabelGroup.BigLabel>인증 번호</LabelGroup.BigLabel>
                 <CustomInput {...register("verification_code")} />
                 {errors.verification_code && (
-                    <LabelGroup.SmallLabel>This field is required</LabelGroup.SmallLabel>
+                    <LabelGroup.SmallLabel>
+                        {errors.verification_code.message}
+                    </LabelGroup.SmallLabel>
                 )}
             </LabelGroup>
-            <LabelGroup>
+            <LabelGroup isRed={errors.password}>
                 <LabelGroup.BigLabel>비밀번호</LabelGroup.BigLabel>
                 <CustomInput {...register("password")} />
                 {errors.password && (
-                    <LabelGroup.SmallLabel>This field is required</LabelGroup.SmallLabel>
+                    <LabelGroup.SmallLabel>{errors.password.message}</LabelGroup.SmallLabel>
                 )}
             </LabelGroup>
-            <LabelGroup>
+            <LabelGroup isRed={errors.passwordConfirm}>
                 <LabelGroup.BigLabel>비밀번호 확인</LabelGroup.BigLabel>
                 <CustomInput {...register("passwordConfirm")} />
                 {errors.passwordConfirm && (
-                    <LabelGroup.SmallLabel>This field is required</LabelGroup.SmallLabel>
+                    <LabelGroup.SmallLabel>{errors.passwordConfirm.message}</LabelGroup.SmallLabel>
                 )}
             </LabelGroup>
-            <LabelGroup>
+            <LabelGroup isRed={errors.nickname}>
                 <LabelGroup.BigLabel>닉네임</LabelGroup.BigLabel>
                 <CustomInput {...register("nickname")} />
                 {errors.nickname && (
-                    <LabelGroup.SmallLabel>This field is required</LabelGroup.SmallLabel>
+                    <LabelGroup.SmallLabel>{errors.nickname.message}</LabelGroup.SmallLabel>
                 )}
             </LabelGroup>
 
