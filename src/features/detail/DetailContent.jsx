@@ -9,6 +9,8 @@ import RoundBox from "../../package/RoundBox.jsx";
 import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
 import { format } from "date-fns";
+import mockData from "../../shared/store/dummyHeehaa.json";
+import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -32,6 +34,8 @@ const DetailContent = () => {
     const artistArray = groupArray.flatMap(
         (groupItem) => groupItem.memberArray || []
     );
+    const subscribeArray1 = mockData;
+    const url = subscribeArray1[0]?.img_banner;
 
     useEffect(() => {
         const fetchEvents = async (params) => {
@@ -103,6 +107,11 @@ const DetailContent = () => {
                     </CustomButton>
                 </div>
             </div>
+
+            {/* 2. 배너 */}
+            <RoundBox className={styles.bannerContainer}>
+                <CustomImageBanner url={url} className={styles.banner} />
+            </RoundBox>
 
             {/* 3. 달력 */}
             <Calendar schedules={eventArray} />
