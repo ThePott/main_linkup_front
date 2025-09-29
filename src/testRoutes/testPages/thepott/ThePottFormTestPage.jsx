@@ -4,8 +4,11 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import LabelGroup from "../../../package/labelGroup/LabelGroup";
 import { signupSchema } from "../../../shared/validations/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 const TutorialForm = () => {
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -17,6 +20,11 @@ const TutorialForm = () => {
             console.log({ errors });
         }
     };
+
+    const passwordLabel =
+        isPasswordFocused || errors.password
+            ? "비밀번호 - 8자 이상, 대소문자, 특수문자 필수"
+            : "비밀번호";
 
     return (
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -39,8 +47,12 @@ const TutorialForm = () => {
                 )}
             </LabelGroup>
             <LabelGroup isRed={errors.password}>
-                <LabelGroup.BigLabel>비밀번호</LabelGroup.BigLabel>
-                <CustomInput {...register("password")} />
+                <LabelGroup.BigLabel>{passwordLabel}</LabelGroup.BigLabel>
+                <CustomInput
+                    {...register("password")}
+                    onFocus={() => setIsPasswordFocused(true)}
+                    onBlur={() => setIsPasswordFocused(false)}
+                />
                 {errors.password && (
                     <LabelGroup.SmallLabel>{errors.password.message}</LabelGroup.SmallLabel>
                 )}
