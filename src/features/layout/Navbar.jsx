@@ -5,6 +5,7 @@ import { Hstack } from "../../package/layout";
 import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/store";
 import useAuth from "../../shared/services/useAuth";
+import useIdol from "../../shared/services/useIdol";
 
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -44,8 +45,11 @@ const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
+
     const user = useLinkUpStore((state) => state.user);
+
     const { logout } = useAuth();
+    useIdol();
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
