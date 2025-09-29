@@ -19,9 +19,13 @@ const ThePottTanstackTestPage = () => {
 
     const firstIdol = idolArray.find((idol) => idol.id === 1);
 
-    const variables = {
+    const variablesAespa = {
         body: { artist_id: 1 },
-        newOne: { artist_id: 1, stage_name: firstIdol.name, group_name: firstIdol.name },
+        newOne: { artist_id: 1, stage_name: firstIdol?.name, group_name: firstIdol?.name },
+    };
+    const variablesKarina = {
+        body: { artist_id: 6 },
+        newOne: { artist_id: 6, stage_name: "카리나", group_name: "에스파" },
     };
 
     useEffect(() => {
@@ -38,12 +42,18 @@ const ThePottTanstackTestPage = () => {
             <p>subscribing artist array</p>
             {artistArray.map((artist) => (
                 <p>
-                    {artist.stage_name || artist.group_name}__{artist.id}
+                    {artist.stage_name || artist.group_name}__{artist.artist_id}
                 </p>
             ))}
             <CustomButton onClick={() => deleteMutation.mutate(1)}>unsubscribe idol 1</CustomButton>
-            <CustomButton onClick={() => postMutation.mutate(variables)}>
+            <CustomButton onClick={() => postMutation.mutate(variablesAespa)}>
                 subscribe idol 1
+            </CustomButton>
+            <CustomButton onClick={() => postMutation.mutate(variablesKarina)}>
+                subscribe karina (6)
+            </CustomButton>
+            <CustomButton onClick={() => deleteMutation.mutate(6)}>
+                unsubscribe karina (6)
             </CustomButton>
         </Vstack>
     );
