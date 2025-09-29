@@ -1,7 +1,10 @@
 import styles from "./GridContainer.module.css";
 
+/**
+ * @param {"xs" | "sm" | "md" | "lg" | "xl"}
+ */
 const GridContainer = ({
-    gap = "MD",
+    gap = "md",
     cols,
     colMinWidth,
     rows,
