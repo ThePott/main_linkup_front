@@ -1,5 +1,4 @@
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
-import useLinkUpStore from "../../../shared/store/store";
 
 const getEvents = async (artistId) => {
     const data = await axiosReturnsData("GET", `/api/events/?artist_id=${artistId}`);
@@ -16,5 +15,5 @@ export const getThenStoreEventDict = async (artistIdArray) => {
         return acc;
     }, {});
 
-    useLinkUpStore.setState({ eventDict });
+    return eventDict;
 };
