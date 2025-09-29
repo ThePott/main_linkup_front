@@ -50,6 +50,7 @@ const TutorialForm = () => {
                 <LabelGroup.BigLabel>{passwordLabel}</LabelGroup.BigLabel>
                 <CustomInput
                     {...register("password")}
+                    type="password"
                     onFocus={() => setIsPasswordFocused(true)}
                     onBlur={() => setIsPasswordFocused(false)}
                 />
@@ -59,7 +60,7 @@ const TutorialForm = () => {
             </LabelGroup>
             <LabelGroup isRed={errors.passwordConfirm}>
                 <LabelGroup.BigLabel>비밀번호 확인</LabelGroup.BigLabel>
-                <CustomInput {...register("passwordConfirm")} />
+                <CustomInput {...register("passwordConfirm")} type="password" />
                 {errors.passwordConfirm && (
                     <LabelGroup.SmallLabel>{errors.passwordConfirm.message}</LabelGroup.SmallLabel>
                 )}
