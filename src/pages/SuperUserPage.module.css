@@ -3,6 +3,14 @@
   font-family: Arial, sans-serif;
 }
 
+/* ✅ 상단 flex 바 */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .title {
   display: block;
   width: 200px;
@@ -10,20 +18,11 @@
   padding: 10px;
   background: #999;
   color: white;
-  margin-bottom: 20px;
 }
 
-.searchBar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.searchBar input {
-  width: 300px;
-  padding: 8px;
-  border: 1px solid #ccc;
+.navbarWrapper {
+  flex: 1;
+  margin-left: 20px;
 }
 
 .userTable {
@@ -40,10 +39,5 @@
 
 .userTable th {
   background: #666;
-  color: white;
-}
-
-.userTable button:hover {
-  background: #aaa;
   color: white;
 }
