@@ -19,4 +19,14 @@ export const signupSchema = z
         path: ["passwordConfirm"],
     });
 
-export const passwordChangeSchema = z.object({});
+export const passwordChangeSchema = z.object({
+    oldPassword: z.string().min(1, "기존 비밀번호를 입력하세요"),
+    password: z
+        .string()
+        .min(8, "8자 이상을 입력해주세요")
+        .regex(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/,
+            "대문자, 소문자, 특수문자가 하나 이상 씩 필요합니다",
+        ),
+    passwordConfirm: z.string().min(1, "비밀번호를 한 번 더 입력하세요"),
+});
