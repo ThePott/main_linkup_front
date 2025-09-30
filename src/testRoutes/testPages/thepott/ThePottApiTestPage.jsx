@@ -73,6 +73,7 @@ const ThePottApiTestPage = () => {
         getThenLog(`${baseURL}/api/events/?is_active=true`, callback, accessToken);
     const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
     const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
+    const getIdolKarina = (callback) => getThenLog(`${baseURL}/api/idol?artist_id=6`, callback);
 
     const getCompaniesArtists = (callback) =>
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
@@ -151,6 +152,9 @@ const ThePottApiTestPage = () => {
                         </CustomButton>
                         <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
                             <p>get idol without token</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getIdolKarina(callbackLog)}>
+                            <p>get idol karina</p>
                         </CustomButton>
                         <CustomButton onClick={() => getCompaniesArtists(callbackLog)}>
                             <p>get companies artists</p>
