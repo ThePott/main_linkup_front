@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router"; // react-router로 import
+import { useNavigate } from "react-router";
 import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 import CustomButton from "../package/customButton/CustomButton.jsx";
 import Modal from "../package/modal/Modal.jsx";
-import Navbar from "../features/layout/Navbar.jsx";
 import styles from "./SuperUserPage.module.css";
 
 const SuperUserPage = () => {
@@ -22,6 +21,7 @@ const SuperUserPage = () => {
     }
   }, [access_token, navigate]);
 
+  // 유저 목록 불러오기
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -52,21 +52,15 @@ const SuperUserPage = () => {
     if (!selectedUser) return;
 
     try {
+      let updatedUser;
       if (actionType === "ban") {
-        await banUser(selectedUser.id, access_token);
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === selectedUser.id ? { ...u, user_type: "ban" } : u
-          )
-        );
+        updatedUser = await banUser(selectedUser.id, access_token);
       } else if (actionType === "unban") {
-        await unbanUser(selectedUser.id, access_token);
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === selectedUser.id ? { ...u, user_type: "normal" } : u
-          )
-        );
+        updatedUser = await unbanUser(selectedUser.id, access_token);
       }
+      setUsers((prev) =>
+        prev.map((u) => (u.id === selectedUser.id ? updatedUser : u))
+      );
     } catch (err) {
       console.error(err);
     } finally {
@@ -76,13 +70,7 @@ const SuperUserPage = () => {
 
   return (
     <div className={styles.superuserContainer}>
-      {/* 상단 바 */}
-      <div className={styles.topBar}>
-        <h1 className={styles.title}>관리 페이지</h1>
-        <div className={styles.navbarWrapper}>
-          <Navbar />
-        </div>
-      </div>
+      <h1 className={styles.title}>관리 페이지</h1>
 
       {users.length === 0 ? (
         <p>유저 목록을 불러오지 못했습니다.</p>
