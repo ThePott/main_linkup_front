@@ -3,39 +3,29 @@ import RoundBox from "../../../package/RoundBox";
 import CustomImageBanner from "../../../shared/CustomImageBanner/CustomImageBanner";
 import CustomImageIcon from "../../../shared/CustomImageIcon/CustomImageIcon";
 import styles from "./TotalContent.module.css";
-import mockData from "../../../shared/store/dummyHeehaa.json";
-import axiosInstance from "../../../shared/services/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { useNavigate } from "react-router";
-
-// CustomImageIcon - 구독 api와 연결이 필요.
-// 현재 artist_id는 undefined임 mockdata로 연결되어 있기 때문
-// 구독한 아이돌의 일정을 가져와야 하는데 우선은 /events/ 주소로 연결하여
-// 일정 가져옴 - 구독에 따른 일정을 가져와야 하기때문에 로직 추가가 필요할 거 같음
+import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+import useLinkUpStore from "../../../shared/store/store";
+import { Vstack } from "../../../package/layout";
 
 const TotalContent = () => {
-    const subscribeArray1 = mockData;
-    const url = subscribeArray1[0].img_banner;
-
+    const artistArray = useLinkUpStore((state) => state.artistArray);
     const [page, setPage] = useState(1);
     const itemsPerPage = 5;
     const navigate = useNavigate();
 
-    const getSchedule = async () => {
-        const res = await axiosInstance.get("events");
-        return res.data.events;
-    };
-
+    const endpoint = "/api/events";
     const {
         isPending,
         error,
-        data: subscribeArray,
+        data: scheduleArray,
     } = useQuery({
-        queryKey: ["events"],
-        queryFn: () => getSchedule(),
-        staleTime: 1000 * 60 * 3,
+        queryKey: [endpoint],
+        queryFn: () => axiosReturnsData("GET", endpoint),
+        onError: (error) => console.error(error),
     });
 
     if (isPending) return <p>데이터를 불러오는 중입니다...</p>;
@@ -43,16 +33,18 @@ const TotalContent = () => {
 
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentItems = subscribeArray?.slice(startIndex, endIndex) ?? [];
-    const totalPages = Math.ceil((subscribeArray?.length ?? 0) / itemsPerPage);
+    const currentItems = scheduleArray.events?.slice(startIndex, endIndex) ?? [];
+    const totalPages = Math.ceil((scheduleArray.events?.length ?? 0) / itemsPerPage);
+
+    //배너 이미지 api가 모호하여 임의로 지정
+    const url = artistArray[0].artist_image_url;
 
     return (
-        // unique key가 필요 - 커스텀이미지아이콘 & currentItems
         <div className={styles.container}>
-            {subscribeArray1.map((artist) => (
+            {artistArray.map((artist) => (
                 <CustomImageIcon
-                    key={artist.id}
-                    url={artist.img_face}
+                    key={artist.artist_id}
+                    url={artist.artist_image_url}
                     className={styles.circleIcon}
                     onClick={() => {
                         navigate(`/detail/artist/${artist.artist_id}`);
@@ -65,19 +57,14 @@ const TotalContent = () => {
             <p className={styles.text}>스케줄</p>
             <section className={styles.calendarContainer}>
                 <Calendar className={styles.calendar} />
-                <span className={styles.dailyScheduleContainer}>
+                <Vstack className={styles.dailyScheduleContainer}>
                     {currentItems.map((schedule) => (
-                        <RoundBox
-                            className={styles.dailySchedyleRoundbox}
-                            key={schedule.id}
-                        >
+                        <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
                             <li className={styles.dailySchedule}>
                                 <span className={styles.date}>
                                     {schedule.start_time.slice(0, 10)}
                                 </span>
-                                <span className={styles.scheduleTitle}>
-                                    {schedule.title}
-                                </span>
+                                <span className={styles.scheduleTitle}>{schedule.title}</span>
                             </li>
                         </RoundBox>
                     ))}
@@ -93,15 +80,13 @@ const TotalContent = () => {
                             {page} / {totalPages}
                         </span>
                         <CustomButton
-                            onClick={() =>
-                                setPage((p) => Math.min(p + 1, totalPages))
-                            }
+                            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                             disabled={page === totalPages}
                         >
                             다음
                         </CustomButton>
                     </div>
-                </span>
+                </Vstack>
             </section>
         </div>
     );

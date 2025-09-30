@@ -12,6 +12,7 @@
 .logo {
     font-weight: bold;
     color: var(--color-vivid);
+    text-decoration: none;
 }
 
 .searchbar {

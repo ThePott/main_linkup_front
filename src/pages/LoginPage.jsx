@@ -1,13 +1,15 @@
+import styles from "./LoginPage.module.css";
+import { Link } from "react-router";
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
 import { loginInputPropsEntryArray } from "../features/login/loginServices/loginInputProps";
-import { useLogin } from "../features/login/loginServices/useLogin";
 import CustomButton from "../package/customButton/CustomButton";
 import CustomInputLabeled from "../package/CustomInputLabeled";
-import { FullScreen, Vstack } from "../package/layout";
+import { FullScreen, Hstack, Vstack } from "../package/layout";
 import RoundBox from "../package/RoundBox";
+import useAuth from "../shared/services/useAuth";
 
 const LoginPage = () => {
-    const { error, isPending, postMutation } = useLogin();
+    const { errorLogin, isPendingLogin, postLoginMutation } = useAuth();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -17,7 +19,7 @@ const LoginPage = () => {
             password: passwordHTMLElement.value,
         };
 
-        postMutation.mutate(body);
+        postLoginMutation.mutate(body);
     };
 
     return (
@@ -26,7 +28,7 @@ const LoginPage = () => {
                 <Vstack gap="xl">
                     <Vstack style={{ width: "400px" }}>
                         <form onSubmit={handleSubmit}>
-                            <Vstack>
+                            <Vstack gap="xl">
                                 {loginInputPropsEntryArray.map((entry) => (
                                     <CustomInputLabeled
                                         key={entry[0]}
@@ -44,6 +46,13 @@ const LoginPage = () => {
                         <SocialLoginButton provider={"KAKAO"} />
                         <SocialLoginButton provider={"FACEBOOK"} />
                     </Vstack>
+
+                    <Hstack>
+                        <p className={styles.smallSubText}>계정이 필요한가요?</p>
+                        <Link to="/signup" className={styles.smallLink}>
+                            가입하기
+                        </Link>
+                    </Hstack>
                 </Vstack>
             </RoundBox>
         </FullScreen>

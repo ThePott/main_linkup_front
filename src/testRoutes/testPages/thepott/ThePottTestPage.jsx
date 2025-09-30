@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton.jsx";
 import Skeleton from "../../../package/skeleton/Skeleton.jsx";
 import { Hstack, Vstack } from "../../../package/layout/";
@@ -7,6 +7,72 @@ import Modal from "../../../package/modal/Modal.jsx";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer.jsx";
 import GridContainer from "../../../package/gridContainer/GridContainer.jsx";
 import CustomImage from "../../../package/customImage/CustomImage.jsx";
+import {
+    addDays,
+    eachDayOfInterval,
+    endOfWeek,
+    getMonth,
+    getYear,
+    startOfWeek,
+    subDays,
+} from "date-fns";
+import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar.jsx";
+import axiosInstance, { axiosReturnsData } from "../../../shared/services/axiosInstance.js";
+import useLinkUpStore from "../../../shared/store/store.js";
+
+const getFirstDayOfMonth = (date) => {
+    return new Date(getYear(date), getMonth(date), 1);
+};
+const getLastDateOfMonth = (date) => {
+    return new Date(getYear(date), getMonth(date) + 1, 0);
+};
+
+const getTrailingPrevMonthDateArray = (year, month, day) => {
+    const date = new Date(year, month - 1, day);
+    const startDay = getFirstDayOfMonth(date);
+    if (startDay.getDay() === 0) {
+        return [];
+    }
+
+    const result = eachDayOfInterval({
+        start: startOfWeek(getFirstDayOfMonth(date)),
+        end: subDays(getFirstDayOfMonth(date), 1),
+    });
+    return result;
+};
+
+const getLeadingNextMonthDateArray = (year, month, day) => {
+    const date = new Date(year, month - 1, day);
+    const lastDay = getLastDateOfMonth(date);
+    console.log({ lastDay });
+
+    if (lastDay.getDay() === 6) {
+        const result = [];
+        return result;
+    }
+    const result = eachDayOfInterval({
+        start: addDays(getLastDateOfMonth(date), 1),
+        end: endOfWeek(getLastDateOfMonth(date)),
+    });
+    return result;
+};
+
+const CalendarRowDebugButton = () => {
+    const checkAroundEnd = () => {
+        const endResult = getLeadingNextMonthDateArray(2025, 2, 2);
+        console.log({ endResult });
+    };
+    const checkAroundStart = () => {
+        const startResult = getTrailingPrevMonthDateArray(2025, 2, 2);
+        console.log({ startResult });
+    };
+    return (
+        <>
+            <CustomButton onClick={checkAroundStart}>check around start of the month</CustomButton>
+            <CustomButton onClick={checkAroundEnd}>check around end of the month</CustomButton>
+        </>
+    );
+};
 
 const CircleImage = () => {
     return (
@@ -27,14 +93,25 @@ const SampleImage = () => {
     );
 };
 
+const getEvents = async () => {
+    const data = await axiosReturnsData("GET", "/api/events");
+    const eventArray = data.events;
+    useLinkUpStore.setState({ eventArray });
+};
+
 const ThePottTestPage = () => {
     const [isOn, setIsOn] = useState(false);
     const handleClick = () => {
         setIsOn(!isOn);
     };
 
+    useEffect(() => {
+        getEvents();
+    }, []);
+
     return (
         <div>
+            <CalendarRowDebugButton />
             <Modal isOn={isOn} onBackgroundClick={handleClick}>
                 <p>anything here yayayay</p>
                 <p>anything here yayayay</p>
@@ -76,7 +153,7 @@ const ThePottTestPage = () => {
                 <CircleImage />
             </Hstack>
 
-            <GridContainer cols="auto" colMinWidth={"var(--sizing-md)"}>
+            <GridContainer cols="auto" colMinWidth={"md"}>
                 <SampleImage />
                 <SampleImage />
                 <SampleImage />
@@ -101,10 +178,7 @@ const ThePottTestPage = () => {
                 >
                     sidebar
                 </div>
-                <FlexOneContainer
-                    style={{ backgroundColor: "var(--color-blue)" }}
-                    isYScrollable
-                >
+                <FlexOneContainer style={{ backgroundColor: "var(--color-blue)" }} isYScrollable>
                     <p>여기에 아무거나 있다고 치고</p>
                     <p>여기에 아무거나 있다고 치고</p>
                     <p>여기에 아무거나 있다고 치고</p>
@@ -122,6 +196,7 @@ const ThePottTestPage = () => {
                     <p>여기에 아무거나 있다고 치고</p>
                 </FlexOneContainer>
             </Hstack>
+
             <Vstack center>
                 <Skeleton widthInPixel={600} heightInPixel={100} />
                 <CustomButton>shape="RECTANGLE" - 기본값</CustomButton>
@@ -140,13 +215,22 @@ const ThePottTestPage = () => {
                 <CustomButton isOn={isOn} color="BLUE" onClick={handleClick}>
                     color="BLUE"
                 </CustomButton>
-                <Calendar />
+                <Calendar
+                    additionalButtonArray={[
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                        <CustomButton>this</CustomButton>,
+                    ]}
+                />
                 <Vstack items="center" style={{ alignItems: "center" }}>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                     <CustomButton style={{ width: "100px" }}>asdf</CustomButton>
                 </Vstack>
+                <ArtistCalendar />
             </Vstack>
         </div>
     );

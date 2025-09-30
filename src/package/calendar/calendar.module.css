@@ -6,6 +6,7 @@
 
 .headerCell {
     padding: var(--spacing-xs);
+    text-align: center;
 }
 
 .businessDay {
@@ -30,7 +31,7 @@
 .dayCircle {
     width: 24px;
     height: 24px;
-    border-radius: 999px;
+    border-radius: var(--rounded-full);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,4 +51,10 @@
     border-radius: var(--rounded-md);
     background-color: var(--color-vivid);
     color: var(--color-vivid-inverted);
+}
+
+.eventDot {
+    background-color: var(--color-vivid);
+    padding: var(--spacing-xs);
+    border-radius: var(--rounded-full);
 }

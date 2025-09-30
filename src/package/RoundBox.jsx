@@ -1,24 +1,28 @@
-import React from "react";
 import styles from "./RoundBox.module.css";
 
-const paddingSize = {
-    XS: "var(--spacing-xs)",
-    SM: "var(--spacing-sm)",
-    MD: "var(--spacing-md)",
-    LG: "var(--spacing-lg)",
-    XL: "var(--spacing-xl)",
-};
-
-const RoundBox = ({ padding, children, style, className, ...rest }) => {
-    const paddingValue = padding ? paddingSize[padding.toUpperCase()] : null;
+/**
+ * {"none" | "xs" | "sm" | "md" | "lg" | "xl"}
+ */
+const RoundBox = ({
+    isShadowed = true,
+    padding = "none",
+    textAlign = "center",
+    children,
+    style,
+    className,
+    ...rest
+}) => {
+    const styleForVar = {};
+    styleForVar["--shadow"] = isShadowed ? "var(--drop-shadow-md)" : 0;
+    styleForVar["--padding"] = padding === "none" ? 0 : `var(--spacing-${padding.toLowerCase()})`;
+    styleForVar["--border"] = isShadowed ? "none" : "1px solid var(--color-dimdimdim)";
+    styleForVar["--border-color-hover"] = isShadowed ? "transparent" : "var(--color-dimdim)";
+    styleForVar["--text-align"] = textAlign;
 
     return (
         <div
-            className={[styles.container, className].filter(Boolean).join(" ")}
-            style={{
-                padding: paddingValue,
-                ...style,
-            }}
+            className={`${styles.container} ${className}`}
+            style={{ ...styleForVar, ...style }}
             {...rest}
         >
             {children}

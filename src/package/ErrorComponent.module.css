@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: var(--spacing-lg);
+    width: var(--sizing-lg);
+    height: var(--sizing-lg);
+}
+
+.title {
+    padding-left: var(--spacing-xl);
+    font-size: var(--text-xl);
+}

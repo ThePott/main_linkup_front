@@ -43,26 +43,20 @@ const ImageInput = ({ name, defaultSrc }) => {
         };
     }, [file]);
 
+    useEffect(() => {
+        if (!defaultSrc) {
+            return;
+        }
+        setPreview(defaultSrc);
+    }, [defaultSrc]);
+
     return (
         <RoundBox>
-            <input
-                hidden
-                name={name}
-                type="file"
-                onChange={handleChange}
-                ref={inputRef}
-            />
-            <img
-                src={preview}
-                className={styles.preview}
-                onClick={handleClick}
-            />
+            <input hidden name={name} type="file" onChange={handleChange} ref={inputRef} />
+            <img src={preview} className={styles.preview} onClick={handleClick} />
 
             {file && (
-                <CustomButton
-                    className={styles.closeButton}
-                    onClick={handleClear}
-                >
+                <CustomButton className={styles.closeButton} onClick={handleClear}>
                     X
                 </CustomButton>
             )}

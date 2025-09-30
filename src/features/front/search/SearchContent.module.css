@@ -1,30 +1,25 @@
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
+.eventColumn {
+    height: var(--sizing-lg);
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
-.recommendedContainer {
+.eventBoxEmpty {
     display: flex;
-    gap: 1rem;
+    justify-content: center;
+    align-items: center;
 }
 
-.groupMemberRow {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
+.artistName {
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
 }
 
-.clickable {
-    cursor: pointer;
-    flex: 0 0 auto;
+.title {
+    font-weight: var(--font-weight-semibold);
 }
 
-.scheduleList {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.groupBlock {
-    margin-bottom: 2rem;
+.description {
+    color: var(--color-muted);
 }

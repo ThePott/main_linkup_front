@@ -1,0 +1,13 @@
+.bigLabel {
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.smallLabel {
+    font-size: var(--text-sm);
+}
+
+.container {
+    color: var(--color);
+    text-align: start;
+}

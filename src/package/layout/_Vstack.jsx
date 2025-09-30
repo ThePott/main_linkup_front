@@ -1,5 +1,4 @@
 import CenterInRow from "./_CenterInRow";
-import { gapToClassName, spacingToCssVar } from "./layoutUtils";
 import styles from "./_Vstack.module.css";
 
 const BaseVstack = ({
@@ -12,18 +11,17 @@ const BaseVstack = ({
     ...props
 }) => {
     const defaultClassName = styles.vstack;
-    const gapClassName = gapToClassName[gap];
 
     const vstackStyle = {};
     vstackStyle["--justify"] = justify;
     vstackStyle["--items"] = items;
-    vstackStyle["--gap"] = spacingToCssVar[gap];
+    vstackStyle["--gap"] = gap === "non" ? 0 : `var(--spacing-${gap})`;
 
     return (
         <div
             {...props}
             style={{ ...vstackStyle, ...style }}
-            className={`${defaultClassName} ${gapClassName} ${className}`}
+            className={`${defaultClassName}  ${className}`}
         >
             {children}
         </div>

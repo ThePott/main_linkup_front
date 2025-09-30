@@ -1,0 +1,29 @@
+.form {
+    width: 100%;
+    display: flex;
+    padding: var(--spacing-sm);
+}
+
+.input {
+    flex: 1 0 auto;
+    font-size: var(--text-md);
+    padding: var(--spacing-sm);
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-top-left-radius: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-blue);
+}
+
+.button {
+    background-color: transparent;
+    font-weight: bold;
+    font-size: var(--text-sm);
+    border-radius: var(--spacing-sm);
+    padding: 0 var(--spacing-sm);
+    transition: all 150ms ease-in;
+}
+
+.button:hover {
+    transform: scale(1.1);
+}

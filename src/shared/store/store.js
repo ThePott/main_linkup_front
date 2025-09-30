@@ -37,6 +37,20 @@ const useLinkUpStore = create()(
                 set({ eventArray });
             },
 
+            eventDict: {},
+            setEventDict: (eventDict) => {
+                set({ eventDict });
+            },
+
+            selectedEvent: null,
+            setSelectedEvent: (selectedEvent) => {
+                set({ selectedEvent });
+            },
+
+            selectedMonthEventArray: [],
+            setSelectedMonthEventArray: (selectedMonthEventArray) =>
+                set({ selectedMonthEventArray }),
+
             artistArray: [],
             setArtistArray: (artistArray) => {
                 set({ artistArray });
@@ -55,10 +69,20 @@ const useLinkUpStore = create()(
                 set({ fanPostArray: [newPost, ...prev] });
             },
 
-            selectedEvent: null,
-            setSelectedEvent: (selectedEvent) => {
-                set({ selectedEvent });
-            },
+            commentsByPostId: {},
+            addComment: (postId, comment) =>
+                set((state) => {
+                    const existingComments = state.commentsByPostId[postId] ?? [];
+                    return {
+                        commentsByPostId: {
+                            ...state.commentsByPostId,
+                            [postId]: [...existingComments, comment],
+                        },
+                    };
+                }),
+
+            selectedFanPost: null,
+            setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
 
             groupArray: [],
             setGroupArray: (groupArray) => set({ groupArray }),

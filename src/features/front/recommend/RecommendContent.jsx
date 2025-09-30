@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import GridContainer from "../../../package/gridContainer/GridContainer";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import SuggestedCard from "../../../shared/SuggestedCard";
 import styles from "./RecommendContent.module.css";
 import { useEffect } from "react";
 import useLinkUpStore from "../../../shared/store/store";
+import RoundBox from "../../../package/RoundBox";
+import ErrorComponent from "../../../package/ErrorComponent";
+import RecommendContentSkeleton from "./RecommendContentSkeleton";
+import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
 
 const RecommendContent = () => {
     const recommendArtistArray = useLinkUpStore((state) => state.recommendArtistArray);
@@ -18,7 +21,7 @@ const RecommendContent = () => {
         // 만약 달리 사용하고 싶으시면 기존처럼 useQuery에 직접 세팅하셔도 됩니다.
         // staleTime: 1000 * 60 * 3,
         onError: (error) => {
-        console.error(error);
+            console.error(error);
         },
     });
 
@@ -29,18 +32,28 @@ const RecommendContent = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
-    if (isPending) return <p>데이터를 불러오는 중입니다...</p>;
-    if (error) return <p>알 수 없는 오류가 발생했습니다.</p>;
+    if (isPending)
+        return (
+            <div className={styles.container}>
+                <RecommendContentSkeleton />
+            </div>
+        );
+    if (error)
+        return (
+            <RoundBox className={styles.roundboxContainer}>
+                <ErrorComponent />
+            </RoundBox>
+        );
 
     return (
         <div className={styles.container}>
-        <GridContainer cols="auto" colMinWidth="200px">
-            {(recommendArtistArray || []).map((artist) => (
-            <SuggestedCard key={artist.id} artist={artist} />
-            ))}
-        </GridContainer>
+            <GridCardContainer>
+                {(recommendArtistArray || []).map((artist) => (
+                    <SuggestedCard key={artist.id} artist={artist} />
+                ))}
+            </GridCardContainer>
         </div>
     );
-    };
+};
 
 export default RecommendContent;

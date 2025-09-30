@@ -12,11 +12,13 @@ import { format } from "date-fns";
 import mockData from "../../shared/store/dummyHeehaa.json";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
+import FanPostGrid from "../../shared/FanPostGrid";
 
 const getSubscriptions = async () => {
     const data = await axiosReturnsData("GET", "/api/subscriptions");
     useLinkUpStore.setState({ artistArray: data });
 };
+
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -130,12 +132,8 @@ const DetailContent = () => {
             </div>
 
             {/* 5. 팬포스트 */}
-            <FanPostSection
-                posts={fanPostArray}
-                limit={24}
-                cols={4}
-                onClickPost={(postId) => navigate(`/post/${postId}`)}
-            />
+            {/* isBlurred: 구독한 아티스트면 false, 아니면 true */}
+            <FanPostGrid fanPostArray={postResultArray} isBlurred={false} />
 
             {/* 6. 모달 */}
             <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>

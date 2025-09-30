@@ -1,10 +1,10 @@
 import GridCardContainer from "./GridCardContainer/GridCardContainer.jsx";
 import CustomImageCard from "./CustomImageCard/CustomImageCard.jsx";
 
-const FanPostSection = ({ posts, onClickPost, limit = posts.length, cols = "auto" }) => {
+const FanPostSection = ({ posts, onClickPost, limit = posts.length }) => {
     const limitedPostArray = posts?.slice(0, limit) ?? [];
     return (
-        <GridCardContainer cols={cols}>
+        <GridCardContainer>
             {limitedPostArray.map((post) => (
                 <div key={post.postId} onClick={() => onClickPost(post.postId)}>
                     <CustomImageCard url={post.imgUrl} alt={post.title} />

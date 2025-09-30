@@ -1,38 +1,20 @@
-import { useState } from "react";
+import styles from "./CustomInput.module.css";
 
-const CustomInput = (props) => {
-  const {
-    placeholder = "",
-    onChange,
-    onEnter,
-    defaultValue = "",
-    style = {},
-    ...rest
-  } = props;
+const CustomInput = ({ placeholder = "", onEnter, className, ...props }) => {
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter" && onEnter) {
+            onEnter(event.target.value);
+        }
+    };
 
-  const [value, setValue] = useState(defaultValue);
-
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    if (onChange) onChange(e.target.value);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && onEnter) {
-      onEnter(value);
-    }
-  };
-
-  return (
-    <input
-      placeholder={placeholder}
-      value={value}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      style={{ border: "1px solid #ccc", padding: "0.5rem", ...style }}
-      {...rest}
-    />
-  );
+    return (
+        <input
+            {...props}
+            placeholder={placeholder}
+            onKeyDown={handleKeyDown}
+            className={`${styles.input} ${className}`}
+        />
+    );
 };
 
 export default CustomInput;

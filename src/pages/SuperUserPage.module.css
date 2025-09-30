@@ -1,4 +1,4 @@
-.superuser-container {
+.superuserContainer {
   padding: 20px;
   font-family: Arial, sans-serif;
 }
@@ -13,37 +13,37 @@
   margin-bottom: 20px;
 }
 
-.search-bar {
+.searchBar {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.search-bar input {
+.searchBar input {
   width: 300px;
   padding: 8px;
   border: 1px solid #ccc;
 }
 
-.user-table {
+.userTable {
   width: 100%;
   border-collapse: collapse;
 }
 
-.user-table th,
-.user-table td {
+.userTable th,
+.userTable td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
 
-.user-table th {
+.userTable th {
   background: #666;
   color: white;
 }
 
-.user-table button:hover {
+.userTable button:hover {
   background: #aaa;
   color: white;
 }

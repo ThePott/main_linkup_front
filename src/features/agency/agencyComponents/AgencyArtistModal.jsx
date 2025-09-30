@@ -8,7 +8,6 @@ import useLinkUpStore from "../../../shared/store/store";
 import useAgentArtistModal from "../agencyServices/useAgencyArtistModal";
 import { useRef } from "react";
 import ImageInput from "../../../package/imageInput/ImageInput";
-import RoundBox from "../../../package/RoundBox";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -44,6 +43,14 @@ const ArtistInput = ({ selectedArtist, info }) => {
     );
 };
 
+const DebugButton = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const handleClick = () => {
+        console.log({ selectedArtist });
+    };
+    return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
+};
+
 const AgencyArtistModal = () => {
     const formRef = useRef(null);
 
@@ -51,8 +58,7 @@ const AgencyArtistModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const { isPending, error, postMutation, putMutation, deleteMutation } =
-        useAgentArtistModal();
+    const { isPending, error, postMutation, putMutation, deleteMutation } = useAgentArtistModal();
 
     const dismiss = () => {
         setModalKey(null);
@@ -60,9 +66,7 @@ const AgencyArtistModal = () => {
 
     const handleDelete = () => {
         if (!selectedArtist) {
-            throw new Error(
-                "---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함",
-            );
+            throw new Error("---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함");
         }
 
         deleteMutation.mutate(selectedArtist.id);
@@ -72,31 +76,12 @@ const AgencyArtistModal = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log({ event });
 
-        const target = event.target;
-        const stage_name = target.stage_name.value;
-        const group_name = target.group_name.value;
-        const debut_date = target.debut_date.value;
-        const birth_date = target.birth_date.value;
-        const artist_type = group_name ? "group" : "individual";
+        const formData = new FormData(event.target);
 
-        // Get actual File objects instead of values
-        const face_image = target.face_image.files[0];
-        const torso_image = target.torso_image.files[0];
-        const banner_image = target.banner_image.files[0];
-
-        const formData = new FormData();
-        formData.append("stage_name", stage_name);
-        formData.append("group_name", group_name);
-        formData.append("debut_date", debut_date);
-        formData.append("birth_date", birth_date);
-        formData.append("artist_type", artist_type);
-
-        // Append files if they exist
-        if (face_image) formData.append("face_image", face_image);
-        if (torso_image) formData.append("torso_image", torso_image);
-        if (banner_image) formData.append("banner_image", banner_image);
+        // Override computed field
+        const artist_type = formData.get("group_name") ? "group" : "individual";
+        formData.set("artist_type", artist_type);
 
         if (selectedArtist) {
             formData.append("id", selectedArtist.id);
@@ -121,25 +106,12 @@ const AgencyArtistModal = () => {
                 <GridContainer gap="MD" cols={4}>
                     <Vstack>
                         {inputFieldInfoArray.map((info) => (
-                            <ArtistInput
-                                key={info}
-                                selectedArtist={selectedArtist}
-                                info={info}
-                            />
+                            <ArtistInput key={info} selectedArtist={selectedArtist} info={info} />
                         ))}
                     </Vstack>
-                    <ImageInput
-                        name="face_image"
-                        defaultSrc={selectedArtist?.face_image}
-                    />
-                    <ImageInput
-                        name="torso_image"
-                        defaultSrc={selectedArtist?.torso_image}
-                    />
-                    <ImageInput
-                        name="banner_image"
-                        defaultSrc={selectedArtist?.banner_image}
-                    />
+                    <ImageInput name="face_image" defaultSrc={selectedArtist?.face_url} />
+                    <ImageInput name="torso_image" defaultSrc={selectedArtist?.torso_url} />
+                    <ImageInput name="banner_image" defaultSrc={selectedArtist?.banner_url} />
 
                     <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (
@@ -149,6 +121,7 @@ const AgencyArtistModal = () => {
                     )}
                 </GridContainer>
             </form>
+            <DebugButton />
         </Modal>
     );
 };

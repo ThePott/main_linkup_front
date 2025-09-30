@@ -4,7 +4,7 @@ import CustomButton from "../../package/customButton/CustomButton.jsx";
 import { apiAuthMe } from "../../shared/services/linkupApi.js";
 import useLinkUpStore from "../../shared/store/store";
 
-const DeleteAccountModal = ({ isOpen, onClose, onDeleted }) => {
+const DeleteAccountModal = ({ isOn, onClose }) => {
   const [resultModal, setResultModal] = useState({
     open: false,
     message: "",
@@ -16,18 +16,17 @@ const DeleteAccountModal = ({ isOpen, onClose, onDeleted }) => {
       // 회원 탈퇴 API 호출
       await apiAuthMe("DELETE");
 
-      // 탈퇴 성공 후 store 초기화
+      // store 초기화
       const store = useLinkUpStore.getState();
       store.setAccessToken(null);
       store.setUser(null);
 
-      // 결과 모달 설정
+      // 성공 모달 열기
       setResultModal({
         open: true,
         message: "회원 탈퇴가 완료되었습니다.",
         onConfirm: () => {
-          if (onDeleted) onDeleted();
-          onClose();
+          window.location.href = "/"; // 탈퇴 후 메인으로 이동
           setResultModal((prev) => ({ ...prev, open: false }));
         },
       });
@@ -46,7 +45,7 @@ const DeleteAccountModal = ({ isOpen, onClose, onDeleted }) => {
   return (
     <>
       {/* 탈퇴 확인 모달 */}
-      <Modal isOn={isOpen} onBackgroundClick={onClose}>
+      <Modal isOn={isOn} onBackgroundClick={onClose}>
         <h2>정말 탈퇴하시겠습니까?</h2>
         <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
           <CustomButton color="RED" shape="RECTANGLE" onClick={handleConfirm}>

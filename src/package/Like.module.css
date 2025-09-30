@@ -1,0 +1,14 @@
+.container {
+    width: var(--spacing-xl);
+}
+.toggleBtn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: var(--text-lg);
+    height: var(--text-lg);
+    font-size: var(--text-md);
+}
+.num {
+    font-size: var(--text-md);
+}
