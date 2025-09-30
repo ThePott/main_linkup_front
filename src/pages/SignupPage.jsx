@@ -3,18 +3,14 @@ import { useState } from "react";
 import RoundBox from "../package/RoundBox";
 import { Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
-import CustomInputLabeled from "../package/CustomInputLabeled";
 import { useSignup } from "../features/signup/useSignup";
-import { inputPropsDict, inputPropsEntryArray } from "../features/signup/signupInputProps";
-import {
-    checkAdditionalEmailValidity,
-    checkAdditionalPasswordValidity,
-} from "../features/signup/signupCheckValidity";
 import LabelGroup from "../package/labelGroup/LabelGroup";
 import CustomInput from "../package/CustomInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../shared/validations/zodSchema";
+import Container from "../package/layout/_Container";
+import GridContainer from "../package/gridContainer/GridContainer";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
@@ -55,11 +51,11 @@ const SignupPage = () => {
             : "비밀번호";
 
     return (
-        <div className={styles.container}>
-            <RoundBox padding="XL">
+        <Container marginTop="none" className={styles.outerContainer}>
+            <RoundBox padding="lg" className={styles.innerContainer}>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Vstack center gap="lg">
-                        <Hstack gap="none">
+                    <Vstack gap="lg">
+                        <GridContainer cols={2} gap="xs">
                             <CustomButton
                                 isOn={!isForAgency}
                                 className={styles.grow}
@@ -76,18 +72,20 @@ const SignupPage = () => {
                             >
                                 소속사
                             </CustomButton>
-                        </Hstack>
+                        </GridContainer>
 
-                        <Hstack style={{ width: "100%" }} items="end">
-                            <LabelGroup isRed={errors.email}>
-                                <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
-                                <CustomInput {...register("email")} />
-                                {errors.email && (
-                                    <LabelGroup.SmallLabel>
-                                        {errors.email.message}
-                                    </LabelGroup.SmallLabel>
-                                )}
-                            </LabelGroup>
+                        <Hstack items="end">
+                            <div className="grow">
+                                <LabelGroup isRed={errors.email}>
+                                    <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
+                                    <CustomInput {...register("email")} />
+                                    {errors.email && (
+                                        <LabelGroup.SmallLabel>
+                                            {errors.email.message}
+                                        </LabelGroup.SmallLabel>
+                                    )}
+                                </LabelGroup>
+                            </div>
                             <CustomButton
                                 type="button"
                                 onClick={handleVerificationClick}
@@ -141,7 +139,7 @@ const SignupPage = () => {
                     </Vstack>
                 </form>
             </RoundBox>
-        </div>
+        </Container>
     );
 };
 
