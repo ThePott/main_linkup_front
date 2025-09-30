@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import Calendar from "../../package/calendar/Calendar.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
@@ -8,160 +8,146 @@ import FanPostSection from "../../shared/FanPostSection.jsx";
 import RoundBox from "../../package/RoundBox.jsx";
 import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
+import { format } from "date-fns";
+import mockData from "../../shared/store/dummyHeehaa.json";
+import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
+import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
+
+const getSubscriptions = async () => {
+    const data = await axiosReturnsData("GET", "/api/subscriptions");
+    useLinkUpStore.setState({ artistArray: data });
+};
+
 
 const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
 
-    const groupArray = useLinkUpStore((state) => state.groupArray);
-    const subscribedArtistIdArray = useLinkUpStore((state) => state.subscribedArtistIdArray || []);
+    const eventArray = useLinkUpStore((state) => state.eventArray);
+    const setEventArray = useLinkUpStore((state) => state.setEventArray);
+
+    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
+    const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
+
+    const artistArray = useLinkUpStore((state) => state.artistArray);
+
     const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
 
-    // 현재 URL 선택된 그룹/ 아티스트 상세 정보
-    const [selectedArtistResult, setSelectedArtistResult] = useState(null);
-    // 그룹 일정 + 멤버 일정 종합
-    const [mergedScheduleResultArray, setMergedScheduleResultArray] = useState([]);
-    // 그룹/ 아티스트 팬포스트 배열
-    const [postResultArray, setPostResultArray] = useState([]);
-    // 구독 중인 그룹/멤버 정보(스토어에서 필터링한거)
-    const [subscribedArtistResultArray, setSubscribedArtistResultArray] = useState([]);
-    // 구독취소 모달
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const modalKey = useLinkUpStore((state) => state.modalKey);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
+
+    const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
+
+    const subscribeArray1 = mockData;
+    const url = subscribeArray1[0]?.img_banner;
 
     useEffect(() => {
-        // 선택된 아티스트(또는 그룹) 찾기
-        let selectedItem = null;
-        if (type === "group") {
-            selectedItem = groupArray.find((group) => group.id === Number(id));
-        } else if (type === "artist") {
-            selectedItem = groupArray
-                .flatMap((group) => group.memberArray)
-                .find((member) => member.id === Number(id));
-        }
-        setSelectedArtistResult(selectedItem);
+        getSubscriptions();
+    }, []);
 
-        if (selectedItem) {
-            // 그룹이면 그룹 일정 + 멤버 일정 합치기 / 아티스트면 해당 일정만
-            const newMergedScheduleResultArray =
-                type === "group"
-                    ? [
-                          // 그룹 일정
-                          ...selectedItem.groupScheduleArray.map((schedule) => ({
-                              ...schedule,
-                              owner: selectedItem.name,
-                          })),
-                          // 멤버 일정
-                          ...selectedItem.memberArray.flatMap((member) =>
-                              member.scheduleArray.map((schedule) => ({
-                                  ...schedule,
-                                  owner: member.name,
-                              })),
-                          ),
-                      ].sort((a, b) => new Date(a.sttime) - new Date(b.sttime))
-                    : selectedItem.scheduleArray.map((schedule) => ({
-                          ...schedule,
-                          owner: selectedItem.name,
-                      }));
+    useEffect(() => {
+        const fetchEvents = async (params) => {
+            try {
+                const query = new URLSearchParams({
+                    limit: 20,
+                    ...params,
+                }).toString();
+                const data = await axiosReturnsData("GET", `/api/events/?${query}`);
+                setEventArray(data.events || []);
+            } catch (err) {
+                console.error("이벤트 API 호출 에러:", err);
+                setEventArray([]);
+            }
+        };
 
-            setMergedScheduleResultArray(newMergedScheduleResultArray);
-            setPostResultArray(selectedItem.groupPostArray || selectedItem.postArray || []);
-        } else {
-            setMergedScheduleResultArray([]);
-            setPostResultArray([]);
-        }
+        const fetchFanPosts = async (artistId) => {
+            try {
+                const query = new URLSearchParams({
+                    limit: 20,
+                    artist_id: Number(artistId),
+                }).toString();
+                const data = await axiosReturnsData("GET", `/api/posts/?${query}`);
+                const posts = data.map((post) => ({
+                    postId: post.id,
+                    imgUrl: post.image_url,
+                    likes: post.likes_count ?? 0,
+                }));
+                setFanPostArray(posts);
+            } catch (err) {
+                console.error("팬포스트 API 호출 에러:", err);
+                setFanPostArray([]);
+            }
+        };
 
-        const subscribedItems = [
-            ...groupArray,
-            ...groupArray.flatMap((group) => group.memberArray),
-        ].filter((item) => subscribedArtistIdArray.includes(item.id));
-        setSubscribedArtistResultArray(subscribedItems);
-    }, [type, id, groupArray, subscribedArtistIdArray]);
-
-    const handleConfirmUnsubscribe = () => {
-        toggleSubscribe(Number(id));
-        setIsModalOpen(false);
-    };
-
-    if (!selectedArtistResult) {
-        return <div>해당 {type === "group" ? "그룹" : "아티스트"}를 찾을 수 없습니다.</div>;
-    }
+        fetchEvents({ artist_id: id });
+        fetchFanPosts(id);
+    }, [type, id, setEventArray, setFanPostArray]);
 
     return (
         <div className={styles.container}>
             {/* 1. 상단 */}
             <div className={styles.topBar}>
-                {subscribedArtistResultArray.map((artistItem) => (
-                    <div
-                        key={artistItem.id}
-                        onClick={() =>
-                            navigate(
-                                `/detail/${
-                                    artistItem.isGroup ? "group" : "artist"
-                                }/${artistItem.id}`,
-                            )
-                        }
-                        className={styles.subscribedItem}
-                    >
-                        <CustomImageIcon
-                            url={artistItem.imgFace}
-                            alt={artistItem.name}
-                            className={styles.subscribedImage}
-                        />
-                    </div>
+                {artistArray.map((artistItem) => (
+                    <CustomImageIcon
+                        key={artistItem.artist_id}
+                        url={artistItem.artist_image_url}
+                        className={styles.circleIcon}
+                        onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
+                    />
                 ))}
-
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
-                        color="MONO"
+                        color={isSubscribed ? "MONO" : "PRIMARY"}
                         isOn
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => setModalKey("subscribeModal")}
                     >
-                        구독중
+                        {isSubscribed ? "구독중" : "구독"}
                     </CustomButton>
                 </div>
             </div>
 
-            {/* 2. 달력 */}
-            <Calendar schedules={mergedScheduleResultArray} />
+            {/* 2. 배너 */}
+            <RoundBox className={styles.bannerContainer}>
+                <CustomImageBanner url={url} className={styles.banner} />
+            </RoundBox>
 
-            {/* 3. 최신 일정 */}
+            {/* 3. 달력 */}
+            <Calendar schedules={eventArray} />
+
+            {/* 4. 최신 일정 */}
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {mergedScheduleResultArray.slice(0, 3).map((schedule, index) => (
-                        <RoundBox key={index} padding="MD">
-                            {schedule.owner} {schedule.title} - {schedule.sttime}
-                        </RoundBox>
-                    ))}
+                    {eventArray.map((schedule) => {
+                        const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
+                        return (
+                            <RoundBox key={schedule.id}>
+                                {schedule.title} — {dateOnly}
+                            </RoundBox>
+                        );
+                    })}
                 </div>
             </div>
 
-            {/* 4. 팬포스트 */}
+            {/* 5. 팬포스트 */}
             {/* isBlurred: 구독한 아티스트면 false, 아니면 true */}
             <FanPostGrid fanPostArray={postResultArray} isBlurred={false} />
 
-            {/* 모달 */}
-            <Modal isOn={isModalOpen} onBackgroundClick={() => setIsModalOpen(false)}>
-                <h3>구독을 취소하시겠습니까?</h3>
-                <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
+            {/* 6. 모달 */}
+            <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
+                <div>
+                    <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
                     <CustomButton
-                        shape="RECTANGLE"
-                        color="RED"
-                        isOn
-                        onClick={handleConfirmUnsubscribe}
+                        onClick={async () => {
+                            await toggleSubscribe(Number(id));
+                            setModalKey(null);
+                        }}
                     >
-                        예
+                        확인
                     </CustomButton>
-                    <CustomButton
-                        shape="RECTANGLE"
-                        color="MONO"
-                        isOn
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        아니요
-                    </CustomButton>
+                    <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
             </Modal>
         </div>
