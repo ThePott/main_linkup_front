@@ -23,6 +23,9 @@ const LoginPage = () => {
     } = useForm({ resolver: zodResolver(loginSchema) });
 
     useEffect(() => {
+        if (!errorLogin) {
+            return;
+        }
         setError("password", {
             type: "server",
             message: "이메일 또는 비밀번호가 잘못되었습니다",
@@ -53,7 +56,7 @@ const LoginPage = () => {
                                 </LabelGroup>
                                 <LabelGroup isRed={errors.password}>
                                     <LabelGroup.BigLabel>비밀번호</LabelGroup.BigLabel>
-                                    <CustomInput {...register("password")} />
+                                    <CustomInput {...register("password")} type="password" />
                                     {errors.password && (
                                         <LabelGroup.SmallLabel>
                                             {errors.password.message}
