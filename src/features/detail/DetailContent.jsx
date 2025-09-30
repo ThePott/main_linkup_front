@@ -13,7 +13,7 @@ import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
 
 const getSubscriptions = async () => {
-    const data = await axiosReturnsData("GET", "/api/subscriptions");
+    const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
     useLinkUpStore.setState({ artistArray: data });
 };
 
@@ -39,7 +39,6 @@ const DetailContent = () => {
     const currentArtist = artistArray.find((a) => a.artist_id === Number(id));
     const imageUrl = currentArtist?.banner_url;
 
-    // ✅ 아이콘 스크롤 참조
     const scrollRef = useRef(null);
 
     const scrollLeft = () => {
