@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router"; // react-router로 import
+import { useNavigate } from "react-router";
 import useLinkUpStore from "../shared/store/store";
 import { fetchUsers, banUser, unbanUser } from "../features/super-user/SuperuserApi";
 import CustomButton from "../package/customButton/CustomButton.jsx";
 import Modal from "../package/modal/Modal.jsx";
-import Navbar from "../features/layout/Navbar.jsx";
 import styles from "./SuperUserPage.module.css";
 
 const SuperUserPage = () => {
@@ -22,24 +21,25 @@ const SuperUserPage = () => {
     }
   }, [access_token, navigate]);
 
+  // 유저 목록 불러오기
+  const loadUsers = async () => {
+    try {
+      if (!access_token) throw new Error("토큰이 없습니다.");
+      const data = await fetchUsers(access_token);
+      const usersArray = Array.isArray(data) ? data : data.users || [];
+      setUsers(usersArray);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        if (!access_token) throw new Error("토큰이 없습니다.");
-        const data = await fetchUsers(access_token);
-        const usersArray = Array.isArray(data) ? data : data.users || [];
-        setUsers(usersArray);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     loadUsers();
   }, [access_token]);
 
   // 모달 열기
   const openModal = (user, type) => {
-    // unban 시 원래 타입(prevType)을 기억
-    setSelectedUser({ ...user, prevType: user.user_type === "ban" ? "fan" : user.user_type });
+    setSelectedUser(user);
     setActionType(type);
     setModalOpen(true);
   };
@@ -57,21 +57,12 @@ const SuperUserPage = () => {
     try {
       if (actionType === "ban") {
         await banUser(selectedUser.id, access_token);
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === selectedUser.id ? { ...u, user_type: "ban" } : u
-          )
-        );
       } else if (actionType === "unban") {
         await unbanUser(selectedUser.id, access_token);
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === selectedUser.id
-              ? { ...u, user_type: selectedUser.prevType || "fan" }
-              : u
-          )
-        );
       }
+
+      // BE에 요청 후 전체 유저 목록 재로딩
+      await loadUsers();
     } catch (err) {
       console.error(err);
     } finally {
@@ -81,13 +72,7 @@ const SuperUserPage = () => {
 
   return (
     <div className={styles.superuserContainer}>
-      {/* 상단 바 */}
-      <div className={styles.topBar}>
-        <h1 className={styles.title}>관리 페이지</h1>
-        <div className={styles.navbarWrapper}>
-          <Navbar />
-        </div>
-      </div>
+      <h1 className={styles.title}>관리 페이지</h1>
 
       {users.length === 0 ? (
         <p>유저 목록을 불러오지 못했습니다.</p>
