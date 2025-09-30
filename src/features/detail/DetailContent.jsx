@@ -67,12 +67,7 @@ const DetailContent = () => {
                     artist_id: Number(artistId),
                 }).toString();
                 const data = await axiosReturnsData("GET", `/api/posts/?${query}`);
-                const posts = data.map((post) => ({
-                    postId: post.id,
-                    imgUrl: post.image_url,
-                    likes: post.likes_count ?? 0,
-                }));
-                setFanPostArray(posts);
+                setFanPostArray(data);
             } catch (err) {
                 console.error("팬포스트 API 호출 에러:", err);
                 setFanPostArray([]);
