@@ -67,6 +67,10 @@ const ThePottApiTestPage = () => {
             callback,
             accessToken,
         );
+    const getEventsWithoutToken = (callback) =>
+        getThenLog(`${baseURL}/api/events/?is_active=true`, callback);
+    const getEventsWithIsActive = (callback) =>
+        getThenLog(`${baseURL}/api/events/?is_active=true`, callback, accessToken);
     const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
     const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
 
@@ -129,6 +133,12 @@ const ThePottApiTestPage = () => {
                         </CustomButton>
                         <CustomButton onClick={() => getEvents(callbackLog)}>
                             <p>get events</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
+                            <p>get events without token</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getEventsWithIsActive(callbackLog)}>
+                            <p>get events with is active</p>
                         </CustomButton>
                         <CustomButton onClick={() => getFanSubscriptionWithName(callbackLog)}>
                             <p>get subscription with name</p>
