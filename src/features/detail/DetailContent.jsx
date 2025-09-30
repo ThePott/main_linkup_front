@@ -13,6 +13,7 @@ import mockData from "../../shared/store/dummyHeehaa.json";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
+import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
 
 const getSubscriptions = async () => {
     const data = await axiosReturnsData("GET", "/api/subscriptions");
@@ -108,7 +109,7 @@ const DetailContent = () => {
             </RoundBox>
 
             {/* 3. 달력 */}
-            <Calendar schedules={eventArray} />
+            <ArtistCalendar />
 
             {/* 4. 최신 일정 */}
             <div className={styles.scheduleSection}>
