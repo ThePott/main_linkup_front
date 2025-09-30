@@ -2,3 +2,8 @@
     max-width: var(--container-lg);
     margin: auto;
 }
+
+.roundboxContainer {
+    margin: auto;
+    width: 500px;
+}

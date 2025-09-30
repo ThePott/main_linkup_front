@@ -1,177 +1,98 @@
-import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router";
-import useLinkUpStore from "../../../shared/store/store";
-import RoundBox from "../../../package/RoundBox.jsx";
-import FanPostSection from "../../../shared/FanPostSection.jsx";
 import styles from "./SearchContent.module.css";
-import ArtistCardNew from "../../../shared/ArtistCardNew/ArtistCardNew";
-import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
-import { format } from "date-fns";
+import { Vstack } from "../../../package/layout";
+import useLinkUpStore from "../../../shared/store/store";
+import useEventsForSearch from "./useEventsForSearch";
+import RoundBox from "../../../package/RoundBox";
+import GridContainer from "../../../package/gridContainer/GridContainer";
+import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard";
+import Skeleton from "../../../package/skeleton/Skeleton";
+import { useNavigate } from "react-router";
+import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
-const SearchContent = () => {
+const RoundBoxFull = ({ children }) => {
+    return (
+        <RoundBox padding="lg" isShadowed={false} className={styles.eventBoxEmpty}>
+            {children}
+        </RoundBox>
+    );
+};
+
+const EventBox = ({ event }) => {
+    return (
+        <RoundBox padding="lg" isShadowed={false} textAlign="start">
+            <p>{event.start_time.slice(0, 10)}</p>
+            <p className={styles.title}>{event.title}</p>
+            <p className={styles.description}>{event.description}</p>
+        </RoundBox>
+    );
+};
+
+const EventColumnSkeleton = () => {
+    return (
+        <Vstack>
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+        </Vstack>
+    );
+};
+
+const EventColumn = ({ artistName, eventArray }) => {
+    return (
+        <Vstack className={styles.eventColumn}>
+            <p className={styles.artistName}>{artistName}</p>
+            <FlexOneContainer isYScrollable>
+                <Vstack>
+                    {eventArray.length === 0 && <RoundBoxFull>등록된 일정이 없어요</RoundBoxFull>}
+                    {eventArray.map((event) => (
+                        <EventBox key={event.id} event={event} />
+                    ))}
+                </Vstack>
+            </FlexOneContainer>
+        </Vstack>
+    );
+};
+
+const SearchResult = ({ artist, isPending, error }) => {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const queryParam = searchParams.get("query") || "";
 
-    // const groupArray = useLinkUpStore((state) => state.groupArray);
-    const setGroupArray = useLinkUpStore((state) => state.setGroupArray);
-    const recommendedGroupArray = useLinkUpStore((state) => state.recommendedGroupArray);
-    const setRecommendedGroupArray = useLinkUpStore((state) => state.setRecommendedGroupArray);
-    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
-    const setSearchResultArray = useLinkUpStore((state) => state.setSearchResultArray);
+    const imageUrl =
+        artist.banner_url || artist.torso_url || artist.face_url || artist.profile_image;
+    const eventDict = useLinkUpStore((state) => state.eventDict);
+    const eventArray = eventDict[artist.id] ?? [];
 
-    const eventArray = useLinkUpStore((state) => state.eventArray);
-    const setEventArray = useLinkUpStore((state) => state.setEventArray);
+    const artistName = artist.stage_name || artist.group_name || artist.name;
 
-    const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
-    const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
-
-    useEffect(() => {
-        const fetchGroupsAndEvents = async () => {
-            try {
-                if (queryParam) {
-                    const res = await fetch(`http://3.35.210.2:8000/api/idol/${queryParam}`);
-                    const artist = await res.json();
-
-                    if (artist.artist_type === "individual" && artist.group_name) {
-                        const groupRes = await fetch(
-                            `http://3.35.210.2:8000/api/idol/${artist.group_name}`,
-                        );
-                        const groupData = await groupRes.json();
-                        setSearchResultArray([groupData]);
-                        await fetchEvents({ artist_parent_group: groupData.id });
-                        await fetchFanPosts(groupData.id);
-                    } else {
-                        setSearchResultArray([artist]);
-                        await fetchEvents({ artist_id: artist.id });
-                        await fetchFanPosts(artist.id);
-                    }
-                } else {
-                    const res = await fetch(
-                        "http://3.35.210.2:8000/api/idol?artist_type=group&limit=20&page=1",
-                    );
-                    const data = await res.json();
-                    const artists = data.artists || [];
-                    setGroupArray(artists);
-                    setRecommendedGroupArray(artists);
-                    setSearchResultArray([]);
-                    setEventArray([]);
-                    setFanPostArray([]);
-                }
-            } catch (err) {
-                console.error("API 호출 에러:", err);
-            }
-        };
-
-        const fetchEvents = async (params) => {
-            try {
-                const query = new URLSearchParams({
-                    limit: 20,
-                    is_active: true,
-                    ...params,
-                }).toString();
-                const res = await fetch(`http://3.35.210.2:8000/events/?${query}`);
-                const data = await res.json();
-                const events = data.events || [];
-                setEventArray(events);
-            } catch (err) {
-                console.error("이벤트 API 호출 에러:", err);
-                setEventArray([]);
-            }
-        };
-
-        const fetchFanPosts = async (artistId) => {
-            try {
-                const query = new URLSearchParams({ limit: 20, artist_id: artistId }).toString();
-                const res = await fetch(`http://3.35.210.2:8000/api/posts/?${query}`);
-                const data = await res.json();
-                const posts = data.map((post) => ({
-                    postId: post.id,
-                    imgUrl: post.image_url ?? "",
-                    likes: post.likes_count,
-                }));
-                setFanPostArray(posts);
-            } catch (err) {
-                console.error("팬포스트 API 호출 에러:", err);
-                setFanPostArray([]);
-            }
-        };
-
-        fetchGroupsAndEvents();
-    }, [queryParam]);
-
-    if (queryParam && searchResultArray.length === 0) {
-        return (
-            <div className={styles.container}>
-                <h2>검색 결과</h2>
-                <p>일치하는 결과를 찾지 못했어요.</p>
-                <h3>추천 그룹</h3>
-                <div className={styles.recommendedContainer}>
-                    {recommendedGroupArray.map((group) => (
-                        <div
-                            key={group.id}
-                            className={styles.clickable}
-                            onClick={() => navigate(`/detail/group/${group.id}`)}
-                        >
-                            <img src={group.imgFace} alt={group.name} width={80} />
-                            <div>{group.name}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
-    if (searchResultArray.length > 1) {
-        return (
-            <div className={styles.container}>
-                <h2>검색 결과</h2>
-                <GridCardContainer>
-                    {searchResultArray.map((artist) => (
-                        <ArtistCardNew key={artist.id} artist={artist} />
-                    ))}
-                </GridCardContainer>
-            </div>
-        );
-    }
-
-    const groupMemberArray = [];
-    const groupThenMemberArray = [...searchResultArray, ...groupMemberArray];
+    const handleClick = () => {
+        navigate(`/detail/artist/${artist.id}`);
+    };
 
     return (
-        <div className={styles.container}>
-            <h2>검색 결과</h2>
+        <GridContainer cols={2} onClick={handleClick}>
+            <CustomImageCard url={imageUrl} style={{ boxShadow: "var(--drop-shadow-md)" }} />
+            {isPending && eventArray.length === 0 && <EventColumnSkeleton />}
+            {!isPending && error && <RoundBoxFull>오류가 발생했어요</RoundBoxFull>}
+            {!isPending && <EventColumn artistName={artistName} eventArray={eventArray} />}
+        </GridContainer>
+    );
+};
 
-            <GridCardContainer>
-                {groupThenMemberArray.map((artist) => (
-                    <ArtistCardNew key={artist.id} artist={artist} />
-                ))}
-            </GridCardContainer>
+const SearchContent = () => {
+    const { isPendingEvents, errorEvents } = useEventsForSearch();
+    const searchResultArray = useLinkUpStore((state) => state.searchResultArray);
 
-            <h4>일정</h4>
-
-            <div className={styles.scheduleList}>
-                {eventArray.slice(0, 3).map((schedule) => {
-                    const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
-                    return (
-                        <RoundBox key={schedule.id}>
-                            {schedule.title} — {dateOnly}
-                        </RoundBox>
-                    );
-                })}
-            </div>
-
-            <h4>그룹 팬포스트</h4>
-
-            <FanPostSection
-                posts={fanPostArray}
-                limit={12}
-                cols={3}
-                onClickPost={(postId) => navigate(`/post/${postId}`)}
-            />
-        </div>
+    return (
+        <Vstack gap="xl">
+            {searchResultArray.map((artist) => (
+                <SearchResult
+                    key={artist.id}
+                    artist={artist}
+                    isPending={isPendingEvents}
+                    error={errorEvents}
+                />
+            ))}
+        </Vstack>
     );
 };
 
 export default SearchContent;
-

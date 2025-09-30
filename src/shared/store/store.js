@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { axiosReturnsData } from "../services/axiosInstance";
 
 const useLinkUpStore = create()(
     persist(
@@ -36,6 +37,11 @@ const useLinkUpStore = create()(
                 set({ eventArray });
             },
 
+            eventDict: {},
+            setEventDict: (eventDict) => {
+                set({ eventDict });
+            },
+
             selectedEvent: null,
             setSelectedEvent: (selectedEvent) => {
                 set({ selectedEvent });
@@ -63,6 +69,25 @@ const useLinkUpStore = create()(
                 set({ fanPostArray: [newPost, ...prev] });
             },
 
+            commentsByPostId: {},
+            setCommentsByPostId: (post_id, comments) =>
+                set((state) => ({
+                    commentsByPostId: {
+                        ...state.commentsByPostId,
+                        [post_id]: comments,
+                    },
+                })),
+            addComment: (post_id, comment) =>
+                set((state) => {
+                    const existingComments = state.commentsByPostId[post_id] ?? [];
+                    return {
+                        commentsByPostId: {
+                            ...state.commentsByPostId,
+                            [post_id]: [...existingComments, comment],
+                        },
+                    };
+                }),
+
             selectedFanPost: null,
             setSelectedFanPost: (selectedFanPost) => set({ selectedFanPost }),
 
@@ -78,23 +103,36 @@ const useLinkUpStore = create()(
             searchStatus: "success",
             setSearchStatus: (status) => set({ searchStatus: status }),
 
-            subscribedArtistIdArray: [],
-            toggleSubscribe: (artistId) =>
-                set((state) => {
-                    const current = state.subscribedArtistIdArray;
-                    return current.includes(artistId)
-                        ? {
-                              subscribedArtistIdArray: current.filter((id) => id !== artistId),
-                          }
-                        : { subscribedArtistIdArray: [...current, artistId] };
-                }),
+            toggleSubscribe: async (artistId) => {
+                try {
+                    const current = get().artistArray;
+                    const isSubscribed = current.some((a) => a.artist_id === artistId);
+
+                    if (isSubscribed) {
+                        await axiosReturnsData("DELETE", `/api/subscriptions/${artistId}`);
+                    } else {
+                        await axiosReturnsData("POST", `/api/subscriptions/`, {
+                            artist_id: artistId,
+                        });
+                    }
+
+                    const data = await axiosReturnsData(
+                        "GET",
+                        "/api/subscriptions?include_image=true",
+                    );
+                    set({ artistArray: data });
+                } catch (err) {
+                    console.error("구독/취소 API 호출 에러", err);
+                }
+            },
         }),
         {
-            name: "linkup-local-storage", // Name for your storage item
+            name: "linkup-session-storage",
             storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 access_token: state.access_token,
                 user: state.user,
+                artistArray: state.artistArray,
             }),
         },
     ),

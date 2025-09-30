@@ -1,9 +1,12 @@
-.container {
-    width: 100%;
+.outerContainer {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.innerContainer {
+    width: var(--sizing-lg);
 }
 
 .grow {

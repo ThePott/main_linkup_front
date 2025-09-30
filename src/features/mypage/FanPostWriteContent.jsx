@@ -11,11 +11,12 @@ import { axiosReturnsData } from "../../shared/services/axiosInstance";
 const FanPostWriteContent = () => {
     const addFanPost = useLinkUpStore((state) => state.addFanPost);
     const artistArray = useLinkUpStore((state) => state.artistArray);
-    console.log("fanpost_artistArray", artistArray);
+    const modalKey = useLinkUpStore((state) => state.modalKey);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-    const [completedModalOpen, setCompletedModalOpen] = useState(false);
+    // const [completedModalOpen, setCompletedModalOpen] = useState(false);
     const [exitConfirmModalOpen, setExitConfirmModalOpen] = useState(false);
 
     const inputRef = useRef(null);
@@ -29,15 +30,17 @@ const FanPostWriteContent = () => {
 
     const mutation = useMutation({
         mutationFn: postFanPost,
-        // onSuccess: (newPost) => {
-        //     debugger;
-        //     addFanPost(newPost);
-        //     setCompletedModalOpen(true);
-        //     setTimeout(() => {
-        //         setCompletedModalOpen(false);
-        //         navigate("/mypage");
-        //     }, 2000);
-        // },
+        onSuccess: (newPost) => {
+            // debugger;
+            // addFanPost(newPost);
+            setModalKey("completed");
+            // setCompletedModalOpen(true); //modalkey로 바꾸기
+            setTimeout(() => {
+                setModalKey(null);
+                //setCompletedModalOpen(false); //modalkey로 바꾸기
+                navigate("/mypage");
+            }, 2000);
+        },
     });
 
     const handleSubmit = (event) => {
@@ -57,7 +60,6 @@ const FanPostWriteContent = () => {
         if (!form) return;
         const formData = new FormData(form);
         mutation.mutate(formData);
-        console.log("mutate", formData);
     };
 
     const handleExit = () => setExitConfirmModalOpen(true);
@@ -143,7 +145,7 @@ const FanPostWriteContent = () => {
                 </div>
             </Modal>
 
-            <Modal isOn={completedModalOpen} onBackgroundClick={() => setCompletedModalOpen(false)}>
+            <Modal isOn={modalKey === "completed"} onBackgroundClick={() => setModalKey(null)}>
                 <p>출간되었습니다.</p>
             </Modal>
         </>

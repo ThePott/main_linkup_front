@@ -6,15 +6,15 @@ const ArtistCardNew = ({ artist }) => {
 
     const type = artist.stage_name ? "artist" : "group";
     const url = `/detail/${type}/${artist.id}`;
-    const name = artist.stage_name || artist.group_name;
+    // const name = artist.stage_name || artist.group_name;
     const handleClick = () => {
         navigate(url);
     };
 
     return (
         <div onClick={handleClick}>
-            <CustomImageCard url={artist.torso_image} />
-            <div>{name}</div>
+            <CustomImageCard url={artist.torso_image || artist.torso_url || artist.profile_image} />
+            {/* <div>{name}</div> */}
         </div>
     );
 };

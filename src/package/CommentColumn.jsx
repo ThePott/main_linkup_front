@@ -1,10 +1,16 @@
-import { React, useEffect, useRef, useState } from "react";
+import { React, useEffect, useMemo, useRef } from "react";
 import CommentBox from "./CommentBox";
 import CommentInput from "../shared/CommentInput";
 import styles from "./CommentColumn.module.css";
+import useLinkUpStore from "../shared/store/store";
 
 const CommentColumn = () => {
-    const [comments, setComments] = useState([]);
+    const selectedFanPost = useLinkUpStore((state) => state.selectedFanPost);
+    const postId = selectedFanPost?.id;
+    const comments = useLinkUpStore((state) => state.commentsByPostId[postId]);
+
+    if (!selectedFanPost) return null;
+
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -12,19 +18,14 @@ const CommentColumn = () => {
         inputRef.current.scrollIntoView({ behavior: "smooth" });
     }, [comments]);
 
-    const handleAdd = (comment) => {
-        setComments((prev) => [...prev, comment]);
-    };
-
     return (
         <section className={styles.container}>
             <ul className={styles.list}>
-                {comments.map((comment) => (
-                    <CommentBox key={comment.id} item={comment} />
-                ))}
+                {comments &&
+                    comments.map((comment) => <CommentBox key={comment.id} item={comment} />)}
                 <div ref={inputRef} />
             </ul>
-            <CommentInput onAdd={handleAdd} />
+            <CommentInput />
         </section>
     );
 };

@@ -55,6 +55,7 @@ const SuperUserPage = () => {
     if (!selectedUser) return;
 
     try {
+      let updatedUser;
       if (actionType === "ban") {
         await banUser(selectedUser.id, access_token);
       } else if (actionType === "unban") {

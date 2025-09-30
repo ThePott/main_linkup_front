@@ -45,10 +45,14 @@ const ThePottTanstackTestPage = () => {
                     {artist.stage_name || artist.group_name}__{artist.artist_id}
                 </p>
             ))}
-            <CustomButton onClick={() => deleteMutation.mutate(1)}>unsubscribe idol 1</CustomButton>
+
             <CustomButton onClick={() => postMutation.mutate(variablesAespa)}>
-                subscribe idol 1
+                subscribe aespa (1)
             </CustomButton>
+            <CustomButton onClick={() => deleteMutation.mutate(1)}>
+                unsubscribe aespa (1)
+            </CustomButton>
+
             <CustomButton onClick={() => postMutation.mutate(variablesKarina)}>
                 subscribe karina (6)
             </CustomButton>
