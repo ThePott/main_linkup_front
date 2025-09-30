@@ -1,15 +1,12 @@
 import { useParams, useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react"; // useRef 추가
 import useLinkUpStore from "../../shared/store/store";
-import Calendar from "../../package/calendar/Calendar.jsx";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
-import FanPostSection from "../../shared/FanPostSection.jsx";
 import RoundBox from "../../package/RoundBox.jsx";
 import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
 import { format } from "date-fns";
-import mockData from "../../shared/store/dummyHeehaa.json";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
@@ -39,8 +36,23 @@ const DetailContent = () => {
 
     const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
 
-    const subscribeArray1 = mockData;
-    const url = subscribeArray1[0]?.img_banner;
+    const currentArtist = artistArray.find((a) => a.artist_id === Number(id));
+    const imageUrl = currentArtist?.banner_url;
+
+    // ✅ 아이콘 스크롤 참조
+    const scrollRef = useRef(null);
+
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: -100, behavior: "smooth" });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: 100, behavior: "smooth" });
+        }
+    };
 
     useEffect(() => {
         getSubscriptions();
@@ -83,14 +95,24 @@ const DetailContent = () => {
         <div className={styles.container}>
             {/* 1. 상단 */}
             <div className={styles.topBar}>
-                {artistArray.map((artistItem) => (
-                    <CustomImageIcon
-                        key={artistItem.artist_id}
-                        url={artistItem.artist_image_url}
-                        className={styles.circleIcon}
-                        onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
-                    />
-                ))}
+                <button className={styles.arrow} onClick={scrollLeft}>
+                    &lt;
+                </button>
+
+                <div className={styles.iconWrapper} ref={scrollRef}>
+                    {artistArray.map((artistItem) => (
+                        <CustomImageIcon
+                            key={artistItem.artist_id}
+                            url={artistItem.artist_image_url}
+                            className={styles.circleIcon}
+                            onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
+                        />
+                    ))}
+                </div>
+                <button className={styles.arrow} onClick={scrollRight}>
+                    &gt;
+                </button>
+
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
@@ -105,7 +127,7 @@ const DetailContent = () => {
 
             {/* 2. 배너 */}
             <RoundBox className={styles.bannerContainer}>
-                <CustomImageBanner url={url} className={styles.banner} />
+                <CustomImageBanner url={imageUrl} className={styles.banner} />
             </RoundBox>
 
             {/* 3. 달력 */}
@@ -127,8 +149,7 @@ const DetailContent = () => {
             </div>
 
             {/* 5. 팬포스트 */}
-            {/* isBlurred: 구독한 아티스트면 false, 아니면 true */}
-            <FanPostGrid fanPostArray={fanPostArray} isBlurred={false} />
+            <FanPostGrid fanPostArray={fanPostArray} isBlurred={!isSubscribed} />
 
             {/* 6. 모달 */}
             <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
