@@ -11,6 +11,7 @@ import LabelGroup from "../package/labelGroup/LabelGroup";
 import CustomInput from "../package/CustomInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../shared/validations/zodSchema";
+import Container from "../package/layout/_Container";
 
 const LoginPage = () => {
     const { errorLogin, isPendingLogin, postLoginMutation } = useAuth();
@@ -39,12 +40,12 @@ const LoginPage = () => {
     };
 
     return (
-        <FullScreen center>
-            <RoundBox padding="LG">
-                <Vstack gap="xl">
-                    <Vstack style={{ width: "400px" }}>
+        <Container className={styles.outerContainer} marginTop="none">
+            <RoundBox padding="lg" className={styles.innerContainer}>
+                <Vstack gap="lg">
+                    <Vstack>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <Vstack gap="xl">
+                            <Vstack gap="lg">
                                 <LabelGroup isRed={errors.email}>
                                     <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
                                     <CustomInput {...register("email")} />
@@ -84,7 +85,7 @@ const LoginPage = () => {
                     </Hstack>
                 </Vstack>
             </RoundBox>
-        </FullScreen>
+        </Container>
     );
 };
 
