@@ -19,7 +19,6 @@ const getSubscriptions = async () => {
     useLinkUpStore.setState({ artistArray: data });
 };
 
-
 const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
@@ -133,7 +132,7 @@ const DetailContent = () => {
 
             {/* 5. 팬포스트 */}
             {/* isBlurred: 구독한 아티스트면 false, 아니면 true */}
-            <FanPostGrid fanPostArray={postResultArray} isBlurred={false} />
+            <FanPostGrid fanPostArray={fanPostArray} isBlurred={false} />
 
             {/* 6. 모달 */}
             <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
