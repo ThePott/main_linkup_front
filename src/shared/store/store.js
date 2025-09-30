@@ -70,13 +70,20 @@ const useLinkUpStore = create()(
             },
 
             commentsByPostId: {},
-            addComment: (postId, comment) =>
+            setCommentsByPostId: (post_id, comments) =>
+                set((state) => ({
+                    commentsByPostId: {
+                        ...state.commentsByPostId,
+                        [post_id]: comments,
+                    },
+                })),
+            addComment: (post_id, comment) =>
                 set((state) => {
-                    const existingComments = state.commentsByPostId[postId] ?? [];
+                    const existingComments = state.commentsByPostId[post_id] ?? [];
                     return {
                         commentsByPostId: {
                             ...state.commentsByPostId,
-                            [postId]: [...existingComments, comment],
+                            [post_id]: [...existingComments, comment],
                         },
                     };
                 }),
