@@ -1,5 +1,5 @@
 import styles from "./SignupPage.module.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import RoundBox from "../package/RoundBox";
 import { Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
@@ -14,8 +14,9 @@ import GridContainer from "../package/gridContainer/GridContainer";
 
 const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
-
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+    const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
+    const emailRef = useRef(null);
 
     const {
         register,
@@ -23,32 +24,31 @@ const SignupPage = () => {
         formState: { errors },
     } = useForm({ resolver: zodResolver(signupSchema) });
 
-    const { verifiedEmail, setVerifiedEmail, emailRef, refetchVerification, setBody } = useSignup();
-
-    const handleVerificationClick = () => {
-        if (!emailRef.current) {
-            return;
-        }
-
-        if (!emailRef.current.checkValidity()) {
-            emailRef.current.reportValidity(); // Shows validation popup
-            return;
-        }
-
-        refetchVerification();
-    };
+    const { sendVerificationEmailMutation, signupMutation } = useSignup();
 
     const onSubmit = (data) => {
         const body = { ...data, user_type: isForAgency ? "company" : "fan" };
-
-        setBody(body);
+        signupMutation.mutate(body);
     };
 
-    const verifyEmailButtonLabel = verifiedEmail ? "인증 완료" : "이메일 인증";
+    const handleVerificationClick = () => {
+        const body = {
+            email: emailRef.current.value,
+        };
+        sendVerificationEmailMutation.mutate(body);
+        setIsVerificationCodeSent(true);
+    };
+
     const passwordLabel =
         isPasswordFocused || errors.password
             ? "비밀번호 - 8자 이상, 대소문자, 특수문자 필수"
             : "비밀번호";
+
+    const verificationCodeLabel = isVerificationCodeSent
+        ? "인증 코드 - 이메일을 확인하세요"
+        : "인증 코드";
+
+    console.log({ errors });
 
     return (
         <Container marginTop="none" className={styles.outerContainer}>
@@ -78,7 +78,7 @@ const SignupPage = () => {
                             <div className="grow">
                                 <LabelGroup isRed={errors.email}>
                                     <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
-                                    <CustomInput {...register("email")} />
+                                    <CustomInput {...register("email")} ref={emailRef} />
                                     {errors.email && (
                                         <LabelGroup.SmallLabel>
                                             {errors.email.message}
@@ -91,11 +91,11 @@ const SignupPage = () => {
                                 onClick={handleVerificationClick}
                                 className={styles.certificateButton}
                             >
-                                {verifyEmailButtonLabel}
+                                이메일 인증
                             </CustomButton>
                         </Hstack>
                         <LabelGroup isRed={errors.verification_code}>
-                            <LabelGroup.BigLabel>인증 번호</LabelGroup.BigLabel>
+                            <LabelGroup.BigLabel>{verificationCodeLabel}</LabelGroup.BigLabel>
                             <CustomInput {...register("verification_code")} />
                             {errors.verification_code && (
                                 <LabelGroup.SmallLabel>
