@@ -121,7 +121,7 @@ const useLinkUpStore = create()(
         }),
         {
             name: "linkup-session-storage",
-            storage: createJSONStorage(() => sessionStorage),
+            storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 access_token: state.access_token,
                 user: state.user,

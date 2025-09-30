@@ -4,17 +4,18 @@ import { useEffect } from "react";
 import useLinkUpStore from "../store/store";
 import queryClient from "./queryClient";
 
+const queryEndpoint = "/api/subscriptions?include_image=true";
+
 const useSubscriptionsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
     const user = useLinkUpStore((state) => state.user);
-    const endpoint = "/api/subscriptions?include_image=true";
     const {
         data,
         isPending: isPendingSubscriptions,
         error: errorSubscriptions,
     } = useQuery({
-        queryKey: [endpoint],
-        queryFn: () => axiosReturnsData("GET", endpoint),
+        queryKey: [queryEndpoint],
+        queryFn: () => axiosReturnsData("GET", queryEndpoint),
         enabled: user?.user_type === "fan",
     });
 
@@ -29,8 +30,7 @@ const useSubscriptionsQuery = () => {
 };
 
 const useSubscriptionsMutate = () => {
-    const endpoint = "/api/subscriptions";
-
+    const mutateEndpoint = "/api/subscriptions";
     /** 사용법
      * const { postMutation } = useSubscriptions()
      * ...
@@ -40,25 +40,25 @@ const useSubscriptionsMutate = () => {
      * <button onClick={ () => postMutation.mutate({ body, newOne })}>구독하기</button>
      */
     const postMutation = useMutation({
-        mutationFn: ({ body }) => axiosReturnsData("POST", endpoint, body),
+        mutationFn: ({ body }) => axiosReturnsData("POST", mutateEndpoint, body),
         onMutate: async ({ newOne }) => {
             await queryClient.cancelQueries({
-                queryKey: [endpoint],
+                queryKey: [queryEndpoint],
             });
-            const previous = queryClient.getQueryData([endpoint]);
+            const previous = queryClient.getQueryData([queryEndpoint]);
             // TODO: subscribedAt이 기록되어서 이걸로 sorting이 되면 좋겠더
             // const newArray = [...previous, newOne].sort((a, b) => a.id - b.id);
             const newArray = [...previous, newOne];
-            queryClient.setQueryData([endpoint], newArray);
+            queryClient.setQueryData([queryEndpoint], newArray);
             return { previous };
         },
         onError: async (error, _data, context) => {
             console.error(error);
-            queryClient.setQueryData([endpoint], context.previous);
+            queryClient.setQueryData([queryEndpoint], context.previous);
         },
         onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: [endpoint],
+                queryKey: [queryEndpoint],
             });
         },
     });
@@ -69,25 +69,25 @@ const useSubscriptionsMutate = () => {
      * <button onClick={ () => deleteMutation.mutate(artist_id)}>구독 취소하기</button>
      */
     const deleteMutation = useMutation({
-        mutationFn: (id) => axiosReturnsData("DELETE", `${endpoint}/${id}`),
+        mutationFn: (id) => axiosReturnsData("DELETE", `${mutateEndpoint}/${id}`),
         onMutate: async (id) => {
             await queryClient.cancelQueries({
-                queryKey: [endpoint],
+                queryKey: [queryEndpoint],
             });
 
-            const previous = queryClient.getQueryData([endpoint]);
+            const previous = queryClient.getQueryData([queryEndpoint]);
             const newArray = previous.filter((el) => el.id !== id);
-            queryClient.setQueryData([endpoint], newArray);
+            queryClient.setQueryData([queryEndpoint], newArray);
 
             return { previous };
         },
         onError: async (error, _data, context) => {
             console.error(error);
-            queryClient.setQueryData([endpoint], context.previous);
+            queryClient.setQueryData([queryEndpoint], context.previous);
         },
         onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: [endpoint],
+                queryKey: [queryEndpoint],
             });
         },
     });
