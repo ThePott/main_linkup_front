@@ -132,6 +132,7 @@ const useLinkUpStore = create()(
             partialize: (state) => ({
                 access_token: state.access_token,
                 user: state.user,
+                artistArray: state.artistArray,
             }),
         },
     ),
