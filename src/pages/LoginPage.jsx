@@ -2,7 +2,7 @@ import styles from "./LoginPage.module.css";
 import { Link } from "react-router";
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
 import CustomButton from "../package/customButton/CustomButton";
-import { FullScreen, Hstack, Vstack } from "../package/layout";
+import { Hstack, Vstack } from "../package/layout";
 import RoundBox from "../package/RoundBox";
 import useAuth from "../shared/services/useAuth";
 import { useForm } from "react-hook-form";
