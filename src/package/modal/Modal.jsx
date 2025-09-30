@@ -6,7 +6,7 @@ const ModalContent = ({ children, ...props }) => {
         event.stopPropagation();
     };
     return (
-        <RoundBox {...props} padding="LG" onClick={handleClick}>
+        <RoundBox padding="lg" {...props} onClick={handleClick}>
             {children}
         </RoundBox>
     );

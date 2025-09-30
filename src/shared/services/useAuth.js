@@ -42,16 +42,10 @@ const useAuthMeQuery = () => {
 };
 
 const useAuthLogin = () => {
-    const [isPendingLogin, setIsPendingLogin] = useState(false);
-    const [errorLogin, setErrorLogin] = useState(null);
     const navigate = useNavigate();
 
     const postLoginMutation = useMutation({
         mutationFn: (body) => apiAuthLogin(body),
-        onMutate: () => {
-            setIsPendingLogin(true);
-            setErrorLogin(null);
-        },
         onSuccess: (data) => {
             switch (data.user_type) {
                 case "fan":
@@ -67,14 +61,13 @@ const useAuthLogin = () => {
                     throw new Error("---- ERROR OCCURRED: 잘못된 유저 타입입니다");
             }
         },
-        onError: (error) => {
-            console.error(error);
-            setErrorLogin(error);
-        },
-        onSettled: () => setIsPendingLogin(false),
     });
 
-    return { isPendingLogin, errorLogin, postLoginMutation };
+    return {
+        isPendingLogin: postLoginMutation.isPending,
+        errorLogin: postLoginMutation.error,
+        postLoginMutation,
+    };
 };
 
 const useAuthLogout = () => {
