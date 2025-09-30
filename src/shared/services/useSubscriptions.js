@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import useLinkUpStore from "../store/store";
 import queryClient from "./queryClient";
 
-const queryEndpoint = "/api/subscriptions?include_image=true";
+const queryEndpoint = "/api/subscriptions";
+// const queryEndpoint = "/api/subscriptions?include_image=true";
 
 const useSubscriptionsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
