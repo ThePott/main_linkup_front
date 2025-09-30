@@ -55,7 +55,7 @@ const SignupPage = () => {
             <RoundBox padding="lg" className={styles.innerContainer}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Vstack gap="lg">
-                        <GridContainer cols={2} gap="xs">
+                        <GridContainer cols={2} gap="sm">
                             <CustomButton
                                 isOn={!isForAgency}
                                 className={styles.grow}
@@ -74,7 +74,7 @@ const SignupPage = () => {
                             </CustomButton>
                         </GridContainer>
 
-                        <Hstack items="end">
+                        <Hstack items="end" gap="sm">
                             <div className="grow">
                                 <LabelGroup isRed={errors.email}>
                                     <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
