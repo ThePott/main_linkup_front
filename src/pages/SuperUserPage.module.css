@@ -1,6 +1,6 @@
 .superuserContainer {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: var(--spacing-lg);
+  font-family: inherit;
 }
 
 /* ✅ 상단 flex 바 */
@@ -15,14 +15,12 @@
   display: block;
   width: 200px;
   text-align: center;
-  padding: 10px;
-  background: #999;
-  color: white;
-}
-
-.navbarWrapper {
-  flex: 1;
-  margin-left: 20px;
+  padding: var(--spacing-sm);
+  background-color: var(--color-muted);
+  color: var(--color-white);
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--rounded-md);
+  font-size: var(--text-xl);
 }
 
 .userTable {
@@ -32,12 +30,17 @@
 
 .userTable th,
 .userTable td {
-  border: 1px solid #ddd;
-  padding: 10px;
+  border: 1px solid var(--color-dimdim);
+  padding: var(--spacing-sm);
   text-align: center;
 }
 
 .userTable th {
-  background: #666;
-  color: white;
+  background-color: var(--color-muted);
+  color: var(--color-white);
+}
+
+.userTable button:hover {
+  background-color: var(--color-dim);
+  color: var(--color-white);
 }
