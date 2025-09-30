@@ -2,9 +2,9 @@ import { React, useEffect, useRef, useState } from "react";
 import styles from "./FileInput.module.css";
 import CustomButton from "./customButton/CustomButton";
 
-const FileInput = ({ name }) => {
+const FileInput = ({ name, initialPreview, className }) => {
     const [file, setFile] = useState();
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview] = useState(initialPreview);
     const inputRef = useRef();
 
     const placeholderImage =
@@ -30,7 +30,7 @@ const FileInput = ({ name }) => {
 
     useEffect(() => {
         if (!file) {
-            setPreview(null);
+            setPreview(initialPreview);
             return;
         }
         const objectUrl = URL.createObjectURL(file);
@@ -42,14 +42,8 @@ const FileInput = ({ name }) => {
     }, [file]);
 
     return (
-        <div className={`${styles.container} `}>
-            <input
-                hidden
-                name={name}
-                type="file"
-                onChange={handleChange}
-                ref={inputRef}
-            />
+        <div className={`${styles.container} ${className || ""}`}>
+            <input hidden name={name} type="file" onChange={handleChange} ref={inputRef} />
             <div className={styles.image}>
                 <img
                     src={preview || placeholderImage}

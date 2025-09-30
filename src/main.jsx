@@ -15,31 +15,28 @@ import Layout from "./pages/Layout";
 import FanPostWritePage from "./features/mypage/FanPostWritePage";
 
 const ProductRouteArray = [
-    {
-        path: "/",
-        element: <Layout />,
-        children: [
-            { path: "/", element: <FrontPage /> },
-            { path: "/detail/:type/:id", element: <DetailPage /> },
-            { path: "/mypage", element: <MyPage /> },
-            { path: "/mypage/write", element: <FanPostWritePage /> },
-            { path: "/agency", element: <AgencyPage /> },
-            { path: "/signup", element: <SignupPage /> },
-            { path: "/login", element: <LoginPage /> },
-        ],
-    },
-
-    {
-        path: "/super-user",
-        element: <SuperUserPage />, // Navbar superuserpage에서 분리
-    },
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "/", element: <FrontPage /> },
+      { path: "/detail/:type/:id", element: <DetailPage /> },
+      { path: "/mypage", element: <MyPage /> },
+      { path: "/mypage/write", element: <FanPostWritePage /> },
+      { path: "/agency", element: <AgencyPage /> },
+      { path: "/signup", element: <SignupPage /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/super-user", element: <SuperUserPage /> },
+    ],
+  },
 ];
+
 const routeArray = [...ProductRouteArray, ...TestRouteArray];
 
 const router = createBrowserRouter(routeArray);
 
 createRoot(document.getElementById("root")).render(
-    <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );

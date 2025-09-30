@@ -1,4 +1,3 @@
-import Calendar from "../../../package/calendar/Calendar";
 import RoundBox from "../../../package/RoundBox";
 import CustomImageBanner from "../../../shared/CustomImageBanner/CustomImageBanner";
 import CustomImageIcon from "../../../shared/CustomImageIcon/CustomImageIcon";
@@ -10,6 +9,7 @@ import { useNavigate } from "react-router";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
 import { Vstack } from "../../../package/layout";
+import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
@@ -56,7 +56,7 @@ const TotalContent = () => {
             </RoundBox>
             <p className={styles.text}>스케줄</p>
             <section className={styles.calendarContainer}>
-                <Calendar className={styles.calendar} />
+                <ArtistCalendar isMedium={true} />
                 <Vstack className={styles.dailyScheduleContainer}>
                     {currentItems.map((schedule) => (
                         <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
