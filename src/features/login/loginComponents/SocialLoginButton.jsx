@@ -36,7 +36,7 @@ const SocialLoginButtonLabel = ({ children, ...props }) => {
     return <p {...props}>{children}</p>;
 };
 
-const SocialLoginButton = ({ provider }) => {
+const SocialLoginButton = ({ provider, disabled }) => {
     const props = providerToProps[provider];
     const Icon = providerToIcon[provider];
 
@@ -46,6 +46,7 @@ const SocialLoginButton = ({ provider }) => {
     };
     return (
         <CustomButton
+            disabled={disabled}
             style={props.buttonStyle}
             className={styles.socialLoginButton}
             onClick={handleClick}
