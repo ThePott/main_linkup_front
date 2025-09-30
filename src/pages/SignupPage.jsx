@@ -16,7 +16,7 @@ const SignupPage = () => {
     const [isForAgency, setIsForAgency] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
-    const emailRef = useRef(null);
+    const [email, setEmail] = useState("");
 
     const {
         register,
@@ -24,18 +24,24 @@ const SignupPage = () => {
         formState: { errors },
     } = useForm({ resolver: zodResolver(signupSchema) });
 
-    const { sendVerificationEmailMutation, signupMutation } = useSignup();
+    const {
+        sendVerificationEmailMutation,
+        signupMutation,
+
+        isPendingVerification,
+        errorVerification,
+        isPendingSignup,
+        errorSignup,
+    } = useSignup();
 
     const onSubmit = (data) => {
+        debugger;
         const body = { ...data, user_type: isForAgency ? "company" : "fan" };
         signupMutation.mutate(body);
     };
 
     const handleVerificationClick = () => {
-        const body = {
-            email: emailRef.current.value,
-        };
-        sendVerificationEmailMutation.mutate(body);
+        sendVerificationEmailMutation.mutate({ email });
         setIsVerificationCodeSent(true);
     };
 
@@ -78,7 +84,10 @@ const SignupPage = () => {
                             <div className="grow">
                                 <LabelGroup isRed={errors.email}>
                                     <LabelGroup.BigLabel>이메일</LabelGroup.BigLabel>
-                                    <CustomInput {...register("email")} ref={emailRef} />
+                                    <CustomInput
+                                        {...register("email")}
+                                        onChange={(event) => setEmail(event.target.value)}
+                                    />
                                     {errors.email && (
                                         <LabelGroup.SmallLabel>
                                             {errors.email.message}
