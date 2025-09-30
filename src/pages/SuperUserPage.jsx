@@ -22,20 +22,22 @@ const SuperUserPage = () => {
   }, [access_token, navigate]);
 
   // 유저 목록 불러오기
+  const loadUsers = async () => {
+    try {
+      if (!access_token) throw new Error("토큰이 없습니다.");
+      const data = await fetchUsers(access_token);
+      const usersArray = Array.isArray(data) ? data : data.users || [];
+      setUsers(usersArray);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        if (!access_token) throw new Error("토큰이 없습니다.");
-        const data = await fetchUsers(access_token);
-        const usersArray = Array.isArray(data) ? data : data.users || [];
-        setUsers(usersArray);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     loadUsers();
   }, [access_token]);
 
+  // 모달 열기
   const openModal = (user, type) => {
     setSelectedUser(user);
     setActionType(type);
@@ -48,19 +50,20 @@ const SuperUserPage = () => {
     setModalOpen(false);
   };
 
+  // 차단 / 차단 해제 처리
   const handleConfirm = async () => {
     if (!selectedUser) return;
 
     try {
       let updatedUser;
       if (actionType === "ban") {
-        updatedUser = await banUser(selectedUser.id, access_token);
+        await banUser(selectedUser.id, access_token);
       } else if (actionType === "unban") {
-        updatedUser = await unbanUser(selectedUser.id, access_token);
+        await unbanUser(selectedUser.id, access_token);
       }
-      setUsers((prev) =>
-        prev.map((u) => (u.id === selectedUser.id ? updatedUser : u))
-      );
+
+      // BE에 요청 후 전체 유저 목록 재로딩
+      await loadUsers();
     } catch (err) {
       console.error(err);
     } finally {
