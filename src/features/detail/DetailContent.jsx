@@ -115,7 +115,7 @@ const DetailContent = () => {
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
-                        color={isSubscribed ? "MONO" : "PRIMARY"}
+                        color= "MONO"
                         isOn
                         onClick={() => setModalKey("subscribeModal")}
                     >
