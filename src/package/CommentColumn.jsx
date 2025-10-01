@@ -15,7 +15,7 @@ const CommentColumn = ({ commentArray = [] }) => {
 
     return (
         <Vstack className={styles.container}>
-            <FlexOneContainer>
+            <FlexOneContainer isYScrollable>
                 <Vstack>
                     {commentArray.map((comment) => (
                         <CommentBox key={comment.id} comment={comment} />

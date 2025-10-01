@@ -9,6 +9,7 @@ import queryClient from "./services/queryClient";
 
 const CommentInput = () => {
     const selectedFanPost = useLinkUpStore((state) => state.selectedFanPost);
+    const user = useLinkUpStore((state) => state.user);
     const post_id = selectedFanPost?.id;
     const [inputText, setInputText] = useState("");
 
@@ -33,7 +34,7 @@ const CommentInput = () => {
         const body = {
             comment_content: value,
         };
-        const newOne = { id: Date.now(), content: value, created_at: new Date() };
+        const newOne = { id: Date.now(), content: value, created_at: new Date(), user };
         postMutation.mutate({ body, newOne });
     };
 
