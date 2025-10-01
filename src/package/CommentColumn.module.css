@@ -1,6 +1,6 @@
 .container {
-    width: var(--sizing-md);
-    height: var(--sizing-xl);
+    /* width: var(--sizing-md); */
+    height: 100%;
     flex-direction: column;
     overflow-y: scroll;
 }
