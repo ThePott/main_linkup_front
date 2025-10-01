@@ -1,11 +1,19 @@
 .container {
-    display: flex;
-    gap: var(--spacing-md);
+    max-height: var(--container-md);
+    max-width: var(--container-lg);
+    width: 100%;
     height: 100%;
+    overflow: hidden;
     min-height: 0;
 }
 
-.content {
+.grid {
     text-align: left;
-    margin-left: var(--spacing-md);
+    height: 100%;
+}
+
+.image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
