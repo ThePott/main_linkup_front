@@ -1,57 +1,54 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import styles from "./Sidebar.module.css"; // CSS Module 적용
+import { useNavigate } from "react-router-dom"; // navigate import
+import styles from "./Sidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import useLinkUpStore from "../../shared/store/store";
-
-// 구독 목록 API
-const fetchSubscriptions = async (accessToken) => {
-  if (!accessToken) return [];
-  const res = await fetch("/api/subscriptions/", {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  if (!res.ok) throw new Error("구독 목록 불러오기 실패");
-  const data = await res.json();
-  return data.filter((sub) => sub.is_active);
-};
+import useSubscriptions from "../../shared/services/useSubscriptions"; // 훅 import
 
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
 
-  const accessToken = useLinkUpStore((state) => state.access_token);
+  const navigate = useNavigate(); // useNavigate 선언
   const modalKey = useLinkUpStore((state) => state.modalKey);
   const setModalKey = useLinkUpStore((state) => state.setModalKey);
+  const artistArray = useLinkUpStore((state) => state.artistArray); // store에 저장된 구독 아티스트 목록
 
-  // 구독 목록 조회
-  const { data: subscriptions = [], isLoading: isSubsLoading } = useQuery({
-    queryKey: ["subscriptions", accessToken],
-    queryFn: () => fetchSubscriptions(accessToken),
-    enabled: !!accessToken,
-  });
+  // 구독 목록 조회 (훅 사용)
+  const { isPendingSubscriptions } = useSubscriptions();
 
   return (
     <div className={styles.sidebar}>
       {/* 구독 항목 섹션 */}
       <div className={styles.section}>
         <h2>구독 중인 아티스트</h2>
-        {isSubsLoading ? (
+        {isPendingSubscriptions ? (
           <p>로딩 중...</p>
-        ) : subscriptions.length === 0 ? (
+        ) : !artistArray || artistArray.length === 0 ? (
           <p>구독 중인 아티스트가 없습니다.</p>
         ) : (
           <div className={styles["item-list"]}>
-            {subscriptions.map((sub) => (
+            {artistArray.map((sub) => (
               <div key={sub.id} className={styles.item}>
                 <div className={styles["item-info"]}>
                   <span className={styles["item-title"]}>
-                    아티스트 {sub.artist_id}
+                    {sub.group_name
+                      ? sub.stage_name
+                        ? `${sub.group_name} - ${sub.stage_name}` // 그룹 + 멤버
+                        : sub.group_name // 그룹만
+                      : sub.stage_name || `아티스트 ${sub.artist_id}`}
                   </span>
                   <span className={styles["item-description"]}>구독 중</span>
                 </div>
-                <CustomButton color="BLUE" shape="RECTANGLE">
+                <CustomButton
+                  color="BLUE"
+                  shape="RECTANGLE"
+                  onClick={() =>
+                    navigate(`/detail/artist/${sub.artist_id}`) // 클릭 시 디테일 페이지 이동
+                  }
+                >
                   선택
                 </CustomButton>
               </div>
