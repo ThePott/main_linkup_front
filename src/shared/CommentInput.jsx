@@ -28,16 +28,16 @@ const CommentInput = () => {
         }
     };
 
-    const getComments = async () => {
-        if (!post_id) return;
-        const endpoint = `api/posts/${post_id}/comments`;
-        const updateComments = await axiosReturnsData("GET", endpoint);
-        setCommentsByPostId(post_id, updateComments);
-    };
+    // const getComments = async () => {
+    //     if (!post_id) return;
+    //     const endpoint = `api/posts/${post_id}/comments`;
+    //     const updateComments = await axiosReturnsData("GET", endpoint);
+    //     setCommentsByPostId(post_id, updateComments);
+    // };
 
-    useEffect(() => {
-        getComments();
-    }, []);
+    // useEffect(() => {
+    //     getComments();
+    // }, []);
 
     return (
         <>
