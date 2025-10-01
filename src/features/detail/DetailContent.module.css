@@ -26,12 +26,6 @@
 }
 
 .circleIcon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
-    flex-shrink: 0;
 }
 
 .arrow {

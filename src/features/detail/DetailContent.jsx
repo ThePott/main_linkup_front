@@ -103,7 +103,6 @@ const DetailContent = () => {
                         <CustomImageIcon
                             key={artistItem.artist_id}
                             url={artistItem.artist_image_url}
-                            className={styles.circleIcon}
                             onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
                         />
                     ))}
