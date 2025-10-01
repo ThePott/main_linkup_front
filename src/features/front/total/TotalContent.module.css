@@ -4,12 +4,6 @@
     margin-top: var(--spacing-lg);
 }
 
-.circleIcon {
-    width: calc(var(--sizing-sm) - 100px);
-    height: calc(var(--sizing-sm) - 100px);
-    margin-left: var(--spacing-sm);
-}
-
 .bannerContainer {
     overflow: hidden;
 }
