@@ -16,12 +16,12 @@ const CommentColumn = ({ commentArray = [] }) => {
     return (
         <Vstack className={styles.container}>
             <FlexOneContainer>
-                <ul className={styles.list}>
+                <Vstack>
                     {commentArray.map((comment) => (
                         <CommentBox key={comment.id} comment={comment} />
                     ))}
                     <div ref={inputRef} />
-                </ul>
+                </Vstack>
             </FlexOneContainer>
             <CommentInput />
         </Vstack>
