@@ -1,23 +1,35 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // navigate import
+
+import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import useLinkUpStore from "../../shared/store/store";
-import useSubscriptions from "../../shared/services/useSubscriptions"; // 훅 import
+import useSubscriptions from "../../shared/services/useSubscriptions";
+import { useNavigate } from "react-router";
+
 
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
+  const [isSocialLogin, setIsSocialLogin] = useState(false); // 소셜 로그인 여부
 
-  const navigate = useNavigate(); // useNavigate 선언
+  const navigate = useNavigate();
   const modalKey = useLinkUpStore((state) => state.modalKey);
   const setModalKey = useLinkUpStore((state) => state.setModalKey);
-  const artistArray = useLinkUpStore((state) => state.artistArray); // store에 저장된 구독 아티스트 목록
+  const artistArray = useLinkUpStore((state) => state.artistArray);
 
   // 구독 목록 조회 (훅 사용)
   const { isPendingSubscriptions } = useSubscriptions();
+
+  // 사용자 정보 조회 (store 또는 API 호출)
+  const user = useLinkUpStore((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      setIsSocialLogin(user.is_social_login ?? false);
+    }
+  }, [user]);
 
   return (
     <div className={styles.sidebar}>
@@ -36,8 +48,8 @@ const Sidebar = () => {
                   <span className={styles["item-title"]}>
                     {sub.group_name
                       ? sub.stage_name
-                        ? `${sub.group_name} - ${sub.stage_name}` // 그룹 + 멤버
-                        : sub.group_name // 그룹만
+                        ? `${sub.group_name} - ${sub.stage_name}`
+                        : sub.group_name
                       : sub.stage_name || `아티스트 ${sub.artist_id}`}
                   </span>
                   <span className={styles["item-description"]}>구독 중</span>
@@ -46,7 +58,7 @@ const Sidebar = () => {
                   color="BLUE"
                   shape="RECTANGLE"
                   onClick={() =>
-                    navigate(`/detail/artist/${sub.artist_id}`) // 클릭 시 디테일 페이지 이동
+                    navigate(`/detail/artist/${sub.artist_id}`)
                   }
                 >
                   선택
@@ -57,26 +69,28 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* 개인 정보 수정 섹션 */}
-      <div className={styles.section}>
-        <h2
-          className={styles.collapsibleHeader}
-          onClick={() => setPersonalOpen(!personalOpen)}
-        >
-          개인 정보 수정 {personalOpen ? "▲" : "▼"}
-        </h2>
-        {personalOpen && (
-          <div className={styles.collapsibleContent}>
-            <CustomButton
-              color="MONO"
-              shape="RECTANGLE"
-              onClick={() => setModalKey("passwordChange")}
-            >
-              비밀번호 변경
-            </CustomButton>
-          </div>
-        )}
-      </div>
+      {/* 개인 정보 수정 섹션 (소셜 로그인일 경우 숨김) */}
+      {!isSocialLogin && (
+        <div className={styles.section}>
+          <h2
+            className={styles.collapsibleHeader}
+            onClick={() => setPersonalOpen(!personalOpen)}
+          >
+            개인 정보 수정 {personalOpen ? "▲" : "▼"}
+          </h2>
+          {personalOpen && (
+            <div className={styles.collapsibleContent}>
+              <CustomButton
+                color="MONO"
+                shape="RECTANGLE"
+                onClick={() => setModalKey("passwordChange")}
+              >
+                비밀번호 변경
+              </CustomButton>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 회원 탈퇴 섹션 */}
       <div className={`${styles.section} ${styles.dangerSection}`}>
