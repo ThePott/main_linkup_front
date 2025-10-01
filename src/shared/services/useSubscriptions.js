@@ -5,6 +5,7 @@ import useLinkUpStore from "../store/store";
 import queryClient from "./queryClient";
 
 const queryEndpoint = "/api/subscriptions?include_image=true";
+const mutateEndpoint = "/api/subscriptions";
 
 const useSubscriptionsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
@@ -30,7 +31,6 @@ const useSubscriptionsQuery = () => {
 };
 
 const useSubscriptionsMutate = () => {
-    const mutateEndpoint = "/api/subscriptions";
     /** 사용법
      * const { postMutation } = useSubscriptions()
      * ...
@@ -49,6 +49,7 @@ const useSubscriptionsMutate = () => {
             // TODO: subscribedAt이 기록되어서 이걸로 sorting이 되면 좋겠더
             // const newArray = [...previous, newOne].sort((a, b) => a.id - b.id);
             const newArray = [...previous, newOne];
+            debugger;
             queryClient.setQueryData([queryEndpoint], newArray);
             return { previous };
         },
