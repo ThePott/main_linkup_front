@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useEffect, useRef } from "react"; // useRef 추가
+import { useEffect, useRef } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
@@ -11,8 +11,9 @@ import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner"
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
-import useSubscriptions from "../../shared/services/useSubscriptions";
 import useDetailContent from "./useDetailContent";
+import MyFanPostModal from "../mypage/MyFanPostModal";
+import useSubscriptions from "../../shared/services/useSubscriptions";
 
 // const getSubscriptions = async () => {
 //     const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
@@ -120,7 +121,6 @@ const DetailContent = () => {
                         <CustomImageIcon
                             key={artistItem.artist_id}
                             url={artistItem.artist_image_url}
-                            className={styles.circleIcon}
                             onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
                         />
                     ))}
@@ -132,7 +132,7 @@ const DetailContent = () => {
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
-                        color={isSubscribed ? "MONO" : "PRIMARY"}
+                        color= "MONO"
                         isOn
                         onClick={() => setModalKey("subscribeModal")}
                     >
@@ -175,6 +175,8 @@ const DetailContent = () => {
                     <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
             </Modal>
+            
+            <MyFanPostModal />
         </div>
     );
 };
