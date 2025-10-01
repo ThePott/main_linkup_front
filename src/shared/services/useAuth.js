@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { apiAuthLogin } from "./linkupApi";
@@ -75,13 +75,22 @@ const useAuthLogout = () => {
     const setUser = useLinkUpStore((state) => state.setUser);
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
 
-    const logout = useCallback(() => {
-        queryClient.setQueryData(["/api/auth/me"], null);
-        queryClient.setQueryData(["/api/subscriptions"], []);
+    const logoutMutation = useMutation({
+        mutationFn: () => axiosReturnsData("POST", "/api/auth/logout"),
+        onMutate: () => {
+            queryClient.setQueryData(["/api/auth/me"], null);
+            queryClient.setQueryData(["/api/subscriptions"], []);
 
-        setAccessToken(null);
-        setUser(null);
-        setArtistArray([]);
+            setUser(null);
+            setArtistArray([]);
+        },
+        onSettled: () => {
+            setAccessToken(null);
+        },
+    });
+
+    const logout = useCallback(() => {
+        logoutMutation.mutate();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
