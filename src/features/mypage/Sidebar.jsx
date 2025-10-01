@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // navigate import
 import styles from "./Sidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import PasswordChangeModal from "./PasswordChangeModal.jsx";
 import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import useLinkUpStore from "../../shared/store/store";
 import useSubscriptions from "../../shared/services/useSubscriptions"; // 훅 import
+import { useNavigate } from "react-router";
 
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
-
+  
   const navigate = useNavigate(); // useNavigate 선언
   const modalKey = useLinkUpStore((state) => state.modalKey);
   const setModalKey = useLinkUpStore((state) => state.setModalKey);
