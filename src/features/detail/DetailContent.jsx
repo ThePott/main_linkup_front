@@ -11,6 +11,7 @@ import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner"
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
+import MyFanPostModal from "../mypage/MyFanPostModal";
 
 const getSubscriptions = async () => {
     const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
@@ -164,6 +165,8 @@ const DetailContent = () => {
                     <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
             </Modal>
+            
+            <MyFanPostModal />
         </div>
     );
 };
