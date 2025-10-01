@@ -75,6 +75,9 @@ const ThePottApiTestPage = () => {
     const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
     const getIdolKarina = (callback) => getThenLog(`${baseURL}/api/idol?artist_id=6`, callback);
 
+    const getPosts = (callback) => getThenLog(`${baseURL}/api/posts`, callback);
+    const getPostsOfFirst = (callback) => getThenLog(`${baseURL}/api/posts/artist_id=1`, callback);
+
     const getCompaniesArtists = (callback) =>
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
     const getCompaniesEvents = (callback) =>
@@ -135,7 +138,7 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getEvents(callbackLog)}>
                             <p>get events</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
+                        <CustomButton onClick={() => getEventsWithoutToken(callbackLog)}>
                             <p>get events without token</p>
                         </CustomButton>
                         <CustomButton onClick={() => getEventsWithIsActive(callbackLog)}>
@@ -166,7 +169,13 @@ const ThePottApiTestPage = () => {
                             <p>get companies events</p>
                         </CustomButton>
                         <CustomButton onClick={() => postFanPost(callbackLog)}>
-                            <p>get posting</p>
+                            <p>post fan posting</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getPosts(callbackLog)}>
+                            <p>get all posts</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getPostsOfFirst(callbackLog)}>
+                            <p>get posts of first idol</p>
                         </CustomButton>
                         <CustomButton onClick={() => getBulkEvent(callbackLog)}>
                             <p>get bulk event</p>
