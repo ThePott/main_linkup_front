@@ -11,6 +11,7 @@ import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner"
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
+import useDetailContent from "./useDetailContent";
 import MyFanPostModal from "../mypage/MyFanPostModal";
 import useSubscriptions from "../../shared/services/useSubscriptions";
 
@@ -34,11 +35,20 @@ const DetailContent = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const isSubscribed = artistArray.some((a) => a.id === Number(id));
-    const currentArtist = artistArray.find((a) => a.id === Number(id));
-    const imageUrl = currentArtist?.banner_url || currentArtist?.artist_image_url;
+    const { currentArtist } = useDetailContent(id);
+
+    const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
+
+    const imageUrl = currentArtist?.banner_url;
 
     const scrollRef = useRef(null);
+
+    const makeVariables = () => {
+        return {
+            newOne: currentArtist,
+            body: { artist_id: currentArtist.id },
+        };
+    };
 
     const scrollLeft = () => {
         if (scrollRef.current) {
@@ -62,7 +72,7 @@ const DetailContent = () => {
             deleteMutation.mutate(id);
             return;
         }
-        postMutation.mutate(id);
+        postMutation.mutate(makeVariables());
     };
 
     useEffect(() => {
