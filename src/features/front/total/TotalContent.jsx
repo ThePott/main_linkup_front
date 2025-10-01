@@ -3,7 +3,7 @@ import CustomImageBanner from "../../../shared/CustomImageBanner/CustomImageBann
 import CustomImageIcon from "../../../shared/CustomImageIcon/CustomImageIcon";
 import styles from "./TotalContent.module.css";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton";
 import { useNavigate } from "react-router";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
@@ -13,28 +13,34 @@ import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
+    const scheduleArray = useLinkUpStore((state) => state.selectedMonthEventArray);
+    const setEventArray = useLinkUpStore((state) => state.setEventArray);
     const [page, setPage] = useState(1);
     const itemsPerPage = 5;
     const navigate = useNavigate();
 
     const endpoint = "/api/events";
-    const {
-        isPending,
-        error,
-        data: scheduleArray,
-    } = useQuery({
+    const { isPending, error, data } = useQuery({
         queryKey: [endpoint],
         queryFn: () => axiosReturnsData("GET", endpoint),
         onError: (error) => console.error(error),
     });
+
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        setEventArray(data.events);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
 
     if (isPending) return <p>데이터를 불러오는 중입니다...</p>;
     if (error) return <p>알 수 없는 오류가 발생했습니다.</p>;
 
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentItems = scheduleArray.events?.slice(startIndex, endIndex) ?? [];
-    const totalPages = Math.ceil((scheduleArray.events?.length ?? 0) / itemsPerPage);
+    const currentItems = scheduleArray.slice(startIndex, endIndex) ?? [];
+    const totalPages = Math.ceil((scheduleArray.length ?? 0) / itemsPerPage);
 
     //배너 이미지 api가 모호하여 임의로 지정
     const url = artistArray[0].artist_image_url;

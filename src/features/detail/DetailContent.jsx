@@ -21,8 +21,8 @@ const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
 
-    const eventArray = useLinkUpStore((state) => state.eventArray);
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
+    const selectedMonthEventArray = useLinkUpStore((state) => state.selectedMonthEventArray);
 
     const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
     const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
@@ -136,7 +136,7 @@ const DetailContent = () => {
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {eventArray.map((schedule) => {
+                    {selectedMonthEventArray.map((schedule) => {
                         const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
                         return (
                             <RoundBox key={schedule.id}>
@@ -170,3 +170,4 @@ const DetailContent = () => {
 };
 
 export default DetailContent;
+
