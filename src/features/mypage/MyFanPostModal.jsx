@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import CommentColumn from "../../package/CommentColumn";
-import Like from "../../package/Like";
 import styles from "./MyFanPostModal.module.css";
 import Modal from "../../package/modal/Modal";
 import CustomImageCard from "../../shared/CustomImageCard/CustomImageCard";
@@ -30,7 +29,6 @@ const MyFanPostModal = () => {
             <div className={styles.container}>
                 <section>
                     <CustomImageCard url={selectedFanPost.image_url} />
-                    <Like />
                     <section className={styles.content}>
                         <div>{artist}</div>
                         <div>{content}</div>

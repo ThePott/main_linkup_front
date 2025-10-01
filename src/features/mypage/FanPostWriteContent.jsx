@@ -7,39 +7,55 @@ import Modal from "../../package/modal/Modal";
 import { useMutation } from "@tanstack/react-query";
 import styles from "./FanPostWriteContent.module.css";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
+import useAuth from "../../shared/services/useAuth";
+import queryClient from "../../shared/services/queryClient";
 
 const FanPostWriteContent = () => {
-    const addFanPost = useLinkUpStore((state) => state.addFanPost);
     const artistArray = useLinkUpStore((state) => state.artistArray);
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-    // const [completedModalOpen, setCompletedModalOpen] = useState(false);
     const [exitConfirmModalOpen, setExitConfirmModalOpen] = useState(false);
+
+    useAuth();
 
     const inputRef = useRef(null);
     const navigate = useNavigate();
 
-    const postFanPost = async (formData) => {
-        const endpoint = "api/posts";
-        const data = await axiosReturnsData("POST", endpoint, formData);
-        console.log("post fan post data", data);
-    };
+    const queryEndpoint = "/api/auth/me";
+    const mutationEndpoint = "/api/posts";
 
-    const mutation = useMutation({
-        mutationFn: postFanPost,
-        onSuccess: (newPost) => {
-            // debugger;
-            // addFanPost(newPost);
+    const postMutation = useMutation({
+        mutationFn: (body) => axiosReturnsData("POST", mutationEndpoint, body),
+
+        onMutate: async (body) => {
+            await queryClient.cancelQueries({ queryKey: [queryEndpoint] });
+            const previousUser = queryClient.getQueryData([queryEndpoint]);
+
+            const newPost = {
+                post_content: body.get("post_content"),
+                artist_id: body.get("artist_id"),
+                imageFile: body.get("post_image"),
+            };
+
+            const newUser = {
+                ...previousUser,
+                posts: [...(previousUser?.posts || []), newPost],
+            };
+            queryClient.setQueryData([queryEndpoint], newUser);
+            return { previousUser };
+        },
+        onSuccess: (data) => {
             setModalKey("completed");
-            // setCompletedModalOpen(true); //modalkey로 바꾸기
             setTimeout(() => {
                 setModalKey(null);
-                //setCompletedModalOpen(false); //modalkey로 바꾸기
                 navigate("/mypage");
             }, 2000);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: [queryEndpoint] });
         },
     });
 
@@ -59,7 +75,7 @@ const FanPostWriteContent = () => {
         const form = document.querySelector(`form.${styles.form}`);
         if (!form) return;
         const formData = new FormData(form);
-        mutation.mutate(formData);
+        postMutation.mutate(formData);
     };
 
     const handleExit = () => setExitConfirmModalOpen(true);

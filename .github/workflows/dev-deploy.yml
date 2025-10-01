@@ -13,6 +13,9 @@ jobs:
               uses: actions/checkout@v5
 
             - name: 의존성 설치 -> 빌드
+              env: 
+                VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+                VITE_PLACEHOLDER_IMAGE: ${{ secrets.VITE_PLACEHOLDER_IMAGE }}
               run: |
                 npm install
                 npm run build

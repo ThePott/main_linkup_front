@@ -50,7 +50,6 @@ const useLinkUpStore = create()(
             selectedMonthEventArray: [],
             setSelectedMonthEventArray: (selectedMonthEventArray) =>
                 set({ selectedMonthEventArray }),
-
             artistArray: [],
             setArtistArray: (artistArray) => {
                 set({ artistArray });

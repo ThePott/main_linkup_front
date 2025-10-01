@@ -3,6 +3,14 @@
   font-family: inherit;
 }
 
+/* ✅ 상단 flex 바 */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .title {
   display: block;
   width: 200px;

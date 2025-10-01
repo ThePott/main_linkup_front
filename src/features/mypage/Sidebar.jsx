@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
@@ -6,6 +7,7 @@ import DeleteAccountModal from "./DeleteAccountModal.jsx";
 import useLinkUpStore from "../../shared/store/store";
 import useSubscriptions from "../../shared/services/useSubscriptions";
 import { useNavigate } from "react-router";
+
 
 const Sidebar = () => {
   const [personalOpen, setPersonalOpen] = useState(false);

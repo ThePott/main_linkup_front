@@ -65,7 +65,7 @@ const FanPostGrid = ({ fanPostArray, isMine, isBlurred = true }) => {
         <GridCardContainer>
             {isMine && <AddCard />}
             {fanPostArray.map((fanPost) => (
-                <FanPostCard fanPost={fanPost} isBlurred={isBlurred} />
+                <FanPostCard key={fanPost.id} fanPost={fanPost} isBlurred={isBlurred} />
             ))}
         </GridCardContainer>
     );

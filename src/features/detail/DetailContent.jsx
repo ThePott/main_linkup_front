@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useEffect, useRef } from "react"; // useRef 추가
+import { useEffect, useRef } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
@@ -11,35 +11,44 @@ import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner"
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
+import useDetailContent from "./useDetailContent";
+import MyFanPostModal from "../mypage/MyFanPostModal";
+import useSubscriptions from "../../shared/services/useSubscriptions";
 
-const getSubscriptions = async () => {
-    const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
-    useLinkUpStore.setState({ artistArray: data });
-};
+// const getSubscriptions = async () => {
+//     const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
+//     useLinkUpStore.setState({ artistArray: data });
+// };
 
 const DetailContent = () => {
     const { type, id } = useParams();
     const navigate = useNavigate();
 
-    const eventArray = useLinkUpStore((state) => state.eventArray);
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
+    const selectedMonthEventArray = useLinkUpStore((state) => state.selectedMonthEventArray);
 
     const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
     const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
 
     const artistArray = useLinkUpStore((state) => state.artistArray);
 
-    const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
-
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
+    const { currentArtist } = useDetailContent(id);
+
     const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
 
-    const currentArtist = artistArray.find((a) => a.artist_id === Number(id));
     const imageUrl = currentArtist?.banner_url;
 
     const scrollRef = useRef(null);
+
+    const makeVariables = () => {
+        return {
+            newOne: currentArtist,
+            body: { artist_id: currentArtist.id },
+        };
+    };
 
     const scrollLeft = () => {
         if (scrollRef.current) {
@@ -53,9 +62,18 @@ const DetailContent = () => {
         }
     };
 
-    useEffect(() => {
-        getSubscriptions();
-    }, []);
+    // useEffect(() => {
+    //     getSubscriptions();
+    // }, []);
+
+    const { postMutation, deleteMutation } = useSubscriptions();
+    const handleConfirmClick = () => {
+        if (isSubscribed) {
+            deleteMutation.mutate(id);
+            return;
+        }
+        postMutation.mutate(makeVariables());
+    };
 
     useEffect(() => {
         const fetchEvents = async (params) => {
@@ -103,7 +121,6 @@ const DetailContent = () => {
                         <CustomImageIcon
                             key={artistItem.artist_id}
                             url={artistItem.artist_image_url}
-                            className={styles.circleIcon}
                             onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
                         />
                     ))}
@@ -115,7 +132,7 @@ const DetailContent = () => {
                 <div className={styles.buttonRight}>
                     <CustomButton
                         shape="RECTANGLE"
-                        color={isSubscribed ? "MONO" : "PRIMARY"}
+                        color= "MONO"
                         isOn
                         onClick={() => setModalKey("subscribeModal")}
                     >
@@ -136,7 +153,7 @@ const DetailContent = () => {
             <div className={styles.scheduleSection}>
                 <h3 className={styles.scheduleTitle}>일정</h3>
                 <div className={styles.scheduleList}>
-                    {eventArray.map((schedule) => {
+                    {selectedMonthEventArray.map((schedule) => {
                         const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
                         return (
                             <RoundBox key={schedule.id}>
@@ -154,17 +171,12 @@ const DetailContent = () => {
             <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
                 <div>
                     <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
-                    <CustomButton
-                        onClick={async () => {
-                            await toggleSubscribe(Number(id));
-                            setModalKey(null);
-                        }}
-                    >
-                        확인
-                    </CustomButton>
+                    <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
                     <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
             </Modal>
+            
+            <MyFanPostModal />
         </div>
     );
 };
