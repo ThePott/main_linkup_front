@@ -98,9 +98,7 @@ const MyPage = () => {
       {/* 본문 영역 */}
       <div className={styles.mypageContainer}>
         <div className={styles.mypageContent}>
-          <div className={styles.cardGrid}>
-            <MyFanPost posts={myPosts} />
-          </div>
+            <MyFanPost />
         </div>
 
         {/* 오른쪽 사이드바 */}

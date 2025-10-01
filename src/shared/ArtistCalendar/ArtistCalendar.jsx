@@ -23,11 +23,10 @@ const ArtistCalendar = ({ isMedium = false }) => {
     const setSelectedMonthEventArray = useLinkUpStore((state) => state.setSelectedMonthEventArray);
 
     const handleDateChange = (date) => {
-        if (!date) {
-            return;
-        }
-        const selectedYear = date.getFullYear();
-        const selectedMonth = date.getMonth() + 1;
+        const selectedDate = date ?? new Date();
+
+        const selectedYear = selectedDate.getFullYear();
+        const selectedMonth = selectedDate.getMonth() + 1;
 
         const filteredEventArray = filterEventArray(eventArray, selectedYear, selectedMonth);
         setSelectedMonthEventArray(filteredEventArray);
@@ -39,12 +38,14 @@ const ArtistCalendar = ({ isMedium = false }) => {
     }, [eventArray]);
 
     return (
-        <Calendar
-            size={isMedium ? "md" : "lg"}
-            eventArray={eventArray}
-            onDateChange={handleDateChange}
-            additionalButtonArray={[<BulkDownloadButton />]}
-        />
+        <>
+            <Calendar
+                size={isMedium ? "md" : "lg"}
+                eventArray={eventArray}
+                onDateChange={handleDateChange}
+                additionalButtonArray={[<BulkDownloadButton />]}
+            />
+        </>
     );
 };
 
