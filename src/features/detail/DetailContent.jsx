@@ -11,11 +11,12 @@ import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner"
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
 import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
+import useSubscriptions from "../../shared/services/useSubscriptions";
 
-const getSubscriptions = async () => {
-    const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
-    useLinkUpStore.setState({ artistArray: data });
-};
+// const getSubscriptions = async () => {
+//     const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
+//     useLinkUpStore.setState({ artistArray: data });
+// };
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -28,8 +29,6 @@ const DetailContent = () => {
     const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
 
     const artistArray = useLinkUpStore((state) => state.artistArray);
-
-    const toggleSubscribe = useLinkUpStore((state) => state.toggleSubscribe);
 
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
@@ -53,9 +52,18 @@ const DetailContent = () => {
         }
     };
 
-    useEffect(() => {
-        getSubscriptions();
-    }, []);
+    // useEffect(() => {
+    //     getSubscriptions();
+    // }, []);
+
+    const { postMutation, deleteMutation } = useSubscriptions();
+    const handleConfirmClick = () => {
+        if (isSubscribed) {
+            deleteMutation.mutate(id);
+            return;
+        }
+        postMutation.mutate(id);
+    };
 
     useEffect(() => {
         const fetchEvents = async (params) => {
@@ -154,14 +162,7 @@ const DetailContent = () => {
             <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
                 <div>
                     <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
-                    <CustomButton
-                        onClick={async () => {
-                            await toggleSubscribe(Number(id));
-                            setModalKey(null);
-                        }}
-                    >
-                        확인
-                    </CustomButton>
+                    <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
                     <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
             </Modal>
@@ -170,4 +171,3 @@ const DetailContent = () => {
 };
 
 export default DetailContent;
-
