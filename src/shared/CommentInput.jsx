@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styles from "./CommentInput.module.css";
 import CustomInput from "../package/CustomInput";
 import CustomButton from "../package/customButton/CustomButton";
@@ -33,7 +33,7 @@ const CommentInput = () => {
         const body = {
             comment_content: value,
         };
-        const newOne = { content: value };
+        const newOne = { id: Date.now(), content: value, created_at: new Date() };
         postMutation.mutate({ body, newOne });
     };
 

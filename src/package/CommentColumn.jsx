@@ -18,7 +18,7 @@ const CommentColumn = ({ commentArray = [] }) => {
             <FlexOneContainer>
                 <ul className={styles.list}>
                     {commentArray.map((comment) => (
-                        <CommentBox key={comment.id} item={comment} />
+                        <CommentBox key={comment.id} comment={comment} />
                     ))}
                     <div ref={inputRef} />
                 </ul>
