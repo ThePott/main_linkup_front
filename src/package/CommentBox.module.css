@@ -4,7 +4,6 @@
     align-items: center;
     margin-bottom: var(--spacing-xs);
     padding: var(--spacing-sm);
-    /* width: var(--sizing-md); */
     color: var(--color-bg);
     border-radius: var(--rounded-md);
     background-color: var(--color-blue);

@@ -8,6 +8,8 @@ import ArrowRight from "../ArrowRight";
 import { Hstack, Vstack } from "../../package/layout";
 import GridContainer from "../../package/gridContainer/GridContainer";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
+import { useQuery } from "@tanstack/react-query";
+import { axiosReturnsData } from "../../shared/services/axiosInstance";
 
 const MyFanPostModal = () => {
     // const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
@@ -15,6 +17,13 @@ const MyFanPostModal = () => {
     const selectedFanPost = useLinkUpStore((state) => state.selectedFanPost);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const modalKey = useLinkUpStore((state) => state.modalKey);
+
+    const endpoint = `/api/posts/${selectedFanPost?.id}/comments`;
+    const { data: commentArray } = useQuery({
+        queryKey: [endpoint],
+        queryFn: () => axiosReturnsData("GET", endpoint),
+        enabled: Boolean(selectedFanPost),
+    });
 
     const handleClose = () => setModalKey(null);
 
@@ -41,7 +50,7 @@ const MyFanPostModal = () => {
                         <div>{content}</div>
                     </section>
                 </Vstack>
-                <CommentColumn />
+                <CommentColumn commentArray={commentArray} />
             </GridContainer>
         </Modal>
     );
