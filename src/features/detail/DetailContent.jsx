@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useEffect, useRef } from "react"; // useRef 추가
+import { useEffect, useRef } from "react"; 
 import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
@@ -35,10 +35,10 @@ const DetailContent = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
+    const isSubscribed = artistArray.some((a) => a.id === Number(id));
 
-    const currentArtist = artistArray.find((a) => a.artist_id === Number(id));
-    const imageUrl = currentArtist?.banner_url;
+    const currentArtist = artistArray.find((a) => a.id === Number(id));
+    const imageUrl = currentArtist?.banner_url || currentArtist?.artist_image_url;
 
     const scrollRef = useRef(null);
 
