@@ -3,8 +3,11 @@ import { Hstack, Vstack } from "../../../package/layout";
 import AgencySidebar from "./AgencySidebar";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 import AgencyCalendar from "./AgencyCalendar";
+import useCompanies from "../../../shared/services/useCompanies";
 
 const AgencyContent = () => {
+    useCompanies();
+
     return (
         <>
             <Hstack gap="none" className={styles.agencyScreen}>

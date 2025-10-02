@@ -5,9 +5,10 @@ import GridContainer from "../../../package/gridContainer/GridContainer";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
-import useAgentArtistModal from "../agencyServices/useAgencyArtistModal";
 import { useRef } from "react";
 import ImageInput from "../../../package/imageInput/ImageInput";
+import useCompanies from "../../../shared/services/useCompanies";
+import { convertFormDataToArtist } from "../../../shared/utils/formUtils";
 
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
@@ -43,14 +44,6 @@ const ArtistInput = ({ selectedArtist, info }) => {
     );
 };
 
-const DebugButton = () => {
-    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
-    const handleClick = () => {
-        console.log({ selectedArtist });
-    };
-    return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
-};
-
 const AgencyArtistModal = () => {
     const formRef = useRef(null);
 
@@ -58,7 +51,8 @@ const AgencyArtistModal = () => {
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
-    const { isPending, error, postMutation, putMutation, deleteMutation } = useAgentArtistModal();
+    // const { isPending, error, postMutation, putMutation, deleteMutation } = useAgentArtistModal();
+    const { artistsPostMutation, artistsPutMutation, artistsDeleteMutation } = useCompanies();
 
     const dismiss = () => {
         setModalKey(null);
@@ -69,7 +63,7 @@ const AgencyArtistModal = () => {
             throw new Error("---- ERROR OCCURRED: 유저 혹은 아티스트가 없는데 삭제를 하려 함");
         }
 
-        deleteMutation.mutate(selectedArtist.id);
+        artistsDeleteMutation.mutate({ newOne: selectedArtist });
         dismiss();
         // TODO: 삭제한 걸 로컬에도 반영해야 한다
     };
@@ -78,16 +72,18 @@ const AgencyArtistModal = () => {
         event.preventDefault();
 
         const formData = new FormData(event.target);
+        const artist = convertFormDataToArtist(formData);
+        const newOne = { id: Date.now(), ...artist };
 
         // Override computed field
         const artist_type = formData.get("group_name") ? "group" : "individual";
-        formData.set("artist_type", artist_type);
+        newOne.artist_type = artist_type;
 
         if (selectedArtist) {
             formData.append("id", selectedArtist.id);
-            putMutation.mutate(formData);
+            artistsPutMutation.mutate({ body: formData, newOne });
         } else {
-            postMutation.mutate(formData);
+            artistsPostMutation.mutate({ body: formData, newOne });
         }
 
         // TODO: POST or PUT 요청 보내고서 로컬에도 반영해야 함
@@ -121,7 +117,6 @@ const AgencyArtistModal = () => {
                     )}
                 </GridContainer>
             </form>
-            <DebugButton />
         </Modal>
     );
 };

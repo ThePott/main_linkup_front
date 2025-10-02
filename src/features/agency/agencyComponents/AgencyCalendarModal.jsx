@@ -1,10 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInputLabeled from "../../../package/CustomInputLabeled";
 import { Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+import useCompanies from "../../../shared/services/useCompanies";
+import { useForm } from "react-hook-form";
+import LabelGroup from "../../../package/labelGroup/LabelGroup";
+import CustomInput from "../../../package/CustomInput";
 
 // Convert: "2025-11-11T08:31:10.811895Z"
 // To: "2025-11-11T08:31"
@@ -19,116 +21,77 @@ const AgencyCalendarModal = () => {
     const selectedEvent = useLinkUpStore((state) => state.selectedEvent);
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
 
-    const postMutation = useMutation({
-        mutationFn: (body) =>
-            axiosReturnsData("POST", `/api/companies/events`, body),
-    });
-    const putMutation = useMutation({
-        mutationFn: ({ body, id }) =>
-            axiosReturnsData("PUT", `/api/companies/events/${id}`, body),
-    });
-    const deleteMutation = useMutation({
-        mutationFn: (id) =>
-            axiosReturnsData("DELETE", `/api/companies/events/${id}`),
-    });
+    const { eventsPostMutation, eventsPutMutation, eventsDeleteMutation } = useCompanies();
+
+    const { register, handleSubmit } = useForm();
 
     const handleDismiss = () => {
         setModalKey(null);
     };
 
-    const handleSubmit = (formEvent) => {
-        formEvent.preventDefault();
-        const target = formEvent.target;
-        const title = target.title.value;
-        const category = target.category.value;
-        const description = target.description.value;
-        const start_time = target.start_time.value;
-        const end_time = target.end_time.value;
-        const location = target.location.value;
+    const onSubmit = (data) => {
+        data.artist_id = selectedArtist.id;
+        const body = data;
 
-        const body = {
-            artist_id: selectedArtist.id,
-            title,
-            category,
-            description,
-            start_time,
-            end_time,
-            location,
-        };
-        console.log({ body });
+        const eventId = selectedEvent?.id ?? Date.now();
+        const newOne = { id: eventId, ...data };
 
-        const eventId = selectedEvent.id;
-        if (eventId) {
-            putMutation.mutate({ body, id: eventId });
+        if (selectedEvent) {
+            eventsPutMutation.mutate({ body, newOne });
         } else {
-            postMutation.mutate(body);
+            eventsPostMutation.mutate({ body, newOne });
         }
+
         handleDismiss();
     };
 
     return (
-        <Modal
-            isOn={modalKey === "agencyCalendar"}
-            onBackgroundClick={handleDismiss}
-        >
-            <form onSubmit={handleSubmit}>
+        <Modal isOn={modalKey === "agencyCalendar"} onBackgroundClick={handleDismiss}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <Vstack>
-                    <CustomInputLabeled
-                        label="제목"
-                        inputProps={{
-                            name: "title",
-                            defaultValue: selectedEvent?.title,
-                        }}
-                    />
-                    <CustomInputLabeled
-                        label="카테고리"
-                        inputProps={{
-                            name: "category",
-                            defaultValue: selectedEvent?.category,
-                        }}
-                    />
-                    <CustomInputLabeled
-                        label="설명"
-                        inputProps={{
-                            name: "description",
-                            defaultValue: selectedEvent?.description,
-                        }}
-                    />
-                    <CustomInputLabeled
-                        label="시작 시각"
-                        inputProps={{
-                            name: "start_time",
-                            type: "datetime-local",
-                            defaultValue: convertIsoToDatetimeLocal(
-                                selectedEvent?.start_time,
-                            ),
-                        }}
-                    />
-                    <CustomInputLabeled
-                        label="종료 시각"
-                        inputProps={{
-                            name: "end_time",
-                            type: "datetime-local",
-                            defaultValue: convertIsoToDatetimeLocal(
-                                selectedEvent?.end_time,
-                            ),
-                        }}
-                    />
-                    <CustomInputLabeled
-                        label="장소"
-                        inputProps={{
-                            name: "location",
-                            defaultValue: selectedEvent?.location,
-                        }}
-                    />
+                    <LabelGroup>
+                        <LabelGroup.BigLabel>제목</LabelGroup.BigLabel>
+                        <CustomInput {...register("title")} defaultValue={selectedEvent?.title} />
+                    </LabelGroup>
+                    <LabelGroup>
+                        <LabelGroup.BigLabel>설명</LabelGroup.BigLabel>
+                        <CustomInput
+                            {...register("description")}
+                            defaultValue={selectedEvent?.description}
+                        />
+                    </LabelGroup>
+                    <LabelGroup>
+                        <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
+                        <CustomInput
+                            {...register("start_time")}
+                            type="datetime-local"
+                            defaultValue={convertIsoToDatetimeLocal(selectedEvent?.start_time)}
+                        />
+                    </LabelGroup>
+                    <LabelGroup>
+                        <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
+                        <CustomInput
+                            {...register("end_time")}
+                            type="datetime-local"
+                            defaultValue={convertIsoToDatetimeLocal(selectedEvent?.end_time)}
+                        />
+                    </LabelGroup>
+                    <LabelGroup>
+                        <LabelGroup.BigLabel>장소</LabelGroup.BigLabel>
+                        <CustomInput
+                            {...register("location")}
+                            defaultValue={selectedEvent?.location}
+                        />
+                    </LabelGroup>
                     <CustomButton>제출</CustomButton>
+                    <CustomButton
+                        type="button"
+                        onClick={() => deleteMutation.mutate(selectedEvent?.id ?? -1)}
+                    >
+                        삭제
+                    </CustomButton>
                 </Vstack>
             </form>
-            <CustomButton
-                onClick={() => deleteMutation.mutate(selectedEvent?.id ?? -1)}
-            >
-                삭제
-            </CustomButton>
         </Modal>
     );
 };

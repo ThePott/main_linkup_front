@@ -3,7 +3,6 @@ import CustomButton from "../../../package/customButton/CustomButton";
 import RoundBox from "../../../package/RoundBox";
 import { BulkDownloadButton } from "../../../shared/ArtistCalendar/AdditionalCalendarButtons";
 import useLinkUpStore from "../../../shared/store/store";
-import useAgencyCalendar from "../agencyServices/useAgencyCalendar";
 import styles from "./AgencyCalendar.module.css";
 import AgencyCalendarModal from "./AgencyCalendarModal";
 import UploadModal from "./UploadModal";
@@ -21,7 +20,6 @@ const AgencyCalendar = () => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedEvent = useLinkUpStore((state) => state.setSelectedEvent);
 
-    const { isPending, error } = useAgencyCalendar();
     return (
         <>
             <AgencyCalendarModal />
