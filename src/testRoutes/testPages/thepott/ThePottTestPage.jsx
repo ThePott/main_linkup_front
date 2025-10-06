@@ -112,7 +112,7 @@ const ThePottTestPage = () => {
     return (
         <div>
             <CalendarRowDebugButton />
-            <Modal isOn={isOn} onBackgroundClick={handleClick}>
+            <Modal isOn={false} onBackgroundClick={handleClick}>
                 <p>anything here yayayay</p>
                 <p>anything here yayayay</p>
                 <p>anything here yayayay</p>
