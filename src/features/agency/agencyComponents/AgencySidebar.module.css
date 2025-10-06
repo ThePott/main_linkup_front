@@ -4,6 +4,11 @@
     color: var(--color);
 }
 
+.plusIcon {
+    color: var(--color-vivid);
+    height: var(--spacing-lg);
+}
+
 .sidebar {
     text-align: start;
     height: 100%;

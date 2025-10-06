@@ -5,6 +5,8 @@ import useLinkUpStore from "../../../shared/store/store";
 import AgencyArtistModal from "./AgencyArtistModal";
 import RoundBox from "../../../package/RoundBox";
 import { memo } from "react";
+import PlusIcon from "../../../package/icons/PlusIcon";
+import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
 const ArtistButton = memo(({ artist, isOn }) => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
@@ -55,6 +57,14 @@ const ArtistButtonGroup = memo(({ artistArray, isOnArray }) => {
     );
 });
 
+const PlusButton = memo(() => {
+    return (
+        <CustomButton>
+            <PlusIcon className={styles.plusIcon} />
+        </CustomButton>
+    );
+});
+
 const AgencySidebar = () => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
@@ -84,19 +94,25 @@ const AgencySidebar = () => {
         <>
             <AgencyArtistModal />
             <Vstack className={styles.sidebar}>
-                {soloArtistArray.map((artist, index) => (
-                    <ArtistButton key={artist.id} isOn={soloIsOnArray[index]} artist={artist} />
-                ))}
-                {groupedEntryArray.map((entry) => (
-                    <ArtistButtonGroup
-                        key={entry[0]}
-                        artistArray={entry[1].artistArray}
-                        isOnArray={entry[1].isOnArray}
-                    />
-                ))}
-                <CustomButton isOn={true} onClick={handleAdd}>
-                    추가
-                </CustomButton>
+                <FlexOneContainer isYScrollable>
+                    <Vstack>
+                        {soloArtistArray.map((artist, index) => (
+                            <ArtistButton
+                                key={artist.id}
+                                isOn={soloIsOnArray[index]}
+                                artist={artist}
+                            />
+                        ))}
+                        {groupedEntryArray.map((entry) => (
+                            <ArtistButtonGroup
+                                key={entry[0]}
+                                artistArray={entry[1].artistArray}
+                                isOnArray={entry[1].isOnArray}
+                            />
+                        ))}
+                    </Vstack>
+                </FlexOneContainer>
+                <PlusButton onClick={handleAdd} />
             </Vstack>
         </>
     );
