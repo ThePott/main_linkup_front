@@ -7,6 +7,7 @@ import useCompanies from "../../../shared/services/useCompanies";
 import { useForm } from "react-hook-form";
 import LabelGroup from "../../../package/labelGroup/LabelGroup";
 import CustomInput from "../../../package/CustomInput";
+import { useEffect } from "react";
 
 // Convert: "2025-11-11T08:31:10.811895Z"
 // To: "2025-11-11T08:31"
@@ -23,7 +24,22 @@ const AgencyCalendarModal = () => {
 
     const { eventsPostMutation, eventsPutMutation, eventsDeleteMutation } = useCompanies();
 
-    const { register, handleSubmit } = useForm();
+    const defaultValues = {
+        title: selectedEvent?.title || "",
+        description: selectedEvent?.description || "",
+        start_time: convertIsoToDatetimeLocal(selectedEvent?.start_time),
+        end_time: convertIsoToDatetimeLocal(selectedEvent?.end_time),
+        location: selectedEvent?.location || "",
+    };
+
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues,
+    });
+
+    useEffect(() => {
+        reset(defaultValues);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalKey, selectedEvent]);
 
     const handleDismiss = () => {
         setModalKey(null);
@@ -59,37 +75,23 @@ const AgencyCalendarModal = () => {
                 <Vstack>
                     <LabelGroup>
                         <LabelGroup.BigLabel>제목</LabelGroup.BigLabel>
-                        <CustomInput {...register("title")} defaultValue={selectedEvent?.title} />
+                        <CustomInput {...register("title")} />
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>설명</LabelGroup.BigLabel>
-                        <CustomInput
-                            {...register("description")}
-                            defaultValue={selectedEvent?.description}
-                        />
+                        <CustomInput {...register("description")} />
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
-                        <CustomInput
-                            {...register("start_time")}
-                            type="datetime-local"
-                            defaultValue={convertIsoToDatetimeLocal(selectedEvent?.start_time)}
-                        />
+                        <CustomInput {...register("start_time")} type="datetime-local" />
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
-                        <CustomInput
-                            {...register("end_time")}
-                            type="datetime-local"
-                            defaultValue={convertIsoToDatetimeLocal(selectedEvent?.end_time)}
-                        />
+                        <CustomInput {...register("end_time")} type="datetime-local" />
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>장소</LabelGroup.BigLabel>
-                        <CustomInput
-                            {...register("location")}
-                            defaultValue={selectedEvent?.location}
-                        />
+                        <CustomInput {...register("location")} />
                     </LabelGroup>
                     <CustomButton>제출</CustomButton>
                     <CustomButton type="button" onClick={handleDelete}>
