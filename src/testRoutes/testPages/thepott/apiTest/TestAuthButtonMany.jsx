@@ -1,6 +1,9 @@
 import { getThenLog, postThenLog } from "../../../../package/commonServices/fetchVariants";
+import CustomButton from "../../../../package/customButton/CustomButton";
 
-const testAuth = (baseURL, accessToken, setAccessToken) => {
+const baseURL = import.meta.env.BASE_URL;
+
+const TestAuthButtonMany = (accessToken, setAccessToken) => {
     const postEmailVerification = () =>
         postThenLog(`${baseURL}/api/auth/send-verification-email`, {
             email: "nusilite@gmail.com",
@@ -28,7 +31,20 @@ const testAuth = (baseURL, accessToken, setAccessToken) => {
 
     const getMe = () => getThenLog(`${baseURL}/api/auth/me`, undefined, accessToken);
 
-    return { postEmailVerification, postFanLogin, postCompanyLogin, getMe };
+    return (
+        <>
+            <CustomButton onClick={postEmailVerification}>send email verification</CustomButton>
+            <CustomButton onClick={postFanLogin}>
+                <p>fan login</p>
+            </CustomButton>
+            <CustomButton onClick={postCompanyLogin}>
+                <p>company login</p>
+            </CustomButton>
+            <CustomButton onClick={getMe}>
+                <p>get me</p>
+            </CustomButton>
+        </>
+    );
 };
 
-export default testAuth;
+export default TestAuthButtonMany;

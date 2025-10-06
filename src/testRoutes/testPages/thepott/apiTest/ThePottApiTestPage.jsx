@@ -9,7 +9,8 @@ import { FullScreen, Vstack } from "../../../../package/layout";
 import FlexOneContainer from "../../../../package/flexOneContainer/FlexOneContainer";
 import CustomButton from "../../../../package/customButton/CustomButton";
 import RoundBox from "../../../../package/RoundBox";
-import testAuth from "./testAuth";
+import TestAuthButtonMany from "./TestAuthButtonMany";
+import TestEventsButtonMany from "./testEvents";
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
@@ -31,9 +32,6 @@ const postFanPost = () =>
 
 const ThePottApiTestPage = () => {
     const [accessToken, setAccessToken] = useState(null);
-
-    const testAuthReturns = testAuth(baseURL, accessToken, setAccessToken);
-    const testEventsReturns = testEvents(baseURL, accessToken);
 
     const getFanSubscriptionWithName = (callback) =>
         getThenLog(`${baseURL}/api/subscriptions/?include_image=true`, callback, accessToken);
@@ -77,61 +75,45 @@ const ThePottApiTestPage = () => {
                         </RoundBoxGlobalShadow>
                         <CustomButton onClick={getHome}>get home</CustomButton>
                         <CustomButton onClick={getHealth}>get health</CustomButton>
-                        <CustomButton onClick={testAuthReturns.postEmailVerification}>
-                            send email verification
-                        </CustomButton>
-                        <CustomButton onClick={testAuthReturns.postFanLogin}>
-                            <p>fan login</p>
-                        </CustomButton>
-                        <CustomButton onClick={testAuthReturns.postCompanyLogin}>
-                            <p>company login</p>
-                        </CustomButton>
-                        <CustomButton onClick={testAuthReturns.getMe}>
-                            <p>get me</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => testEventsReturns.getEvents()}>
-                            <p>get events</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => testEventsReturns.getEventsWithoutToken()}>
-                            <p>get events without token</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => testEventsReturns.getEventsWithIsActive()}>
-                            <p>get events with is active</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getFanSubscriptionWithName(callbackLog)}>
+                        <TestAuthButtonMany
+                            accessToken={accessToken}
+                            setAccessToken={setAccessToken}
+                        />
+                        <TestEventsButtonMany accessToken={accessToken} />
+                        <CustomButton onClick={() => getFanSubscriptionWithName()}>
                             <p>get subscription with name</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getFanSubscription(callbackLog)}>
+                        <CustomButton onClick={() => getFanSubscription()}>
                             <p>get subscription</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getIdol(callbackLog)}>
+                        <CustomButton onClick={() => getIdol()}>
                             <p>get idol</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
+                        <CustomButton onClick={() => getIdolWithoutToken()}>
                             <p>get idol without token</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getIdolKarina(callbackLog)}>
+                        <CustomButton onClick={() => getIdolKarina()}>
                             <p>get idol karina</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getCompaniesArtists(callbackLog)}>
+                        <CustomButton onClick={() => getCompaniesArtists()}>
                             <p>get companies artists</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getCompaniesEvents(callbackLog)}>
+                        <CustomButton onClick={() => getCompaniesEvents()}>
                             <p>get companies events</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getCompaniesEventsAespa(callbackLog)}>
+                        <CustomButton onClick={() => getCompaniesEventsAespa()}>
                             <p>get companies events</p>
                         </CustomButton>
-                        <CustomButton onClick={() => postFanPost(callbackLog)}>
+                        <CustomButton onClick={() => postFanPost()}>
                             <p>post fan posting</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getPosts(callbackLog)}>
+                        <CustomButton onClick={() => getPosts()}>
                             <p>get all posts</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getPostsOfFirst(callbackLog)}>
+                        <CustomButton onClick={() => getPostsOfFirst()}>
                             <p>get posts of first idol</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getBulkEvent(callbackLog)}>
+                        <CustomButton onClick={() => getBulkEvent()}>
                             <p>get bulk event</p>
                         </CustomButton>
                         <RoundBox>
@@ -140,7 +122,7 @@ const ThePottApiTestPage = () => {
                                 <CustomButton>upload</CustomButton>
                             </form>
                         </RoundBox>
-                        <CustomButton onClick={() => getCompanyUploadTemplate(callbackLog)}>
+                        <CustomButton onClick={() => getCompanyUploadTemplate()}>
                             <p>get upload template </p>
                         </CustomButton>
                     </Vstack>
