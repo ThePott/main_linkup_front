@@ -1,6 +1,7 @@
+import styles from "./AgencyCalendarModal.module.css";
 import CustomButton from "../../../package/customButton/CustomButton";
 import CustomInputLabeled from "../../../package/CustomInputLabeled";
-import { Vstack } from "../../../package/layout";
+import { Hstack, Vstack } from "../../../package/layout";
 import Modal from "../../../package/modal/Modal";
 import useLinkUpStore from "../../../shared/store/store";
 import useCompanies from "../../../shared/services/useCompanies";
@@ -10,6 +11,7 @@ import CustomInput from "../../../package/CustomInput";
 import { useEffect, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { eventSchema } from "../../../shared/validations/zodSchema";
+import GridContainer from "../../../package/gridContainer/GridContainer";
 
 // Convert: "2025-11-11T08:31:10.811895Z"
 // To: "2025-11-11T08:31"
@@ -99,9 +101,19 @@ const AgencyCalendarModal = () => {
     };
 
     return (
-        <Modal isOn={modalKey === "agencyCalendar"} onBackgroundClick={handleDismiss}>
+        <Modal
+            isOn={modalKey === "agencyCalendar"}
+            onBackgroundClick={handleDismiss}
+            className={styles.container}
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Vstack>
+                    <Hstack items="end" justify="center">
+                        <p className={styles.artistName}>
+                            {selectedArtist.stage_name || selectedArtist.group_name}
+                        </p>
+                        <p className={styles.date}>{selectedEvent.start_time.split("T")[0]}</p>
+                    </Hstack>
                     <LabelGroup isRed={errors.title}>
                         <LabelGroup.BigLabel>제목</LabelGroup.BigLabel>
                         <CustomInput {...register("title")} />
@@ -118,24 +130,26 @@ const AgencyCalendarModal = () => {
                             </LabelGroup.SmallLabel>
                         )}
                     </LabelGroup>
-                    <LabelGroup isRed={errors.startTimeOnlyTime}>
-                        <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
-                        <CustomInput {...register("startTimeOnlyTime")} type="time" />
-                        {errors.startTimeOnlyTime && (
-                            <LabelGroup.SmallLabel>
-                                {errors.startTimeOnlyTime.message}
-                            </LabelGroup.SmallLabel>
-                        )}
-                    </LabelGroup>
-                    <LabelGroup isRed={errors.endTimeOnlyTime}>
-                        <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
-                        <CustomInput {...register("endTimeOnlyTime")} type="time" />
-                        {errors.endTimeOnlyTime && (
-                            <LabelGroup.SmallLabel>
-                                {errors.endTimeOnlyTime.message}
-                            </LabelGroup.SmallLabel>
-                        )}
-                    </LabelGroup>
+                    <GridContainer cols={2}>
+                        <LabelGroup isRed={errors.startTimeOnlyTime}>
+                            <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
+                            <CustomInput {...register("startTimeOnlyTime")} type="time" />
+                            {errors.startTimeOnlyTime && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.startTimeOnlyTime.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                        <LabelGroup isRed={errors.endTimeOnlyTime}>
+                            <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
+                            <CustomInput {...register("endTimeOnlyTime")} type="time" />
+                            {errors.endTimeOnlyTime && (
+                                <LabelGroup.SmallLabel>
+                                    {errors.endTimeOnlyTime.message}
+                                </LabelGroup.SmallLabel>
+                            )}
+                        </LabelGroup>
+                    </GridContainer>
                     <LabelGroup isRed={errors.location}>
                         <LabelGroup.BigLabel>장소</LabelGroup.BigLabel>
                         <CustomInput {...register("location")} />
@@ -143,10 +157,12 @@ const AgencyCalendarModal = () => {
                             <LabelGroup.SmallLabel>{errors.location.message}</LabelGroup.SmallLabel>
                         )}
                     </LabelGroup>
-                    <CustomButton>제출</CustomButton>
-                    <CustomButton type="button" onClick={handleDelete}>
-                        삭제
-                    </CustomButton>
+                    <GridContainer cols={2}>
+                        <CustomButton type="button" onClick={handleDelete}>
+                            삭제
+                        </CustomButton>
+                        <CustomButton>제출</CustomButton>
+                    </GridContainer>
                 </Vstack>
             </form>
         </Modal>

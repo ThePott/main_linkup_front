@@ -1,0 +1,11 @@
+.container {
+    width: var(--sizing-lg);
+}
+.artistName {
+    font-weight: var(--font-weight-semibold);
+}
+
+.date {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+}
