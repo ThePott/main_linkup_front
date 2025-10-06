@@ -10,7 +10,7 @@ const useEventsForSearch = () => {
     const artistIdArray = searchResultArray.map((result) => result.id);
 
     const start_date = format(new Date(), "yyyy-MM-dd");
-    const endpoint = `/api/events/?start_date=${start_date}&artist_id=`;
+    const endpoint = `/api/events?start_date=${start_date}&artist_id=`;
 
     const {
         data,

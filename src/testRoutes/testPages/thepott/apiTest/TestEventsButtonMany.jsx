@@ -11,26 +11,22 @@ const TestEventsButtonMany = ({ accessToken }) => {
     const getEventsSubscribed = () =>
         getThenLog(`${baseURL}/api/events/subscribed`, undefined, accessToken);
 
+    const getEventsOfKarina = () => getThenLog(`${baseURL}/api/events?artist_id=6`);
+
     const getBulkEvent = () =>
         getFileThenDownload(`${baseURL}/api/events/file/download-all`, undefined, accessToken);
 
     return (
         <>
-            <CustomButton onClick={getEvents}>
-                <p>get events</p>
-            </CustomButton>
+            <CustomButton onClick={getEvents}>get events</CustomButton>
 
-            <CustomButton onClick={getEventsWithoutToken}>
-                <p>get events without token</p>
-            </CustomButton>
+            <CustomButton onClick={getEventsWithoutToken}>get events without token</CustomButton>
 
-            <CustomButton onClick={getEventsSubscribed}>
-                <p>get events subscribed</p>
-            </CustomButton>
+            <CustomButton onClick={getEventsSubscribed}>get events subscribed</CustomButton>
 
-            <CustomButton onClick={getBulkEvent}>
-                <p>get events download all</p>
-            </CustomButton>
+            <CustomButton onClick={getEventsOfKarina}>get events of karina</CustomButton>
+
+            <CustomButton onClick={getBulkEvent}>get events download all</CustomButton>
         </>
     );
 };
