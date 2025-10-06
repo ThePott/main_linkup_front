@@ -1,15 +1,15 @@
-import CustomButton from "../../../package/customButton/CustomButton";
-import { FullScreen, Vstack } from "../../../package/layout";
-import RoundBox from "../../../package/RoundBox";
+import { useState } from "react";
 import {
     getFileThenDownload,
     getThenLog,
     postFileThenLog,
     postThenLog,
-} from "../../../package/commonServices/fetchVariants";
-import { useState } from "react";
-import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
-import { axiosReturnsData } from "../../../shared/services/axiosInstance";
+} from "../../../../package/commonServices/fetchVariants";
+import { axiosReturnsData } from "../../../../shared/services/axiosInstance";
+import { FullScreen, Vstack } from "../../../../package/layout";
+import FlexOneContainer from "../../../../package/flexOneContainer/FlexOneContainer";
+import CustomButton from "../../../../package/customButton/CustomButton";
+import RoundBox from "../../../../package/RoundBox";
 
 const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
     return (
@@ -116,7 +116,7 @@ const ThePottApiTestPage = () => {
                 <RoundBoxGlobalShadow padding="XL">
                     <Vstack gap="xl">
                         <RoundBoxGlobalShadow padding="XL">
-                            개벌자 도구(Cmd + Alt + I) {"->"} Console 탭
+                            개발자 도구(Cmd + Alt + I) {"->"} Console 탭
                         </RoundBoxGlobalShadow>
                         <CustomButton onClick={getHome}>get home</CustomButton>
                         <CustomButton onClick={getHealth}>get health</CustomButton>
