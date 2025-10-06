@@ -3,7 +3,6 @@ import {
     getFileThenDownload,
     getThenLog,
     postFileThenLog,
-    postThenLog,
 } from "../../../../package/commonServices/fetchVariants";
 import { axiosReturnsData } from "../../../../shared/services/axiosInstance";
 import { FullScreen, Vstack } from "../../../../package/layout";
@@ -34,22 +33,12 @@ const ThePottApiTestPage = () => {
     const [accessToken, setAccessToken] = useState(null);
 
     const testAuthReturns = testAuth(baseURL, accessToken, setAccessToken);
+    const testEventsReturns = testEvents(baseURL, accessToken);
 
     const getFanSubscriptionWithName = (callback) =>
         getThenLog(`${baseURL}/api/subscriptions/?include_image=true`, callback, accessToken);
     const getFanSubscription = (callback) =>
         getThenLog(`${baseURL}/api/subscriptions`, callback, accessToken);
-    const getEvents = (callback) =>
-        getThenLog(
-            // `${baseURL}/events/?artist_parent_group=1`,
-            `${baseURL}/api/events/`,
-            callback,
-            accessToken,
-        );
-    const getEventsWithoutToken = (callback) =>
-        getThenLog(`${baseURL}/api/events/?is_active=true`, callback);
-    const getEventsWithIsActive = (callback) =>
-        getThenLog(`${baseURL}/api/events/?is_active=true`, callback, accessToken);
     const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
     const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
     const getIdolKarina = (callback) => getThenLog(`${baseURL}/api/idol?artist_id=6`, callback);
@@ -100,13 +89,13 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={testAuthReturns.getMe}>
                             <p>get me</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getEvents(callbackLog)}>
+                        <CustomButton onClick={() => testEventsReturns.getEvents()}>
                             <p>get events</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getEventsWithoutToken(callbackLog)}>
+                        <CustomButton onClick={() => testEventsReturns.getEventsWithoutToken()}>
                             <p>get events without token</p>
                         </CustomButton>
-                        <CustomButton onClick={() => getEventsWithIsActive(callbackLog)}>
+                        <CustomButton onClick={() => testEventsReturns.getEventsWithIsActive()}>
                             <p>get events with is active</p>
                         </CustomButton>
                         <CustomButton onClick={() => getFanSubscriptionWithName(callbackLog)}>
