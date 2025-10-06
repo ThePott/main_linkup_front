@@ -110,9 +110,9 @@ const AgencyCalendarModal = () => {
                 <Vstack>
                     <Hstack items="end" justify="center">
                         <p className={styles.artistName}>
-                            {selectedArtist.stage_name || selectedArtist.group_name}
+                            {selectedArtist?.stage_name || selectedArtist?.group_name}
                         </p>
-                        <p className={styles.date}>{selectedEvent.start_time.split("T")[0]}</p>
+                        <p className={styles.date}>{selectedEvent?.start_time?.split("T")[0]}</p>
                     </Hstack>
                     <LabelGroup isRed={errors.title}>
                         <LabelGroup.BigLabel>제목</LabelGroup.BigLabel>

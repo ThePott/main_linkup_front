@@ -10,13 +10,17 @@
 
 :root {
     --color-yellow: light-dark(oklch(0.5 0.0526 89.08), oklch(0.9 0.0526 89.08));
+    --color-yellow-muted: light-dark(oklch(0.5 0.0526 89.08 / 0.6), oklch(0.9 0.0526 89.08 / 0.6));
     --color-yellow-accent: light-dark(oklch(0.4 0.0526 89.08), oklch(0.95 0.0526 89.08));
 
     --color-blue: light-dark(oklch(0.5 0.0526 243.52), oklch(0.9 0.0526 243.52));
+    --color-blue-muted: light-dark(oklch(0.5 0.0526 243.52 / 0.6), oklch(0.9 0.0526 243.52 / 0.6));
     --color-blue-accent: light-dark(oklch(0.4 0.0526 243.52), oklch(0.95 0.0526 243.52));
 
     --color-red: light-dark(oklch(0.5 0.0526 0), oklch(0.9 0.0526 0));
+    --color-red-muted: light-dark(oklch(0.5 0.0526 0 / 0.6), oklch(0.9 0.0526 0 / 0.6));
     --color-red-accent: light-dark(oklch(0.4 0.0526 0), oklch(0.95 0.0526 0));
+
     --color-vivid: light-dark(rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.9));
     --color-muted: light-dark(rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.6));
     --color-vivid-inverted: light-dark(rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));

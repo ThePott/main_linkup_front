@@ -4,44 +4,6 @@
     height: 100%;
 }
 
-.headerCell {
-    padding: var(--spacing-xs);
-    text-align: center;
-}
-
-.businessDay {
-    color: var(--color-vivid);
-}
-.holyday {
-    color: var(--color-red);
-}
-
-.sunday {
-    color: var(--color-red);
-}
-
-.saturday {
-    color: var(--color-blue);
-}
-
-.dim {
-    opacity: 0.3;
-}
-
-.dayCircle {
-    width: 24px;
-    height: 24px;
-    border-radius: var(--rounded-full);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.today {
-    background-color: var(--color-today);
-    color: var(--color-vivid-inverted);
-}
-
 .bold {
     font-weight: var(--font-weight-semibold);
 }

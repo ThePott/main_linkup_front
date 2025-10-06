@@ -1,8 +1,32 @@
 import { format } from "date-fns";
 import { Hstack, Vstack } from "../layout";
 import EventBox, { EventDot } from "./_EventBox";
-import styles from "./calendar.module.css";
+import styles from "./_DateCell.module.css";
 import { useCalendarContext } from "./CalendarContext";
+
+const getColorVar = (dayType, isDim) => {
+    const colorVarArray = ["--color"];
+    switch (dayType) {
+        case "BUSINESS_DAY":
+            break;
+        case "SATURDAY":
+            colorVarArray.push("-blue");
+            break;
+        case "SUNDAY":
+            colorVarArray.push("-red");
+            break;
+    }
+    if (isDim) {
+        colorVarArray.push("-muted");
+    }
+    if (colorVarArray.length === 1) {
+        colorVarArray.push("-vivid");
+    }
+
+    const colorVar = colorVarArray.join("");
+
+    return colorVar;
+};
 
 const getDayType = (date) => {
     const day = date.getDay();
@@ -27,37 +51,35 @@ const getDayTypeFromKorean = (weekday) => {
     }
 };
 
-const dayTypeToClassName = {
-    SUNDAY: styles.sunday,
-    SATURDAY: styles.saturday,
-    BUSINESS_DAY: styles.businessDay,
-};
-
-const dayTypeToColor = {
-    SUNDAY: "var(--color-red)",
-    SATURDAY: "var(--color-blue)",
-    BUSINESS_DAY: "var(--color-vivid)",
-};
-
 export const HeaderCell = ({ weekday }) => {
-    const defaultClassName = styles.headerCell;
     const dayType = getDayTypeFromKorean(weekday);
-    const dayTypeClassName = dayTypeToClassName[dayType];
-    const className = `${defaultClassName} ${dayTypeClassName}`;
-    return <div className={className}>{weekday}</div>;
+    const colorVar = getColorVar(dayType, false);
+
+    const styleForVar = {};
+    styleForVar["--color"] = `var(${colorVar})`;
+
+    return (
+        <div style={styleForVar} className={styles.headerCell}>
+            {weekday}
+        </div>
+    );
 };
 
-const DayCircle = ({ date, isHolyday, isToday }) => {
-    const dayType = isHolyday ? "HOLYDAY" : getDayType(date);
+const DayCircle = ({ date, isHolyday, isToday, isDim }) => {
     const day = date.getDate();
-    const dayTypeClassName = dayTypeToClassName[dayType];
-    const defaultClassName = styles.dayCircle;
-    const todayClassName = isToday ? styles.today : "";
-    const className = `${dayTypeClassName} ${defaultClassName} ${todayClassName}`;
+    const dayType = isHolyday ? "HOLYDAY" : getDayType(date);
+    const colorVar = getColorVar(dayType, isDim);
 
-    const style = { "--color-today": dayTypeToColor[dayType] };
+    const styleForVar = {};
+    if (isToday) {
+        styleForVar["--bg"] = `var(${colorVar})`;
+        styleForVar["--color"] = "var(--color-vivid-inverted)";
+    } else {
+        styleForVar["--color"] = `var(${colorVar})`;
+    }
+
     return (
-        <div style={style} className={className}>
+        <div style={styleForVar} className={styles.dayCircle}>
             {day}
         </div>
     );
@@ -91,9 +113,6 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
 
     const isHolyday = false;
 
-    const opacityClassName = isDim ? styles.dim : "";
-    const className = `${opacityClassName}`;
-
     const handleDoubleClick = () => {
         const selectedDate = format(date, "yyyy-MM-dd");
         setSelectedEvent({ start_time: `${selectedDate}T00:00` });
@@ -102,8 +121,8 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     };
 
     return (
-        <Vstack className={className} onDoubleClick={handleDoubleClick}>
-            <DayCircle date={date} isHolyday={isHolyday} isToday={isToday} />
+        <Vstack onDoubleClick={handleDoubleClick}>
+            <DayCircle isDim={isDim} date={date} isHolyday={isHolyday} isToday={isToday} />
             {size === "lg" && <EventBoxMany eventArray={eventArray} />}
             {size === "md" && <EventDotMany eventArray={eventArray} />}
         </Vstack>
