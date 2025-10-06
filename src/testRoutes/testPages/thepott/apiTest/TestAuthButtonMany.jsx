@@ -1,9 +1,9 @@
 import { getThenLog, postThenLog } from "../../../../package/commonServices/fetchVariants";
 import CustomButton from "../../../../package/customButton/CustomButton";
 
-const baseURL = import.meta.env.BASE_URL;
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const TestAuthButtonMany = (accessToken, setAccessToken) => {
+const TestAuthButtonMany = ({ accessToken, setAccessToken }) => {
     const postEmailVerification = () =>
         postThenLog(`${baseURL}/api/auth/send-verification-email`, {
             email: "nusilite@gmail.com",

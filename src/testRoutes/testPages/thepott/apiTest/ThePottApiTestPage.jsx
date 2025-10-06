@@ -1,78 +1,31 @@
 import { useState } from "react";
-import {
-    getFileThenDownload,
-    getThenLog,
-    postFileThenLog,
-} from "../../../../package/commonServices/fetchVariants";
-import { axiosReturnsData } from "../../../../shared/services/axiosInstance";
+import { getThenLog } from "../../../../package/commonServices/fetchVariants";
 import { FullScreen, Vstack } from "../../../../package/layout";
 import FlexOneContainer from "../../../../package/flexOneContainer/FlexOneContainer";
 import CustomButton from "../../../../package/customButton/CustomButton";
 import RoundBox from "../../../../package/RoundBox";
 import TestAuthButtonMany from "./TestAuthButtonMany";
-import TestEventsButtonMany from "./testEvents";
-
-const RoundBoxGlobalShadow = ({ style, children, ...props }) => {
-    return (
-        <RoundBox style={{ boxShadow: "var(--drop-shadow-md)", ...style }} {...props}>
-            {children}
-        </RoundBox>
-    );
-};
+import TestEventsButtonMany from "./TestEventsButtonMany";
+import TestSubscriptionsButtonMany from "./TestSubscriptionsButtonMany";
+import TestIdolButtonMany from "./TestIdolButtonMany";
+import TestCompaniesButtonMany from "./TestCompaniesButtonMany";
+import TestPostsButtonMany from "./TestPostsButtonMany";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 const getHome = () => getThenLog(`${baseURL}`);
 const getHealth = () => getThenLog(`${baseURL}/health`);
 
-const postFanPost = () =>
-    axiosReturnsData("POST", "/api/posts", {
-        artist_id: 22,
-        post_content: "가나다라",
-    });
-
 const ThePottApiTestPage = () => {
     const [accessToken, setAccessToken] = useState(null);
-
-    const getFanSubscriptionWithName = (callback) =>
-        getThenLog(`${baseURL}/api/subscriptions/?include_image=true`, callback, accessToken);
-    const getFanSubscription = (callback) =>
-        getThenLog(`${baseURL}/api/subscriptions`, callback, accessToken);
-    const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
-    const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
-    const getIdolKarina = (callback) => getThenLog(`${baseURL}/api/idol?artist_id=6`, callback);
-
-    const getPosts = (callback) => getThenLog(`${baseURL}/api/posts`, callback);
-    const getPostsOfFirst = (callback) => getThenLog(`${baseURL}/api/posts/artist_id=1`, callback);
-
-    const getCompaniesArtists = (callback) =>
-        getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
-    const getCompaniesEvents = (callback) =>
-        getThenLog(`${baseURL}/api/companies/events`, callback, accessToken);
-    const getCompaniesEventsAespa = (callback) =>
-        getThenLog(`${baseURL}/api/companies/events?artist_id=6`, callback, accessToken);
-    const getBulkEvent = (callback) =>
-        getFileThenDownload(`${baseURL}/api/events/file/download-all`, callback, accessToken);
-    const getCompanyUploadTemplate = (callback) =>
-        getFileThenDownload(
-            `${baseURL}/api/companies/artists/upload-template`,
-            callback,
-            accessToken,
-        );
-
-    const handleBulkUpload = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        postFileThenLog(`${baseURL}/api/events/file/upload-all`, formData, accessToken);
-    };
 
     return (
         <FullScreen center>
             <FlexOneContainer isYScrollable>
-                <RoundBoxGlobalShadow padding="XL">
+                <RoundBox padding="XL">
                     <Vstack gap="xl">
-                        <RoundBoxGlobalShadow padding="XL">
+                        <RoundBox padding="XL">
                             개발자 도구(Cmd + Alt + I) {"->"} Console 탭
-                        </RoundBoxGlobalShadow>
+                        </RoundBox>
                         <CustomButton onClick={getHome}>get home</CustomButton>
                         <CustomButton onClick={getHealth}>get health</CustomButton>
                         <TestAuthButtonMany
@@ -80,53 +33,12 @@ const ThePottApiTestPage = () => {
                             setAccessToken={setAccessToken}
                         />
                         <TestEventsButtonMany accessToken={accessToken} />
-                        <CustomButton onClick={() => getFanSubscriptionWithName()}>
-                            <p>get subscription with name</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getFanSubscription()}>
-                            <p>get subscription</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getIdol()}>
-                            <p>get idol</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getIdolWithoutToken()}>
-                            <p>get idol without token</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getIdolKarina()}>
-                            <p>get idol karina</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getCompaniesArtists()}>
-                            <p>get companies artists</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getCompaniesEvents()}>
-                            <p>get companies events</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getCompaniesEventsAespa()}>
-                            <p>get companies events</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => postFanPost()}>
-                            <p>post fan posting</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getPosts()}>
-                            <p>get all posts</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getPostsOfFirst()}>
-                            <p>get posts of first idol</p>
-                        </CustomButton>
-                        <CustomButton onClick={() => getBulkEvent()}>
-                            <p>get bulk event</p>
-                        </CustomButton>
-                        <RoundBox>
-                            <form onSubmit={handleBulkUpload}>
-                                <input type="file" name="file" />
-                                <CustomButton>upload</CustomButton>
-                            </form>
-                        </RoundBox>
-                        <CustomButton onClick={() => getCompanyUploadTemplate()}>
-                            <p>get upload template </p>
-                        </CustomButton>
+                        <TestSubscriptionsButtonMany accessToken={accessToken} />
+                        <TestIdolButtonMany accessToken={accessToken} />
+                        <TestCompaniesButtonMany accessToken={accessToken} />
+                        <TestPostsButtonMany accessToken={accessToken} />
                     </Vstack>
-                </RoundBoxGlobalShadow>
+                </RoundBox>
             </FlexOneContainer>
         </FullScreen>
     );
