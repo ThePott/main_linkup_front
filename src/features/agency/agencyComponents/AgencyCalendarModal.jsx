@@ -27,8 +27,8 @@ const AgencyCalendarModal = () => {
     const defaultValues = {
         title: selectedEvent?.title || "",
         description: selectedEvent?.description || "",
-        start_time: convertIsoToDatetimeLocal(selectedEvent?.start_time),
-        end_time: convertIsoToDatetimeLocal(selectedEvent?.end_time),
+        startTimeOnlyTime: convertIsoToDatetimeLocal(selectedEvent?.start_time).split("T")[1],
+        endTimeOnlyTime: convertIsoToDatetimeLocal(selectedEvent?.end_time).split("T")[1],
         location: selectedEvent?.location || "",
     };
 
