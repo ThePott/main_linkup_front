@@ -14,6 +14,7 @@ const ArtistButton = memo(({ artist, isOn }) => {
 
     const styleForVar = {};
     styleForVar["--text-align"] = artist.stage_name ? "start" : "center";
+    styleForVar["--color"] = isOn ? "var(--color-vivid-inverted)" : "var(--color-muted)";
 
     const handleClick = () => {
         setSelectedArtist(artist);

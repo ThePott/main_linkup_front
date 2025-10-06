@@ -1,6 +1,7 @@
 .artistButton {
     font-weight: var(--font-weight-semibold);
     text-align: var(--text-align);
+    color: var(--color);
 }
 
 .sidebar {
