@@ -1,4 +1,5 @@
 import z from "zod";
+import { checkIsLatterLaterTime } from "../utils/dateUtils";
 
 export const loginSchema = z.object({
     email: z.string().email("올바르지 않은 이메일 형식입니다").min(1, "이메일을 입력하세요"),
@@ -22,6 +23,19 @@ export const signupSchema = z
     .refine((data) => data.password === data.passwordConfirm, {
         message: "비밀번호가 일치하지 않습니다",
         path: ["passwordConfirm"],
+    });
+
+export const eventSchema = z
+    .object({
+        title: z.string().min(1, "제목을 입력해주세요"),
+        description: z.string().min(2, "설명을 입력해주세요"),
+        startTimeOnlyTime: z.string().min(1, "시작 시각을 입력해주세요"),
+        endTimeOnlyTime: z.string(),
+        location: z.string().min(1, "장소를 입력해주세요"),
+    })
+    .refine((data) => checkIsLatterLaterTime(data.startTimeOnlyTime, data.endTimeOnlyTime), {
+        messsage: "종료 시각은 시작 시각 이후여야 합니다",
+        path: ["endTimeOnlyTime"],
     });
 
 export const passwordChangeSchema = z.object({

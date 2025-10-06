@@ -7,13 +7,49 @@ import useCompanies from "../../../shared/services/useCompanies";
 import { useForm } from "react-hook-form";
 import LabelGroup from "../../../package/labelGroup/LabelGroup";
 import CustomInput from "../../../package/CustomInput";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { eventSchema } from "../../../shared/validations/zodSchema";
 
 // Convert: "2025-11-11T08:31:10.811895Z"
 // To: "2025-11-11T08:31"
 const convertIsoToDatetimeLocal = (isoString) => {
     if (!isoString) return "";
     return isoString.slice(0, 16); // Takes "YYYY-MM-DDTHH:mm"
+};
+
+const makeDefaultValues = (selectedEvent) => {
+    const defaultValues = {
+        title: selectedEvent?.title || "",
+        description: selectedEvent?.description || "",
+        startTimeOnlyTime:
+            convertIsoToDatetimeLocal(selectedEvent?.start_time).split("T")[1] || "00:00",
+        endTimeOnlyTime:
+            convertIsoToDatetimeLocal(selectedEvent?.end_time).split("T")[1] || "23:59",
+        location: selectedEvent?.location || "",
+    };
+    return defaultValues;
+};
+
+const makeBody = (selectedArtist, selectedEvent, data) => {
+    const artistId = selectedArtist.id;
+    if (!artistId) {
+        throw new Error("---- ERROR OCCURRED: 아티스트가 선택되지 않았습니다");
+    }
+
+    const date = selectedEvent.start_time.split("T")[0];
+
+    data.artist_id = artistId;
+    data.category = "concert";
+    const { startTimeOnlyTime, endTimeOnlyTime, ...rest } = data;
+
+    const body = rest;
+    body.start_time = `${date}T${startTimeOnlyTime}`;
+    if (endTimeOnlyTime) {
+        body.end_time = `${date}T${endTimeOnlyTime}`;
+    }
+
+    return body;
 };
 
 const AgencyCalendarModal = () => {
@@ -24,15 +60,15 @@ const AgencyCalendarModal = () => {
 
     const { eventsPostMutation, eventsPutMutation, eventsDeleteMutation } = useCompanies();
 
-    const defaultValues = {
-        title: selectedEvent?.title || "",
-        description: selectedEvent?.description || "",
-        startTimeOnlyTime: convertIsoToDatetimeLocal(selectedEvent?.start_time).split("T")[1],
-        endTimeOnlyTime: convertIsoToDatetimeLocal(selectedEvent?.end_time).split("T")[1],
-        location: selectedEvent?.location || "",
-    };
+    const defaultValues = useMemo(() => makeDefaultValues(selectedEvent), [selectedEvent]);
 
-    const { register, handleSubmit, reset } = useForm({
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(eventSchema),
         defaultValues,
     });
 
@@ -50,26 +86,10 @@ const AgencyCalendarModal = () => {
     };
 
     const onSubmit = (data) => {
-        const artistId = selectedArtist.id;
-        if (!artistId) {
-            throw new Error("---- ERROR OCCURRED: 아티스트가 선택되지 않았습니다");
-        }
-
-        data.artist_id = artistId;
-        data.category = "concert";
-        const { startTimeOnlyTime, endTimeOnlyTime, start_time, ...rest } = data;
-
-        const body = rest;
-        const date = start_time.split("T")[0];
-        body.start_time = `${date}T${startTimeOnlyTime}`;
-        if (endTimeOnlyTime) {
-            body.end_time = `${date}T${endTimeOnlyTime}`;
-        }
-
-        debugger;
+        const body = makeBody(selectedArtist, selectedEvent, data);
 
         const eventId = selectedEvent?.id ?? Date.now();
-        const newOne = { id: eventId, ...data };
+        const newOne = { id: eventId, ...body };
 
         if (selectedEvent.id) {
             eventsPutMutation.mutate({ body, newOne });
@@ -82,25 +102,46 @@ const AgencyCalendarModal = () => {
         <Modal isOn={modalKey === "agencyCalendar"} onBackgroundClick={handleDismiss}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Vstack>
-                    <LabelGroup>
+                    <LabelGroup isRed={errors.title}>
                         <LabelGroup.BigLabel>제목</LabelGroup.BigLabel>
                         <CustomInput {...register("title")} />
+                        {errors.title && (
+                            <LabelGroup.SmallLabel>{errors.title.message}</LabelGroup.SmallLabel>
+                        )}
                     </LabelGroup>
-                    <LabelGroup>
+                    <LabelGroup isRed={errors.description}>
                         <LabelGroup.BigLabel>설명</LabelGroup.BigLabel>
                         <CustomInput {...register("description")} />
+                        {errors.description && (
+                            <LabelGroup.SmallLabel>
+                                {errors.description.message}
+                            </LabelGroup.SmallLabel>
+                        )}
                     </LabelGroup>
-                    <LabelGroup>
+                    <LabelGroup isRed={errors.startTimeOnlyTime}>
                         <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
                         <CustomInput {...register("startTimeOnlyTime")} type="time" />
+                        {errors.startTimeOnlyTime && (
+                            <LabelGroup.SmallLabel>
+                                {errors.startTimeOnlyTime.message}
+                            </LabelGroup.SmallLabel>
+                        )}
                     </LabelGroup>
-                    <LabelGroup>
-                        <LabelGroup.BigLabel>종료 시각(선택)</LabelGroup.BigLabel>
+                    <LabelGroup isRed={errors.endTimeOnlyTime}>
+                        <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
                         <CustomInput {...register("endTimeOnlyTime")} type="time" />
+                        {errors.endTimeOnlyTime && (
+                            <LabelGroup.SmallLabel>
+                                {errors.endTimeOnlyTime.message}
+                            </LabelGroup.SmallLabel>
+                        )}
                     </LabelGroup>
-                    <LabelGroup>
+                    <LabelGroup isRed={errors.location}>
                         <LabelGroup.BigLabel>장소</LabelGroup.BigLabel>
                         <CustomInput {...register("location")} />
+                        {errors.location && (
+                            <LabelGroup.SmallLabel>{errors.location.message}</LabelGroup.SmallLabel>
+                        )}
                     </LabelGroup>
                     <CustomButton>제출</CustomButton>
                     <CustomButton type="button" onClick={handleDelete}>
