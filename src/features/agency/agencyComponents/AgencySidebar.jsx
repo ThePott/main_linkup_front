@@ -64,9 +64,9 @@ const ArtistButtonGroup = memo(({ artistArray, isOnArray }) => {
     );
 });
 
-const PlusButton = memo(() => {
+const PlusButton = memo((props) => {
     return (
-        <CustomButton>
+        <CustomButton {...props}>
             <PlusIcon className={styles.plusIcon} />
         </CustomButton>
     );
