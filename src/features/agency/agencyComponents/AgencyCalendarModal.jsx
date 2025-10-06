@@ -57,7 +57,16 @@ const AgencyCalendarModal = () => {
 
         data.artist_id = artistId;
         data.category = "concert";
-        const body = data;
+        const { startTimeOnlyTime, endTimeOnlyTime, start_time, ...rest } = data;
+
+        const body = rest;
+        const date = start_time.split("T")[0];
+        body.start_time = `${date}T${startTimeOnlyTime}`;
+        if (endTimeOnlyTime) {
+            body.end_time = `${date}T${endTimeOnlyTime}`;
+        }
+
+        debugger;
 
         const eventId = selectedEvent?.id ?? Date.now();
         const newOne = { id: eventId, ...data };
@@ -83,11 +92,11 @@ const AgencyCalendarModal = () => {
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>시작 시각</LabelGroup.BigLabel>
-                        <CustomInput {...register("start_time")} type="datetime-local" />
+                        <CustomInput {...register("startTimeOnlyTime")} type="time" />
                     </LabelGroup>
                     <LabelGroup>
-                        <LabelGroup.BigLabel>종료 시각</LabelGroup.BigLabel>
-                        <CustomInput {...register("end_time")} type="datetime-local" />
+                        <LabelGroup.BigLabel>종료 시각(선택)</LabelGroup.BigLabel>
+                        <CustomInput {...register("endTimeOnlyTime")} type="time" />
                     </LabelGroup>
                     <LabelGroup>
                         <LabelGroup.BigLabel>장소</LabelGroup.BigLabel>

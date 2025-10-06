@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { Hstack, Vstack } from "../layout";
 import EventBox, { EventDot } from "./_EventBox";
 import styles from "./calendar.module.css";
@@ -94,7 +95,8 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     const className = `${opacityClassName}`;
 
     const handleDoubleClick = () => {
-        setSelectedEvent({});
+        const selectedDate = format(date, "yyyy-MM-dd");
+        setSelectedEvent({ start_time: `${selectedDate}T00:00` });
 
         setModalKey("agencyCalendar");
     };
