@@ -31,27 +31,32 @@ const useCompaniesArtistsQuery = () => {
 
 const useCompaniesArtistsMutate = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const id = selectedArtist?.id ?? -1;
 
     const baseEndpoint = "/api/companies/artists";
-    const artistsPostMutation = useSimpleMutation(
-        "POST",
-        baseEndpoint,
-        baseEndpoint,
-        (previous, newOne) => [...previous, newOne],
-    );
-    const artistsPutMutation = useSimpleMutation(
-        "PUT",
-        baseEndpoint,
-        `${baseEndpoint}/${id}`,
-        (previous, newOne) => previous.map((el) => (el.id === newOne.id ? newOne : el)),
-    );
-    const artistsDeleteMutation = useSimpleMutation(
-        "DELETE",
-        baseEndpoint,
-        `${baseEndpoint}/${id}`,
-        (previous, newOne) => previous.filter((el) => el.id !== newOne.id),
-    );
+    const artistsPostMutation = useSimpleMutation({
+        method: "POST",
+        queryEndpoint: baseEndpoint,
+        mutateEndpoint: baseEndpoint,
+        updateCacheForUi: (previous, newOne) => [...previous, newOne],
+        handleSuccess: () => setModalKey(null),
+    });
+    const artistsPutMutation = useSimpleMutation({
+        method: "PUT",
+        queryEndpoint: baseEndpoint,
+        mutateEndpoint: `${baseEndpoint}/${id}`,
+        updateCacheForUi: (previous, newOne) =>
+            previous.map((el) => (el.id === newOne.id ? newOne : el)),
+        handleSuccess: () => setModalKey(null),
+    });
+    const artistsDeleteMutation = useSimpleMutation({
+        method: "DELETE",
+        queryEndpoint: baseEndpoint,
+        mutateEndpoint: `${baseEndpoint}/${id}`,
+        updateCacheForUi: (previous, newOne) => previous.filter((el) => el.id !== newOne.id),
+        handleSuccess: () => setModalKey(null),
+    });
 
     return { artistsPostMutation, artistsPutMutation, artistsDeleteMutation };
 };
@@ -87,29 +92,34 @@ const useCompaniesEventsMutate = () => {
     const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const artistId = selectedArtist?.id ?? -1;
     const queryEndpoint = `/api/companies/events?artist_id=${artistId}`;
+    const setModalKey = useLinkUpStore((state) => state.setModalKey);
 
     const selectedEvent = useLinkUpStore((state) => state.selectedEvent);
     const eventId = selectedEvent?.id ?? -1;
     const mutateBaseEndpoint = `/api/companies/events`;
 
-    const eventsPostMutation = useSimpleMutation(
-        "POST",
+    const eventsPostMutation = useSimpleMutation({
+        method: "POST",
         queryEndpoint,
-        mutateBaseEndpoint,
-        (previous, newOne) => [...previous, newOne],
-    );
-    const eventsPutMutation = useSimpleMutation(
-        "PUT",
+        mutateEndpoint: mutateBaseEndpoint,
+        updateCacheForUi: (previous, newOne) => [...previous, newOne],
+        handleSuccess: () => setModalKey(null),
+    });
+    const eventsPutMutation = useSimpleMutation({
+        method: "PUT",
         queryEndpoint,
-        `${mutateBaseEndpoint}/${eventId}`,
-        (previous, newOne) => previous.map((el) => (el.id === newOne.id ? newOne : el)),
-    );
-    const eventsDeleteMutation = useSimpleMutation(
-        "DELETE",
+        mutateEndpoint: `${mutateBaseEndpoint}/${eventId}`,
+        updateCacheForUi: (previous, newOne) =>
+            previous.map((el) => (el.id === newOne.id ? newOne : el)),
+        handleSuccess: () => setModalKey(null),
+    });
+    const eventsDeleteMutation = useSimpleMutation({
+        method: "DELETE",
         queryEndpoint,
-        `${mutateBaseEndpoint}/${eventId}`,
-        (previous, newOne) => previous.filter((el) => el.id !== newOne.id),
-    );
+        mutateEndpoint: `${mutateBaseEndpoint}/${eventId}`,
+        updateCacheForUi: (previous, newOne) => previous.filter((el) => el.id !== newOne.id),
+        handleSuccess: () => setModalKey(null),
+    });
 
     return { eventsPostMutation, eventsPutMutation, eventsDeleteMutation };
 };

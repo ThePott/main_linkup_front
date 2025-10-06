@@ -29,6 +29,10 @@ const AgencyCalendarModal = () => {
         setModalKey(null);
     };
 
+    const handleDelete = () => {
+        eventsDeleteMutation.mutate({ newOne: selectedEvent });
+    };
+
     const onSubmit = (data) => {
         const artistId = selectedArtist.id;
         if (!artistId) {
@@ -47,8 +51,6 @@ const AgencyCalendarModal = () => {
         } else {
             eventsPostMutation.mutate({ body, newOne });
         }
-
-        handleDismiss();
     };
 
     return (
@@ -90,10 +92,7 @@ const AgencyCalendarModal = () => {
                         />
                     </LabelGroup>
                     <CustomButton>제출</CustomButton>
-                    <CustomButton
-                        type="button"
-                        onClick={() => deleteMutation.mutate(selectedEvent?.id ?? -1)}
-                    >
+                    <CustomButton type="button" onClick={handleDelete}>
                         삭제
                     </CustomButton>
                 </Vstack>
