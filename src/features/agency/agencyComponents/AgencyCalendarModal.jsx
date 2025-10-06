@@ -30,13 +30,19 @@ const AgencyCalendarModal = () => {
     };
 
     const onSubmit = (data) => {
-        data.artist_id = selectedArtist.id;
+        const artistId = selectedArtist.id;
+        if (!artistId) {
+            throw new Error("---- ERROR OCCURRED: 아티스트가 선택되지 않았습니다");
+        }
+
+        data.artist_id = artistId;
+        data.category = "concert";
         const body = data;
 
         const eventId = selectedEvent?.id ?? Date.now();
         const newOne = { id: eventId, ...data };
 
-        if (selectedEvent) {
+        if (selectedEvent.id) {
             eventsPutMutation.mutate({ body, newOne });
         } else {
             eventsPostMutation.mutate({ body, newOne });
