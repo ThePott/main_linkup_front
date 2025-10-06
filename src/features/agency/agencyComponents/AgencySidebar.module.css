@@ -2,6 +2,9 @@
     font-weight: var(--font-weight-semibold);
     text-align: var(--text-align);
     color: var(--color);
+    transition-property: color;
+    transition-duration: 0.1s;
+    transition-timing-function: cubic-bezier(0.01, 0.81, 0.09, 1.13);
 }
 
 .plusIcon {

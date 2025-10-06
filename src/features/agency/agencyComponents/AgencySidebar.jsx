@@ -4,11 +4,12 @@ import { Vstack } from "../../../package/layout";
 import useLinkUpStore from "../../../shared/store/store";
 import AgencyArtistModal from "./AgencyArtistModal";
 import RoundBox from "../../../package/RoundBox";
-import { memo } from "react";
+import { memo, useState } from "react";
 import PlusIcon from "../../../package/icons/PlusIcon";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
 const ArtistButton = memo(({ artist, isOn }) => {
+    const [isMouseEntered, setIsMouseEntered] = useState(false);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
 
@@ -16,7 +17,11 @@ const ArtistButton = memo(({ artist, isOn }) => {
 
     const styleForVar = {};
     styleForVar["--text-align"] = artist.stage_name ? "start" : "center";
-    styleForVar["--color"] = isOn ? "var(--color-vivid-inverted)" : "var(--color-muted)";
+    styleForVar["--color"] = isOn
+        ? "var(--color-vivid-inverted)"
+        : isMouseEntered
+          ? "var(--color-vivid)"
+          : "var(--color-muted)";
 
     const handleClick = () => {
         setSelectedArtist(artist);
@@ -33,6 +38,8 @@ const ArtistButton = memo(({ artist, isOn }) => {
             className={styles.artistButton}
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
+            onMouseEnter={() => setIsMouseEntered(true)}
+            onMouseLeave={() => setIsMouseEntered(false)}
         >
             {name}
         </CustomButton>
