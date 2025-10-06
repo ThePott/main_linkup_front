@@ -34,17 +34,7 @@ const ArtistButton = ({ artist }) => {
     );
 };
 
-const ArtistButtonGroup = ({ group_name, artistArray }) => {
-    if (group_name === "null") {
-        return (
-            <>
-                {artistArray.map((artist) => (
-                    <ArtistButton key={artist.id} artist={artist} />
-                ))}
-            </>
-        );
-    }
-
+const ArtistButtonGroup = ({ artistArray }) => {
     const groupArtist = artistArray.find((artist) => !artist.stage_name);
     const memberArtistArray = artistArray.filter((artist) => artist.stage_name);
     return (
@@ -64,7 +54,9 @@ const AgencySidebar = () => {
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
     const artistArray = useLinkUpStore((state) => state.artistArray);
     const groupedArtistArray = Object.groupBy(artistArray, ({ group_name }) => group_name);
-    const groupedEntryArray = Object.entries(groupedArtistArray);
+
+    const { null: soloArtistArray, ...groupArtistRecords } = groupedArtistArray;
+    const groupedEntryArray = Object.entries(groupArtistRecords);
 
     const handleAdd = () => {
         setSelectedArtist(null);
@@ -75,12 +67,11 @@ const AgencySidebar = () => {
         <>
             <AgencyArtistModal />
             <Vstack className={styles.sidebar}>
+                {soloArtistArray.map((artist) => (
+                    <ArtistButton artist={artist} />
+                ))}
                 {groupedEntryArray.map((entry) => (
-                    <ArtistButtonGroup
-                        key={entry[0]}
-                        group_name={entry[0]}
-                        artistArray={entry[1]}
-                    />
+                    <ArtistButtonGroup key={entry[0]} artistArray={entry[1]} />
                 ))}
                 <CustomButton isOn={true} onClick={handleAdd}>
                     추가
