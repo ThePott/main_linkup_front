@@ -67,8 +67,16 @@ const ThePottApiTestPage = () => {
             callback,
             accessToken,
         );
+    const getEventsWithoutToken = (callback) =>
+        getThenLog(`${baseURL}/api/events/?is_active=true`, callback);
+    const getEventsWithIsActive = (callback) =>
+        getThenLog(`${baseURL}/api/events/?is_active=true`, callback, accessToken);
     const getIdol = (callback) => getThenLog(`${baseURL}/api/idol`, callback, accessToken);
     const getIdolWithoutToken = (callback) => getThenLog(`${baseURL}/api/idol`, callback);
+    const getIdolKarina = (callback) => getThenLog(`${baseURL}/api/idol?artist_id=6`, callback);
+
+    const getPosts = (callback) => getThenLog(`${baseURL}/api/posts`, callback);
+    const getPostsOfFirst = (callback) => getThenLog(`${baseURL}/api/posts/artist_id=1`, callback);
 
     const getCompaniesArtists = (callback) =>
         getThenLog(`${baseURL}/api/companies/artists`, callback, accessToken);
@@ -130,6 +138,12 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getEvents(callbackLog)}>
                             <p>get events</p>
                         </CustomButton>
+                        <CustomButton onClick={() => getEventsWithoutToken(callbackLog)}>
+                            <p>get events without token</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getEventsWithIsActive(callbackLog)}>
+                            <p>get events with is active</p>
+                        </CustomButton>
                         <CustomButton onClick={() => getFanSubscriptionWithName(callbackLog)}>
                             <p>get subscription with name</p>
                         </CustomButton>
@@ -142,6 +156,9 @@ const ThePottApiTestPage = () => {
                         <CustomButton onClick={() => getIdolWithoutToken(callbackLog)}>
                             <p>get idol without token</p>
                         </CustomButton>
+                        <CustomButton onClick={() => getIdolKarina(callbackLog)}>
+                            <p>get idol karina</p>
+                        </CustomButton>
                         <CustomButton onClick={() => getCompaniesArtists(callbackLog)}>
                             <p>get companies artists</p>
                         </CustomButton>
@@ -152,7 +169,13 @@ const ThePottApiTestPage = () => {
                             <p>get companies events</p>
                         </CustomButton>
                         <CustomButton onClick={() => postFanPost(callbackLog)}>
-                            <p>get posting</p>
+                            <p>post fan posting</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getPosts(callbackLog)}>
+                            <p>get all posts</p>
+                        </CustomButton>
+                        <CustomButton onClick={() => getPostsOfFirst(callbackLog)}>
+                            <p>get posts of first idol</p>
                         </CustomButton>
                         <CustomButton onClick={() => getBulkEvent(callbackLog)}>
                             <p>get bulk event</p>

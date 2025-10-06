@@ -17,15 +17,17 @@ const ThePottTanstackTestPage = () => {
         setIdolArray(data.artists);
     };
 
-    const firstIdol = idolArray.find((idol) => idol.id === 1);
-
-    const variablesAespa = {
-        body: { artist_id: 1 },
-        newOne: { artist_id: 1, stage_name: firstIdol?.name, group_name: firstIdol?.name },
+    const variableNewjeans = {
+        body: { artist_id: 11 },
+        newOne: { artist_id: 11, group_name: "뉴진스" },
     };
-    const variablesKarina = {
-        body: { artist_id: 6 },
-        newOne: { artist_id: 6, stage_name: "카리나", group_name: "에스파" },
+    const variableIve = {
+        body: { artist_id: 12 },
+        newOne: { artist_id: 12, group_name: "아이브" },
+    };
+    const variableTaeyeon = {
+        body: { artist_id: 38 },
+        newOne: { artist_id: 38, stage_name: "태연", group_name: "소녀시대" },
     };
 
     useEffect(() => {
@@ -46,18 +48,25 @@ const ThePottTanstackTestPage = () => {
                 </p>
             ))}
 
-            <CustomButton onClick={() => postMutation.mutate(variablesAespa)}>
-                subscribe aespa (1)
+            <CustomButton onClick={() => postMutation.mutate(variableNewjeans)}>
+                subscribe newjeans (11)
             </CustomButton>
-            <CustomButton onClick={() => deleteMutation.mutate(1)}>
-                unsubscribe aespa (1)
+            <CustomButton onClick={() => deleteMutation.mutate(11)}>
+                unsubscribe newjeans (11)
             </CustomButton>
 
-            <CustomButton onClick={() => postMutation.mutate(variablesKarina)}>
-                subscribe karina (6)
+            <CustomButton onClick={() => postMutation.mutate(variableIve)}>
+                subscribe ive (12)
             </CustomButton>
-            <CustomButton onClick={() => deleteMutation.mutate(6)}>
-                unsubscribe karina (6)
+            <CustomButton onClick={() => deleteMutation.mutate(12)}>
+                unsubscribe ive (12)
+            </CustomButton>
+
+            <CustomButton onClick={() => postMutation.mutate(variableTaeyeon)}>
+                subscribe taeyeon (38)
+            </CustomButton>
+            <CustomButton onClick={() => deleteMutation.mutate(38)}>
+                unsubscribe taeyeon (38)
             </CustomButton>
         </Vstack>
     );
