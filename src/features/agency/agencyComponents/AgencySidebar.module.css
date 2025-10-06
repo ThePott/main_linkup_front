@@ -1,13 +1,6 @@
-.artistLabel {
+.artistButton {
     font-weight: var(--font-weight-semibold);
     text-align: var(--text-align);
-}
-.artistButton {
-    color: var(--color-muted);
-    transition-property: color;
-}
-.artistButton:hover {
-    color: var(--color-vivid);
 }
 
 .sidebar {

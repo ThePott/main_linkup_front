@@ -4,8 +4,9 @@ import { Vstack } from "../../../package/layout";
 import useLinkUpStore from "../../../shared/store/store";
 import AgencyArtistModal from "./AgencyArtistModal";
 import RoundBox from "../../../package/RoundBox";
+import { memo } from "react";
 
-const ArtistButton = ({ artist }) => {
+const ArtistButton = memo(({ artist, isOn }) => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
 
@@ -24,39 +25,54 @@ const ArtistButton = ({ artist }) => {
 
     return (
         <CustomButton
+            isOn={isOn}
             style={styleForVar}
             className={styles.artistButton}
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
         >
-            <p className={styles.artistLabel}>{name}</p>
+            {name}
         </CustomButton>
     );
-};
+});
 
-const ArtistButtonGroup = ({ artistArray }) => {
-    const groupArtist = artistArray.find((artist) => !artist.stage_name);
-    const memberArtistArray = artistArray.filter((artist) => artist.stage_name);
+const ArtistButtonGroup = memo(({ artistArray, isOnArray }) => {
+    const groupArtistIndex = artistArray.findIndex((artist) => !artist.stage_name);
+    const groupArtist = artistArray[groupArtistIndex];
+    const groupIsOn = isOnArray[groupArtistIndex];
+    const memberArtistArray = [...artistArray].filter((_, index) => index !== groupArtistIndex);
+    const memberIsOnArray = [...isOnArray].slice((_, index) => index !== groupArtistIndex);
     return (
         <RoundBox isShadowed={false} padding="md">
             <Vstack gap="sm">
-                <ArtistButton artist={groupArtist} />
-                {memberArtistArray.map((artist) => (
-                    <ArtistButton artist={artist} />
+                <ArtistButton isOn={groupIsOn} artist={groupArtist} />
+                {memberArtistArray.map((artist, index) => (
+                    <ArtistButton isOn={memberIsOnArray[index]} artist={artist} />
                 ))}
             </Vstack>
         </RoundBox>
     );
-};
+});
 
 const AgencySidebar = () => {
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
     const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
     const artistArray = useLinkUpStore((state) => state.artistArray);
-    const groupedArtistArray = Object.groupBy(artistArray, ({ group_name }) => group_name);
+    const groupedArtistAndIsOn = artistArray.reduce((acc, cur) => {
+        const existingArtistArray = acc[String(cur.group_name)]?.artistArray ?? [];
+        const existingIsOnArray = acc[String(cur.group_name)]?.isOnArray ?? [];
+        acc[String(cur.group_name)] = {
+            artistArray: [...existingArtistArray, cur],
+            isOnArray: [...existingIsOnArray, cur.id === selectedArtist?.id],
+        };
+        return acc;
+    }, {});
 
-    const { null: soloArtistArray, ...groupArtistRecords } = groupedArtistArray;
+    const { null: soloArtistAndIsOnDict, ...groupArtistRecords } = groupedArtistAndIsOn;
     const groupedEntryArray = Object.entries(groupArtistRecords);
+    const soloArtistArray = soloArtistAndIsOnDict?.artistArray ?? [];
+    const soloIsOnArray = soloArtistAndIsOnDict?.isOnArray ?? [];
 
     const handleAdd = () => {
         setSelectedArtist(null);
@@ -67,11 +83,15 @@ const AgencySidebar = () => {
         <>
             <AgencyArtistModal />
             <Vstack className={styles.sidebar}>
-                {soloArtistArray.map((artist) => (
-                    <ArtistButton artist={artist} />
+                {soloArtistArray.map((artist, index) => (
+                    <ArtistButton key={artist.id} isOn={soloIsOnArray[index]} artist={artist} />
                 ))}
                 {groupedEntryArray.map((entry) => (
-                    <ArtistButtonGroup key={entry[0]} artistArray={entry[1]} />
+                    <ArtistButtonGroup
+                        key={entry[0]}
+                        artistArray={entry[1].artistArray}
+                        isOnArray={entry[1].isOnArray}
+                    />
                 ))}
                 <CustomButton isOn={true} onClick={handleAdd}>
                     추가
