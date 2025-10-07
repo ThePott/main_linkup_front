@@ -41,6 +41,8 @@ const MyButton = ({ user }) => {
     }
 };
 
+const showOnlyLogoPathArray = ["/login", "/signup"];
+
 const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -51,13 +53,14 @@ const Navbar = () => {
     const { logout } = useAuth();
     useIdol();
 
+    const pathname = location.pathname;
+
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();
         if (!trimmed) {
             return;
         }
 
-        const pathname = location.pathname;
         if (pathname !== "/") {
             navigate("/");
         }
@@ -74,19 +77,25 @@ const Navbar = () => {
                     </Link>
                 </SideSection>
 
-                <CustomInput
-                    placeholder="검색어를 입력해주세요"
-                    onEnter={handleSearch}
-                    className={styles.searchbar}
-                />
+                {!showOnlyLogoPathArray.includes(pathname) && (
+                    <>
+                        <CustomInput
+                            placeholder="검색어를 입력해주세요"
+                            onEnter={handleSearch}
+                            className={styles.searchbar}
+                        />
 
-                <SideSection justify="end">
-                    <MyButton user={user} />
-                    {user && <CustomButton onClick={logout}>로그아웃</CustomButton>}
-                    {!user && (
-                        <CustomButton onClick={() => navigate("/login")}>로그인</CustomButton>
-                    )}
-                </SideSection>
+                        <SideSection justify="end">
+                            <MyButton user={user} />
+                            {user && <CustomButton onClick={logout}>로그아웃</CustomButton>}
+                            {!user && (
+                                <CustomButton onClick={() => navigate("/login")}>
+                                    로그인
+                                </CustomButton>
+                            )}
+                        </SideSection>
+                    </>
+                )}
             </Hstack>
         </Hstack>
     );

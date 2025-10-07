@@ -8,6 +8,7 @@ import RoundBox from "../../../package/RoundBox";
 import ErrorComponent from "../../../package/ErrorComponent";
 import RecommendContentSkeleton from "./RecommendContentSkeleton";
 import GridCardContainer from "../../../shared/GridCardContainer/GridCardContainer";
+import Container from "../../../package/layout/_Container";
 
 const RecommendContent = () => {
     const recommendArtistArray = useLinkUpStore((state) => state.recommendArtistArray);
@@ -46,13 +47,13 @@ const RecommendContent = () => {
         );
 
     return (
-        <div className={styles.container}>
+        <Container>
             <GridCardContainer>
                 {(recommendArtistArray || []).map((artist) => (
                     <SuggestedCard key={artist.id} artist={artist} />
                 ))}
             </GridCardContainer>
-        </div>
+        </Container>
     );
 };
 
