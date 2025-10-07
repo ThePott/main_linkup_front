@@ -14,6 +14,8 @@ import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer.jsx";
 import CustomImageIcon from "../shared/CustomImageIcon/CustomImageIcon.jsx";
 import ImageInput from "../package/imageInput/ImageInput.jsx";
 import CustomImageContainer from "../package/customImage/CustomImageContainer.jsx";
+import { axiosReturnsData } from "../shared/services/axiosInstance.js";
+import CustomInput from "../package/CustomInput.jsx";
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -80,21 +82,41 @@ const MyPage = () => {
     const postsCount = myPosts.length;
     const likesCount = myPosts.reduce((sum, post) => sum + (post.likes_count ?? 0), 0);
 
+    const handleImageChange = (event) => {
+        const body = new FormData(event.currentTarget);
+        axiosReturnsData("PUT", "/api/auth/me", body);
+    };
+
+    const handleNicknameBlur = (event) => {
+        const nickname = event.target.value;
+        if (!nickname) {
+            event.target.value = userInfo?.nickname;
+            return;
+        }
+        axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`);
+    };
+
     return (
         <Container>
             <Vstack>
                 {/* 사용자 프로필 */}
                 <Hstack items="center">
                     <CustomImageContainer shape="CIRCLE" height="xs">
-                        <ImageInput
-                            name="profile_image"
-                            defaultSrc={
-                                userInfo.profile_image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE
-                            }
-                        />
+                        <form onChange={handleImageChange}>
+                            <ImageInput
+                                name="profile_image"
+                                defaultSrc={
+                                    userInfo.profile_image_url ||
+                                    import.meta.env.VITE_PLACEHOLDER_IMAGE
+                                }
+                            />
+                        </form>
                     </CustomImageContainer>
                     <div className={styles.userInfo}>
-                        <span className={styles.userName}>{userInfo?.nickname}</span>
+                        <CustomInput
+                            defaultValue={userInfo?.nickname}
+                            onBlur={handleNicknameBlur}
+                        />
                         <div className={styles.userStats}>
                             <span>구독: {subscriptionsCount}</span>
                             <span>포스트: {postsCount}</span>
