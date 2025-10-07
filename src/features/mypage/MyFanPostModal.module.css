@@ -12,8 +12,18 @@
     height: 100%;
 }
 
+.column {
+    height: 100%;
+    overflow: hidden;
+}
+
 .image {
     height: 100%;
     width: 100%;
     object-fit: cover;
+    border-radius: var(--rounded-md);
+}
+
+.bold {
+    font-weight: var(--font-weight-semibold);
 }
