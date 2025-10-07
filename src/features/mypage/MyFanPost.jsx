@@ -6,6 +6,10 @@ const MyFanPost = () => {
     const user = useLinkUpStore((state) => state.user);
     const fanPostArray = user.posts;
 
+    if (!user) {
+        return null;
+    }
+
     return (
         <>
             <FanPostGrid isMine fanPostArray={fanPostArray} isBlurred={false} />

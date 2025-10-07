@@ -64,7 +64,7 @@ const TotalContent = () => {
                         <ArtistCalendar isMedium={true} />
                         <Vstack className={styles.dailyScheduleContainer}>
                             {currentItems.map((schedule) => (
-                                <EventBox event={schedule} />
+                                <EventBox key={schedule.id} event={schedule} />
                             ))}
 
                             <div className={styles.btns}>

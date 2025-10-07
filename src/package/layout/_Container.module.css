@@ -2,4 +2,5 @@
     max-width: var(--width);
     margin: auto;
     margin-top: var(--margin-top);
+    padding: 0 var(--spacing-md);
 }

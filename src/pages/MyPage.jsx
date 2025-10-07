@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Sidebar from "../features/mypage/Sidebar.jsx";
-import RoundBox from "../package/RoundBox.jsx";
 import DeleteAccountModal from "../features/mypage/DeleteAccountModal.jsx";
 import useLinkUpStore from "../shared/store/store";
 import { apiAuthMe } from "../shared/services/linkupApi.js";
@@ -11,11 +10,12 @@ import Container from "../package/layout/_Container.jsx";
 import Hstack from "../package/layout/_Hstack.jsx";
 import Vstack from "../package/layout/_Vstack.jsx";
 import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer.jsx";
-import CustomImageIcon from "../shared/CustomImageIcon/CustomImageIcon.jsx";
 import ImageInput from "../package/imageInput/ImageInput.jsx";
 import CustomImageContainer from "../package/customImage/CustomImageContainer.jsx";
 import { axiosReturnsData } from "../shared/services/axiosInstance.js";
 import CustomInput from "../package/CustomInput.jsx";
+import { useNavigate } from "react-router";
+import useAuth from "../shared/services/useAuth.js";
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -48,19 +48,17 @@ const fetchSubscriptions = async ({ queryKey }) => {
 const MyPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const accessToken = useLinkUpStore((state) => state.access_token);
+    const user = useLinkUpStore((state) => state.user);
+    const navigate = useNavigate();
 
     // 사용자 정보
-    const { data: userInfo, isLoading: isUserLoading } = useQuery({
-        queryKey: ["userInfo", accessToken],
-        queryFn: async () => await apiAuthMe("GET"),
-        enabled: !!accessToken,
-    });
+    useAuth();
 
     // 내 포스트
     const { data: myPosts = [], isFetching: isPostsFetching } = useQuery({
-        queryKey: ["myPosts", accessToken, userInfo?.id],
+        queryKey: ["myPosts", accessToken, user?.id],
         queryFn: fetchMyPosts,
-        enabled: !!accessToken && !!userInfo,
+        enabled: !!accessToken && !!user,
         // refetchInterval: 5000, // 주석 처리: 서버 요청 최소화
         keepPreviousData: true, // 이전 데이터 유지
     });
@@ -74,8 +72,17 @@ const MyPage = () => {
         keepPreviousData: true,
     });
 
-    if (!accessToken) return <div>로그인이 필요합니다.</div>;
-    if (isUserLoading) return <div>로딩 중...</div>; // 사용자 정보만 로딩 표시
+    useEffect(() => {
+        if (user) {
+            return;
+        }
+        navigate("/login");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
+    if (!user) {
+        return null;
+    }
 
     // 통계
     const subscriptionsCount = subscriptions.length;
@@ -90,7 +97,7 @@ const MyPage = () => {
     const handleNicknameBlur = (event) => {
         const nickname = event.target.value;
         if (!nickname) {
-            event.target.value = userInfo?.nickname;
+            event.target.value = user?.nickname;
             return;
         }
         axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`);
@@ -106,17 +113,13 @@ const MyPage = () => {
                             <ImageInput
                                 name="profile_image"
                                 defaultSrc={
-                                    userInfo.profile_image_url ||
-                                    import.meta.env.VITE_PLACEHOLDER_IMAGE
+                                    user.profile_image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE
                                 }
                             />
                         </form>
                     </CustomImageContainer>
                     <div className={styles.userInfo}>
-                        <CustomInput
-                            defaultValue={userInfo?.nickname}
-                            onBlur={handleNicknameBlur}
-                        />
+                        <CustomInput defaultValue={user?.nickname} onBlur={handleNicknameBlur} />
                         <div className={styles.userStats}>
                             <span>구독: {subscriptionsCount}</span>
                             <span>포스트: {postsCount}</span>

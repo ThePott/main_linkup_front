@@ -101,8 +101,8 @@ const EventDotMany = ({ eventArray }) => {
     }
     return (
         <Hstack gap="xs">
-            {eventArray.map(() => (
-                <EventDot />
+            {eventArray.map((event) => (
+                <EventDot key={event.id} />
             ))}
         </Hstack>
     );

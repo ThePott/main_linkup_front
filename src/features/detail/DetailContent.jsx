@@ -155,7 +155,7 @@ const DetailContent = () => {
                     {/* 4. 최신 일정 */}
                     <GridContainer cols={2}>
                         {selectedMonthEventArray.map((event) => (
-                            <EventBox event={event} />
+                            <EventBox key={event.id} event={event} />
                         ))}
                     </GridContainer>
 
