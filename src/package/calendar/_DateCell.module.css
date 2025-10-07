@@ -15,3 +15,8 @@
     background-color: var(--bg);
     color: var(--color);
 }
+
+.eventDotContainer {
+    width: 100%;
+    padding: var(--spacing-sm);
+}
