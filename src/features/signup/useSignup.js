@@ -12,7 +12,7 @@ export const useSignup = () => {
     const signupMutation = useMutation({
         mutationFn: (body) => axiosReturnsData("POST", "/api/auth/signup", body),
         onSuccess: () => {
-            navigate("/login");
+            navigate("/login", { replace: true });
         },
     });
 

@@ -6,6 +6,7 @@ import CustomButton from "../../package/customButton/CustomButton";
 import useLinkUpStore from "../../shared/store/store";
 import useAuth from "../../shared/services/useAuth";
 import useIdol from "../../shared/services/useIdol";
+import { useEffect } from "react";
 
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
@@ -49,11 +50,21 @@ const Navbar = () => {
     const [, setSearchParams] = useSearchParams();
 
     const user = useLinkUpStore((state) => state.user);
+    const setPreviousPathname = useLinkUpStore((state) => state.setPreviousPathname);
 
     const { logout } = useAuth();
     useIdol();
 
     const pathname = location.pathname;
+
+    useEffect(() => {
+        if (showOnlyLogoPathArray.includes(pathname)) {
+            return;
+        }
+
+        setPreviousPathname(pathname);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
     const handleSearch = (keyword) => {
         const trimmed = keyword.trim();

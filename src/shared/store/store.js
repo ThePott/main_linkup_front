@@ -5,16 +5,14 @@ import { axiosReturnsData } from "../services/axiosInstance";
 const useLinkUpStore = create()(
     persist(
         (set, get) => ({
-            something: 1,
-            setSomething: (diff) => {
-                const state = get();
-                const newSomething = state.something + diff;
-                set({ something: newSomething });
-            },
-
             access_token: null,
             setAccessToken: (access_token) => {
                 set({ access_token });
+            },
+
+            previousPathname: null,
+            setPreviousPathname: (previousPathname) => {
+                set({ previousPathname });
             },
 
             user: null,

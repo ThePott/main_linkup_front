@@ -6,10 +6,6 @@ const CustomInput = ({ placeholder = "", onEnter, className, ...props }) => {
             return;
         }
 
-        if (!event.nativeEvent.isComposing) {
-            event.target.blur();
-        }
-
         if (onEnter) {
             onEnter(event.target.value);
         }

@@ -43,19 +43,20 @@ const useAuthMeQuery = () => {
 
 const useAuthLogin = () => {
     const navigate = useNavigate();
+    const previousPathname = useLinkUpStore((state) => state.previousPathname);
 
     const postLoginMutation = useMutation({
         mutationFn: (body) => apiAuthLogin(body),
         onSuccess: (data) => {
             switch (data.user_type) {
                 case "fan":
-                    navigate("/");
+                    navigate(previousPathname ? -1 : "/", { replace: true });
                     break;
                 case "company":
-                    navigate("/agency");
+                    navigate("/agency", { replace: true });
                     break;
                 case "admin":
-                    navigate("/super-user");
+                    navigate("/super-user", { replace: true });
                     break;
                 default:
                     throw new Error("---- ERROR OCCURRED: 잘못된 유저 타입입니다");
