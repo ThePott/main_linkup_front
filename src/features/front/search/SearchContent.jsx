@@ -8,21 +8,12 @@ import CustomImageCard from "../../../shared/CustomImageCard/CustomImageCard";
 import Skeleton from "../../../package/skeleton/Skeleton";
 import { useNavigate } from "react-router";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
+import EventBox from "../../../package/eventBox/EventBox";
 
 const RoundBoxFull = ({ children }) => {
     return (
         <RoundBox padding="lg" isShadowed={false} className={styles.eventBoxEmpty}>
             {children}
-        </RoundBox>
-    );
-};
-
-const EventBox = ({ event }) => {
-    return (
-        <RoundBox padding="lg" isShadowed={false} textAlign="start">
-            <p>{event.start_time.slice(0, 10)}</p>
-            <p className={styles.title}>{event.title}</p>
-            <p className={styles.description}>{event.description}</p>
         </RoundBox>
     );
 };

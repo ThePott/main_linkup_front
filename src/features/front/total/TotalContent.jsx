@@ -1,11 +1,8 @@
 import RoundBox from "../../../package/RoundBox";
-import CustomImageBanner from "../../../shared/CustomImageBanner/CustomImageBanner";
-import CustomImageIcon from "../../../shared/CustomImageIcon/CustomImageIcon";
 import styles from "./TotalContent.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import CustomButton from "../../../package/customButton/CustomButton";
-import { useNavigate } from "react-router";
 import { axiosReturnsData } from "../../../shared/services/axiosInstance";
 import useLinkUpStore from "../../../shared/store/store";
 import { Vstack } from "../../../package/layout";
@@ -14,6 +11,7 @@ import useSubscriptions from "../../../shared/services/useSubscriptions";
 import Container from "../../../package/layout/_Container";
 import ArtistIconBar from "../../../shared/ArtistIconBar/ArtistIconBar";
 import GridContainer from "../../../package/gridContainer/GridContainer";
+import EventBox from "../../../package/eventBox/EventBox";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
@@ -54,14 +52,7 @@ const TotalContent = () => {
                     <ArtistCalendar isMedium={true} />
                     <Vstack className={styles.dailyScheduleContainer}>
                         {currentItems.map((schedule) => (
-                            <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
-                                <li className={styles.dailySchedule}>
-                                    <span className={styles.date}>
-                                        {schedule.start_time.slice(0, 10)}
-                                    </span>
-                                    <span className={styles.scheduleTitle}>{schedule.title}</span>
-                                </li>
-                            </RoundBox>
+                            <EventBox event={schedule} />
                         ))}
 
                         <div className={styles.btns}>

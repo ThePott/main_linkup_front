@@ -15,11 +15,3 @@
     font-size: var(--text-lg);
     font-weight: var(--font-weight-semibold);
 }
-
-.title {
-    font-weight: var(--font-weight-semibold);
-}
-
-.description {
-    color: var(--color-muted);
-}
