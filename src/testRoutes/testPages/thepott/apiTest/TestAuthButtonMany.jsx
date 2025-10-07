@@ -40,9 +40,12 @@ const TestAuthButtonMany = ({ accessToken, setAccessToken }) => {
 
     const handleSubmitPutMe = (event) => {
         event.preventDefault();
+
         const body = new FormData(event.target);
+        const nickname = body.get("nickname");
+
         fetchThenLog({
-            url: `${baseURL}/api/auth/me?nickname=크하하`,
+            url: `${baseURL}/api/auth/me?nickname=${nickname}`,
             accessToken,
             body,
             method: "PUT",
