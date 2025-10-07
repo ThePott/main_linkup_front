@@ -1,5 +1,12 @@
-import { getThenLog, postThenLog } from "../../../../package/commonServices/fetchVariants";
+import {
+    fetchThenLog,
+    getThenLog,
+    postThenLog,
+} from "../../../../package/commonServices/fetchVariants";
 import CustomButton from "../../../../package/customButton/CustomButton";
+import CustomInput from "../../../../package/CustomInput";
+import GridContainer from "../../../../package/gridContainer/GridContainer";
+import RoundBox from "../../../../package/RoundBox";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -31,18 +38,41 @@ const TestAuthButtonMany = ({ accessToken, setAccessToken }) => {
 
     const getMe = () => getThenLog(`${baseURL}/api/auth/me`, undefined, accessToken);
 
+    const handleSubmitPutMe = (event) => {
+        event.preventDefault();
+        const body = new FormData(event.target);
+        fetchThenLog({
+            url: `${baseURL}/api/auth/me?nickname=크하하`,
+            accessToken,
+            body,
+            method: "PUT",
+        });
+    };
+
     return (
         <>
             <CustomButton onClick={postEmailVerification}>send email verification</CustomButton>
+
             <CustomButton onClick={postFanLogin}>
                 <p>fan login</p>
             </CustomButton>
+
             <CustomButton onClick={postCompanyLogin}>
                 <p>company login</p>
             </CustomButton>
+
             <CustomButton onClick={getMe}>
                 <p>get me</p>
             </CustomButton>
+
+            <RoundBox>
+                <p>update my profile</p>
+                <form onSubmit={handleSubmitPutMe}>
+                    <CustomInput type="file" name="profile_image" />
+                    <CustomInput type="text" name="nickname" placeholder="nickname" />
+                    <CustomButton>update my profile</CustomButton>
+                </form>
+            </RoundBox>
         </>
     );
 };

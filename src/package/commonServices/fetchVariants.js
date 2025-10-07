@@ -97,3 +97,40 @@ export const postThenLog = (url, body, callback) => {
         })
         .catch((error) => console.error("Error:", error));
 };
+
+/**
+ * @param {object} options
+ * @param {"GET" | "POST" | "PUT" | "PATCH" | "DELETE"} options.method
+ * @param {string} options.url
+ * @param {string} options.accessToken
+ * @param {any} options.body
+ * @param {(...params: any[]) => any} options.callback
+ */
+export const fetchThenLog = (options) => {
+    const { method, url, accessToken, body, callback } = options;
+
+    const init = {
+        method: method, // Specify the method as POST
+    };
+
+    if (accessToken) {
+        init.headers = { Authorization: `Bearer ${accessToken}` };
+    }
+
+    if (!body || body instanceof FormData) {
+        init.body = body;
+    } else {
+        init.body = JSON.stringify(body); // Convert the JavaScript object to a JSON string
+    }
+
+    fetch(url, init)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            if (!callback) {
+                return;
+            }
+            callback(data);
+        })
+        .catch((error) => console.error("Error:", error));
+};
