@@ -1,0 +1,7 @@
+.title {
+    font-weight: var(--font-weight-semibold);
+}
+
+.description {
+    color: var(--color-muted);
+}
