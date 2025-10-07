@@ -4,6 +4,11 @@ import CustomImageIcon from "../CustomImageIcon/CustomImageIcon";
 
 const ArtistIconBar = ({ artistArray }) => {
     const navigate = useNavigate();
+
+    if (!artistArray || artistArray.length === 0) {
+        return null;
+    }
+
     return (
         <Hstack>
             {artistArray.map((artist) => (

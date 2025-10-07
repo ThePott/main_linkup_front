@@ -4,7 +4,6 @@ import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
 import RoundBox from "../../package/RoundBox.jsx";
-import CustomImageIcon from "../../shared/CustomImageIcon/CustomImageIcon.jsx";
 import styles from "./DetailContent.module.css";
 import { format } from "date-fns";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
@@ -14,15 +13,12 @@ import ArtistCalendar from "../../shared/ArtistCalendar/ArtistCalendar";
 import useDetailContent from "./useDetailContent";
 import MyFanPostModal from "../mypage/MyFanPostModal";
 import useSubscriptions from "../../shared/services/useSubscriptions";
-
-// const getSubscriptions = async () => {
-//     const data = await axiosReturnsData("GET", "/api/subscriptions/?include_image=true");
-//     useLinkUpStore.setState({ artistArray: data });
-// };
+import Container from "../../package/layout/_Container";
+import { Hstack, Vstack } from "../../package/layout";
+import ArtistIconBar from "../../shared/ArtistIconBar/ArtistIconBar";
 
 const DetailContent = () => {
     const { type, id } = useParams();
-    const navigate = useNavigate();
 
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
     const selectedMonthEventArray = useLinkUpStore((state) => state.selectedMonthEventArray);
@@ -41,30 +37,10 @@ const DetailContent = () => {
 
     const imageUrl = currentArtist?.banner_url;
 
-    const scrollRef = useRef(null);
-
-    const makeVariables = () => {
-        return {
-            newOne: currentArtist,
-            body: { artist_id: currentArtist.id },
-        };
+    const mutataionVariables = {
+        newOne: currentArtist,
+        body: { artist_id: currentArtist?.id },
     };
-
-    const scrollLeft = () => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({ left: -100, behavior: "smooth" });
-        }
-    };
-
-    const scrollRight = () => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({ left: 100, behavior: "smooth" });
-        }
-    };
-
-    // useEffect(() => {
-    //     getSubscriptions();
-    // }, []);
 
     const { postMutation, deleteMutation } = useSubscriptions();
     const handleConfirmClick = () => {
@@ -72,7 +48,7 @@ const DetailContent = () => {
             deleteMutation.mutate(id);
             return;
         }
-        postMutation.mutate(makeVariables());
+        postMutation.mutate(mutataionVariables);
     };
 
     useEffect(() => {
@@ -109,75 +85,62 @@ const DetailContent = () => {
     }, [type, id, setEventArray, setFanPostArray]);
 
     return (
-        <div className={styles.container}>
-            {/* 1. 상단 */}
-            <div className={styles.topBar}>
-                <button className={styles.arrow} onClick={scrollLeft}>
-                    &lt;
-                </button>
+        <Container>
+            <Vstack gap="xl">
+                {/* 1. 상단 */}
+                <ArtistIconBar artistArray={artistArray} />
 
-                <div className={styles.iconWrapper} ref={scrollRef}>
-                    {artistArray.map((artistItem) => (
-                        <CustomImageIcon
-                            key={artistItem.artist_id}
-                            url={artistItem.artist_image_url}
-                            onClick={() => navigate(`/detail/artist/${artistItem.artist_id}`)}
-                        />
-                    ))}
-                </div>
-                <button className={styles.arrow} onClick={scrollRight}>
-                    &gt;
-                </button>
+                {/* 2. 배너 */}
+                <CustomImageBanner url={imageUrl} />
 
-                <div className={styles.buttonRight}>
+                <Hstack items="center">
+                    <p className={styles.artistName}>{currentArtist?.name}</p>
                     <CustomButton
                         shape="RECTANGLE"
-                        color= "MONO"
+                        color="MONO"
                         isOn
                         onClick={() => setModalKey("subscribeModal")}
                     >
                         {isSubscribed ? "구독중" : "구독"}
                     </CustomButton>
+                </Hstack>
+
+                {/* 3. 달력 */}
+                <ArtistCalendar />
+
+                {/* 4. 최신 일정 */}
+                <div className={styles.scheduleSection}>
+                    {/* <h3 className={styles.scheduleTitle}>일정</h3> */}
+                    <div className={styles.scheduleList}>
+                        {selectedMonthEventArray.map((schedule) => {
+                            const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
+                            return (
+                                <RoundBox key={schedule.id}>
+                                    {schedule.title} — {dateOnly}
+                                </RoundBox>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
 
-            {/* 2. 배너 */}
-            <RoundBox className={styles.bannerContainer}>
-                <CustomImageBanner url={imageUrl} className={styles.banner} />
-            </RoundBox>
+                {/* 5. 팬포스트 */}
+                <FanPostGrid fanPostArray={fanPostArray} isBlurred={!isSubscribed} />
 
-            {/* 3. 달력 */}
-            <ArtistCalendar />
+                {/* 6. 모달 */}
+                <Modal
+                    isOn={modalKey === "subscribeModal"}
+                    onBackgroundClick={() => setModalKey(null)}
+                >
+                    <div>
+                        <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
+                        <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
+                        <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
+                    </div>
+                </Modal>
 
-            {/* 4. 최신 일정 */}
-            <div className={styles.scheduleSection}>
-                <h3 className={styles.scheduleTitle}>일정</h3>
-                <div className={styles.scheduleList}>
-                    {selectedMonthEventArray.map((schedule) => {
-                        const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
-                        return (
-                            <RoundBox key={schedule.id}>
-                                {schedule.title} — {dateOnly}
-                            </RoundBox>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* 5. 팬포스트 */}
-            <FanPostGrid fanPostArray={fanPostArray} isBlurred={!isSubscribed} />
-
-            {/* 6. 모달 */}
-            <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
-                <div>
-                    <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
-                    <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
-                    <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
-                </div>
-            </Modal>
-            
-            <MyFanPostModal />
-        </div>
+                <MyFanPostModal />
+            </Vstack>
+        </Container>
     );
 };
 
