@@ -21,7 +21,7 @@ const TotalContent = () => {
     const navigate = useNavigate();
     useSubscriptions();
 
-    const endpoint = "/api/events";
+    const endpoint = "/api/events/subscribed";
     const { isPending, error, data } = useQuery({
         queryKey: [endpoint],
         queryFn: () => axiosReturnsData("GET", endpoint),
@@ -44,9 +44,6 @@ const TotalContent = () => {
     const currentItems = scheduleArray.slice(startIndex, endIndex) ?? [];
     const totalPages = Math.ceil((scheduleArray.length ?? 0) / itemsPerPage);
 
-    //배너 이미지 api가 모호하여 임의로 지정
-    const url = artistArray[0].artist_image_url;
-
     return (
         <div className={styles.container}>
             {artistArray.map((artist) => (
@@ -58,9 +55,6 @@ const TotalContent = () => {
                     }}
                 />
             ))}
-            <RoundBox className={styles.bannerContainer}>
-                <CustomImageBanner url={url} className={styles.banner} />
-            </RoundBox>
             <p className={styles.text}>스케줄</p>
             <section className={styles.calendarContainer}>
                 <ArtistCalendar isMedium={true} />
