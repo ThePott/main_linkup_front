@@ -1,4 +1,4 @@
-import ThePottApiTestPage from "./testPages/thepott/ThePottApiTestPage";
+import ThePottApiTestPage from "./testPages/thepott/apiTest/ThePottApiTestPage";
 import ThePottFormTestPage from "./testPages/thepott/ThePottFormTestPage";
 import ThePottTanstackTestPage from "./testPages/thepott/ThePottTanstackTestPage";
 import ThePottTestPage from "./testPages/thepott/ThePottTestPage";
