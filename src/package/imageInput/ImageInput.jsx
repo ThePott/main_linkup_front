@@ -17,13 +17,6 @@ const ImageInput = ({ name, defaultSrc }) => {
         setFile(nextFile);
     };
 
-    const handleClear = () => {
-        setFile(defaultPreview);
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
-    };
-
     const handleClick = () => {
         if (inputRef.current) {
             inputRef.current.click();
@@ -54,12 +47,6 @@ const ImageInput = ({ name, defaultSrc }) => {
         <RoundBox>
             <input hidden name={name} type="file" onChange={handleChange} ref={inputRef} />
             <img src={preview} className={styles.preview} onClick={handleClick} />
-
-            {file && (
-                <CustomButton className={styles.closeButton} onClick={handleClear}>
-                    X
-                </CustomButton>
-            )}
         </RoundBox>
     );
 };

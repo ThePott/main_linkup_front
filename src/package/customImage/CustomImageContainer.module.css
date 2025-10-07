@@ -1,0 +1,8 @@
+.container {
+    border-radius: var(--rounded);
+    height: var(--height);
+    width: var(--width);
+    object-fit: cover;
+    flex-shrink: 0;
+    overflow: hidden;
+}

@@ -12,6 +12,8 @@ import Hstack from "../package/layout/_Hstack.jsx";
 import Vstack from "../package/layout/_Vstack.jsx";
 import FlexOneContainer from "../package/flexOneContainer/FlexOneContainer.jsx";
 import CustomImageIcon from "../shared/CustomImageIcon/CustomImageIcon.jsx";
+import ImageInput from "../package/imageInput/ImageInput.jsx";
+import CustomImageContainer from "../package/customImage/CustomImageContainer.jsx";
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -83,9 +85,14 @@ const MyPage = () => {
             <Vstack>
                 {/* 사용자 프로필 */}
                 <Hstack items="center">
-                    <CustomImageIcon
-                        url={userInfo.profile_image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE}
-                    />
+                    <CustomImageContainer shape="CIRCLE" height="xs">
+                        <ImageInput
+                            name="profile_image"
+                            defaultSrc={
+                                userInfo.profile_image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE
+                            }
+                        />
+                    </CustomImageContainer>
                     <div className={styles.userInfo}>
                         <span className={styles.userName}>{userInfo?.nickname}</span>
                         <div className={styles.userStats}>
