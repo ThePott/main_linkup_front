@@ -16,6 +16,7 @@ import useSubscriptions from "../../shared/services/useSubscriptions";
 import Container from "../../package/layout/_Container";
 import { Hstack, Vstack } from "../../package/layout";
 import ArtistIconBar from "../../shared/ArtistIconBar/ArtistIconBar";
+import { useQuery } from "@tanstack/react-query";
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -58,7 +59,7 @@ const DetailContent = () => {
                     limit: 20,
                     ...params,
                 }).toString();
-                const data = await axiosReturnsData("GET", `/api/events/?${query}`);
+                const data = await axiosReturnsData("GET", `/api/events?${query}`);
                 setEventArray(data.events || []);
             } catch (err) {
                 console.error("이벤트 API 호출 에러:", err);
@@ -72,7 +73,7 @@ const DetailContent = () => {
                     limit: 20,
                     artist_id: Number(artistId),
                 }).toString();
-                const data = await axiosReturnsData("GET", `/api/posts/?${query}`);
+                const data = await axiosReturnsData("GET", `/api/posts?${query}`);
                 setFanPostArray(data);
             } catch (err) {
                 console.error("팬포스트 API 호출 에러:", err);

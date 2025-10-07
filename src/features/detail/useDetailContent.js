@@ -23,10 +23,11 @@ const useDetailArtistQuery = (artistId) => {
 
     return { currentArtist, isPendingDetailArtist, errorDetailArtist };
 };
-const useDetailContent = (artistId) => {
-    const queryReturn = useDetailArtistQuery(artistId);
 
-    return { ...queryReturn };
+const useDetailContent = (artistId) => {
+    const artistQueryReturns = useDetailArtistQuery(artistId);
+
+    return { ...artistQueryReturns };
 };
 
 export default useDetailContent;
