@@ -37,7 +37,7 @@ const FanPostCard = ({ fanPost, isBlurred }) => {
     };
 
     const triggerSubscribeModal = () => {
-        setModalKey("subscribe"); // << 뭔가 구독해야 볼 수 있다는 모달창을 보여주고 확인을 누르면 디테일 페이지로 넘어가게 해야 합니다
+        setModalKey("subscribeForFanPost"); // << 뭔가 구독해야 볼 수 있다는 모달창을 보여주고 확인을 누르면 디테일 페이지로 넘어가게 해야 합니다
         console.log({ fanPostClickMessage: "modalKey를 바꿔 구독을 유도합니다" });
     };
 

@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from "react-router";
-import { useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useEffect } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
@@ -16,7 +16,9 @@ import useSubscriptions from "../../shared/services/useSubscriptions";
 import Container from "../../package/layout/_Container";
 import { Hstack, Vstack } from "../../package/layout";
 import ArtistIconBar from "../../shared/ArtistIconBar/ArtistIconBar";
-import { useQuery } from "@tanstack/react-query";
+import ConfirmationModal from "../../package/modal/ConfirmationModal";
+import GridContainer from "../../package/gridContainer/GridContainer";
+import EventBox from "../../package/eventBox/EventBox";
 
 const DetailContent = () => {
     const { type, id } = useParams();
@@ -27,10 +29,13 @@ const DetailContent = () => {
     const fanPostArray = useLinkUpStore((state) => state.fanPostArray);
     const setFanPostArray = useLinkUpStore((state) => state.setFanPostArray);
 
+    const user = useLinkUpStore((state) => state.user);
     const artistArray = useLinkUpStore((state) => state.artistArray);
 
     const modalKey = useLinkUpStore((state) => state.modalKey);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
+
+    const navigate = useNavigate();
 
     const { currentArtist } = useDetailContent(id);
 
@@ -45,10 +50,18 @@ const DetailContent = () => {
 
     const { postMutation, deleteMutation } = useSubscriptions();
     const handleConfirmClick = () => {
+        setModalKey(null);
+
         if (isSubscribed) {
             deleteMutation.mutate(id);
             return;
         }
+
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
         postMutation.mutate(mutataionVariables);
     };
 
@@ -86,62 +99,71 @@ const DetailContent = () => {
     }, [type, id, setEventArray, setFanPostArray]);
 
     return (
-        <Container>
-            <Vstack gap="xl">
-                {/* 1. 상단 */}
-                <ArtistIconBar artistArray={artistArray} />
+        <>
+            {/* 6. 모달 */}
+            <MyFanPostModal />
 
-                {/* 2. 배너 */}
-                <CustomImageBanner url={imageUrl} />
+            <ConfirmationModal
+                isOn={modalKey === "subscribeForFanPost"}
+                onBackgroundClick={() => setModalKey(null)}
+            >
+                <ConfirmationModal.TextGroup>
+                    <ConfirmationModal.Title>구독하시겠습니까?</ConfirmationModal.Title>
+                    <ConfirmationModal.Description>
+                        팬 포스트를 보기 위해서는 구독을 해야 합니다
+                    </ConfirmationModal.Description>
+                </ConfirmationModal.TextGroup>
+                <GridContainer cols={2}>
+                    <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
+                    <CustomButton onClick={() => handleConfirmClick()}>구독</CustomButton>
+                </GridContainer>
+            </ConfirmationModal>
 
-                <Hstack items="center">
-                    <p className={styles.artistName}>{currentArtist?.name}</p>
-                    <CustomButton
-                        shape="RECTANGLE"
-                        color="MONO"
-                        isOn
-                        onClick={() => setModalKey("subscribeModal")}
-                    >
-                        {isSubscribed ? "구독중" : "구독"}
-                    </CustomButton>
-                </Hstack>
-
-                {/* 3. 달력 */}
-                <ArtistCalendar />
-
-                {/* 4. 최신 일정 */}
-                <div className={styles.scheduleSection}>
-                    {/* <h3 className={styles.scheduleTitle}>일정</h3> */}
-                    <div className={styles.scheduleList}>
-                        {selectedMonthEventArray.map((schedule) => {
-                            const dateOnly = format(new Date(schedule.start_time), "yyyy-MM-dd");
-                            return (
-                                <RoundBox key={schedule.id}>
-                                    {schedule.title} — {dateOnly}
-                                </RoundBox>
-                            );
-                        })}
-                    </div>
+            <Modal isOn={modalKey === "subscribeModal"} onBackgroundClick={() => setModalKey(null)}>
+                <div>
+                    <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
+                    <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
+                    <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
                 </div>
+            </Modal>
 
-                {/* 5. 팬포스트 */}
-                <FanPostGrid fanPostArray={fanPostArray} isBlurred={!isSubscribed} />
+            <Container>
+                <Vstack gap="xl">
+                    {/* 1. 상단 */}
+                    <ArtistIconBar artistArray={artistArray} />
 
-                {/* 6. 모달 */}
-                <Modal
-                    isOn={modalKey === "subscribeModal"}
-                    onBackgroundClick={() => setModalKey(null)}
-                >
-                    <div>
-                        <h3>{isSubscribed ? "구독을 취소하시겠습니까?" : "구독하시겠습니까?"}</h3>
-                        <CustomButton onClick={() => handleConfirmClick()}>확인</CustomButton>
-                        <CustomButton onClick={() => setModalKey(null)}>취소</CustomButton>
-                    </div>
-                </Modal>
+                    {/* 2. 배너 */}
+                    <CustomImageBanner url={imageUrl} />
 
-                <MyFanPostModal />
-            </Vstack>
-        </Container>
+                    <Hstack items="center">
+                        <p className={styles.artistName}>{currentArtist?.name}</p>
+                        {user && (
+                            <CustomButton
+                                shape="RECTANGLE"
+                                color="MONO"
+                                isOn={!isSubscribed}
+                                onClick={() => setModalKey("subscribeModal")}
+                            >
+                                {isSubscribed ? "구독중" : "구독"}
+                            </CustomButton>
+                        )}
+                    </Hstack>
+
+                    {/* 3. 달력 */}
+                    <ArtistCalendar />
+
+                    {/* 4. 최신 일정 */}
+                    <GridContainer cols={2}>
+                        {selectedMonthEventArray.map((event) => (
+                            <EventBox event={event} />
+                        ))}
+                    </GridContainer>
+
+                    {/* 5. 팬포스트 */}
+                    <FanPostGrid fanPostArray={fanPostArray} isBlurred={!isSubscribed} />
+                </Vstack>
+            </Container>
+        </>
     );
 };
 

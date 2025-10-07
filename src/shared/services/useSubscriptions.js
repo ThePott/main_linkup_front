@@ -46,10 +46,7 @@ const useSubscriptionsMutate = () => {
                 queryKey: [queryEndpoint],
             });
             const previous = queryClient.getQueryData([queryEndpoint]);
-            // TODO: subscribedAt이 기록되어서 이걸로 sorting이 되면 좋겠더
-            // const newArray = [...previous, newOne].sort((a, b) => a.id - b.id);
             const newArray = [...previous, newOne];
-            debugger;
             queryClient.setQueryData([queryEndpoint], newArray);
             return { previous };
         },
