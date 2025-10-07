@@ -124,7 +124,9 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
         <Vstack onDoubleClick={handleDoubleClick}>
             <DayCircle isDim={isDim} date={date} isHolyday={isHolyday} isToday={isToday} />
             {size === "lg" && <EventBoxMany eventArray={eventArray} />}
-            {size === "md" && <EventDotMany eventArray={eventArray} />}
+            <div className={styles.eventDotContainer}>
+                {size === "md" && <EventDotMany eventArray={eventArray} />}
+            </div>
         </Vstack>
     );
 };

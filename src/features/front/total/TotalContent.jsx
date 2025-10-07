@@ -11,6 +11,9 @@ import useLinkUpStore from "../../../shared/store/store";
 import { Vstack } from "../../../package/layout";
 import ArtistCalendar from "../../../shared/ArtistCalendar/ArtistCalendar";
 import useSubscriptions from "../../../shared/services/useSubscriptions";
+import Container from "../../../package/layout/_Container";
+import ArtistIconBar from "../../../shared/ArtistIconBar/ArtistIconBar";
+import GridContainer from "../../../package/gridContainer/GridContainer";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
@@ -18,7 +21,6 @@ const TotalContent = () => {
     const setEventArray = useLinkUpStore((state) => state.setEventArray);
     const [page, setPage] = useState(1);
     const itemsPerPage = 5;
-    const navigate = useNavigate();
     useSubscriptions();
 
     const endpoint = "/api/events/subscribed";
@@ -45,51 +47,44 @@ const TotalContent = () => {
     const totalPages = Math.ceil((scheduleArray.length ?? 0) / itemsPerPage);
 
     return (
-        <div className={styles.container}>
-            {artistArray.map((artist) => (
-                <CustomImageIcon
-                    key={artist.artist_id}
-                    url={artist.artist_image_url}
-                    onClick={() => {
-                        navigate(`/detail/artist/${artist.artist_id}`);
-                    }}
-                />
-            ))}
-            <p className={styles.text}>스케줄</p>
-            <section className={styles.calendarContainer}>
-                <ArtistCalendar isMedium={true} />
-                <Vstack className={styles.dailyScheduleContainer}>
-                    {currentItems.map((schedule) => (
-                        <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
-                            <li className={styles.dailySchedule}>
-                                <span className={styles.date}>
-                                    {schedule.start_time.slice(0, 10)}
-                                </span>
-                                <span className={styles.scheduleTitle}>{schedule.title}</span>
-                            </li>
-                        </RoundBox>
-                    ))}
+        <Container>
+            <Vstack gap="xl">
+                <ArtistIconBar artistArray={artistArray} />
+                <GridContainer cols={2}>
+                    <ArtistCalendar isMedium={true} />
+                    <Vstack className={styles.dailyScheduleContainer}>
+                        {currentItems.map((schedule) => (
+                            <RoundBox className={styles.dailySchedyleRoundbox} key={schedule.id}>
+                                <li className={styles.dailySchedule}>
+                                    <span className={styles.date}>
+                                        {schedule.start_time.slice(0, 10)}
+                                    </span>
+                                    <span className={styles.scheduleTitle}>{schedule.title}</span>
+                                </li>
+                            </RoundBox>
+                        ))}
 
-                    <div className={styles.btns}>
-                        <CustomButton
-                            onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                            disabled={page === 1}
-                        >
-                            이전
-                        </CustomButton>
-                        <span>
-                            {page} / {totalPages}
-                        </span>
-                        <CustomButton
-                            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                            disabled={page === totalPages}
-                        >
-                            다음
-                        </CustomButton>
-                    </div>
-                </Vstack>
-            </section>
-        </div>
+                        <div className={styles.btns}>
+                            <CustomButton
+                                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                                disabled={page === 1}
+                            >
+                                이전
+                            </CustomButton>
+                            <span>
+                                {page} / {totalPages}
+                            </span>
+                            <CustomButton
+                                onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                                disabled={page === totalPages}
+                            >
+                                다음
+                            </CustomButton>
+                        </div>
+                    </Vstack>
+                </GridContainer>
+            </Vstack>
+        </Container>
     );
 };
 
