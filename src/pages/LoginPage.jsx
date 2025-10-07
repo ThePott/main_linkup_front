@@ -1,5 +1,5 @@
 import styles from "./LoginPage.module.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
 import CustomButton from "../package/customButton/CustomButton";
 import { Hstack, Vstack } from "../package/layout";
@@ -12,9 +12,15 @@ import CustomInput from "../package/CustomInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../shared/validations/zodSchema";
 import Container from "../package/layout/_Container";
+import useLinkUpStore from "../shared/store/store";
 
 const LoginPage = () => {
-    const { errorLogin, isPendingLogin, postLoginMutation } = useAuth();
+    const user = useLinkUpStore((state) => state.user);
+    const previousPathname = useLinkUpStore((state) => state.previousPathname);
+
+    const { errorLogin, isPendingLogin, postLoginMutation, logout } = useAuth();
+
+    const navigate = useNavigate();
 
     const {
         register,
@@ -38,6 +44,16 @@ const LoginPage = () => {
     const onSubmit = (data) => {
         postLoginMutation.mutate(data);
     };
+
+    if (user) {
+        return (
+            <Container className={styles.outerContainer} marginTop="none">
+                <CustomButton isOn onClick={logout}>
+                    로그아웃
+                </CustomButton>
+            </Container>
+        );
+    }
 
     return (
         <Container className={styles.outerContainer} marginTop="none">

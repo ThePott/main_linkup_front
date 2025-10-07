@@ -43,6 +43,7 @@ const MyButton = ({ user }) => {
 };
 
 const showOnlyLogoPathArray = ["/login", "/signup"];
+const doNotStorePathArray = [...showOnlyLogoPathArray, "/super-user", "/agency"];
 
 const Navbar = () => {
     const location = useLocation();
@@ -58,7 +59,7 @@ const Navbar = () => {
     const pathname = location.pathname;
 
     useEffect(() => {
-        if (showOnlyLogoPathArray.includes(pathname)) {
+        if (doNotStorePathArray.includes(pathname)) {
             return;
         }
 

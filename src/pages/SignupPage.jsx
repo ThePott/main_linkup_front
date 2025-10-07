@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import RoundBox from "../package/RoundBox";
 import { Hstack, Vstack } from "../package/layout";
 import CustomButton from "../package/customButton/CustomButton";
-import { useSignup } from "../features/signup/useSignup";
+import useSignup from "../features/signup/useSignup";
 import LabelGroup from "../package/labelGroup/LabelGroup";
 import CustomInput from "../package/CustomInput";
 import { useForm } from "react-hook-form";
@@ -20,8 +20,6 @@ const SignupPage = () => {
     const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
     const [email, setEmail] = useState("");
 
-    const setModalKey = useLinkUpStore((state) => state.setModalKey);
-
     const {
         register,
         handleSubmit,
@@ -36,16 +34,9 @@ const SignupPage = () => {
         errorVerification,
         isPendingSignup,
         errorSignup,
+
+        isOkayToShow,
     } = useSignup();
-
-    useEffect(() => {
-        if (!errorVerification && !errorSignup) {
-            return;
-        }
-
-        setModalKey("error");
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [errorVerification, errorSignup]);
 
     const onSubmit = (data) => {
         const body = { ...data, user_type: isForAgency ? "company" : "fan" };
@@ -65,6 +56,10 @@ const SignupPage = () => {
     const verificationCodeLabel = isVerificationCodeSent
         ? "인증 코드 - 이메일을 확인하세요"
         : "인증 코드";
+
+    if (!isOkayToShow) {
+        return null;
+    }
 
     return (
         <>

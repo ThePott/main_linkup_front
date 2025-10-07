@@ -55,7 +55,7 @@ const ArtistButtonGroup = memo(({ artistArray, isOnArray }) => {
     return (
         <RoundBox isShadowed={false} padding="md">
             <Vstack gap="sm">
-                <ArtistButton isOn={groupIsOn} artist={groupArtist} />
+                {groupArtist && <ArtistButton isOn={groupIsOn} artist={groupArtist} />}
                 {memberArtistArray.map((artist, index) => (
                     <ArtistButton isOn={memberIsOnArray[index]} artist={artist} />
                 ))}

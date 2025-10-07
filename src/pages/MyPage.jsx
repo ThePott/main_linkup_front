@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import Sidebar from "../features/mypage/Sidebar.jsx";
 import DeleteAccountModal from "../features/mypage/DeleteAccountModal.jsx";
 import useLinkUpStore from "../shared/store/store";
-import { apiAuthMe } from "../shared/services/linkupApi.js";
 import styles from "./MyPage.module.css";
 import MyFanPost from "../features/mypage/MyFanPost.jsx";
 import Container from "../package/layout/_Container.jsx";
@@ -16,6 +15,7 @@ import { axiosReturnsData } from "../shared/services/axiosInstance.js";
 import CustomInput from "../package/CustomInput.jsx";
 import { useNavigate } from "react-router";
 import useAuth from "../shared/services/useAuth.js";
+import useRedirectIfNot from "../shared/utils/useRedirectIfNot.js";
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -49,8 +49,8 @@ const MyPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const accessToken = useLinkUpStore((state) => state.access_token);
     const user = useLinkUpStore((state) => state.user);
-    const navigate = useNavigate();
 
+    const { isOkayToShow } = useRedirectIfNot("fan");
     // 사용자 정보
     useAuth();
 
@@ -72,18 +72,6 @@ const MyPage = () => {
         keepPreviousData: true,
     });
 
-    useEffect(() => {
-        if (user) {
-            return;
-        }
-        navigate("/login");
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
-
-    if (!user) {
-        return null;
-    }
-
     // 통계
     const subscriptionsCount = subscriptions.length;
     const postsCount = myPosts.length;
@@ -102,6 +90,10 @@ const MyPage = () => {
         }
         axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`);
     };
+
+    if (!isOkayToShow) {
+        return null;
+    }
 
     return (
         <Container>

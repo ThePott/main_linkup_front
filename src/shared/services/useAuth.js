@@ -50,7 +50,7 @@ const useAuthLogin = () => {
         onSuccess: (data) => {
             switch (data.user_type) {
                 case "fan":
-                    navigate(previousPathname ? -1 : "/", { replace: true });
+                    navigate(previousPathname ?? "/", { replace: true });
                     break;
                 case "company":
                     navigate("/agency", { replace: true });
