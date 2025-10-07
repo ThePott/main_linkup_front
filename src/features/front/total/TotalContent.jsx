@@ -12,6 +12,8 @@ import Container from "../../../package/layout/_Container";
 import ArtistIconBar from "../../../shared/ArtistIconBar/ArtistIconBar";
 import GridContainer from "../../../package/gridContainer/GridContainer";
 import EventBox from "../../../package/eventBox/EventBox";
+import FanPostGrid from "../../../shared/FanPostGrid";
+import MyFanPostModal from "../../mypage/MyFanPostModal";
 
 const TotalContent = () => {
     const artistArray = useLinkUpStore((state) => state.artistArray);
@@ -25,7 +27,16 @@ const TotalContent = () => {
     const { isPending, error, data } = useQuery({
         queryKey: [endpoint],
         queryFn: () => axiosReturnsData("GET", endpoint),
-        onError: (error) => console.error(error),
+        // V5에서 삭제되었습니다
+        // onError: (error) => console.error(error),
+    });
+
+    const fanPostEndpoint = "/api/posts?is_active=true";
+    const { data: fanPostArray } = useQuery({
+        queryKey: [fanPostEndpoint],
+        queryFn: () => axiosReturnsData("GET", fanPostEndpoint),
+        // V5에서 삭제되었습니다
+        // onError: (error) => console.error(error),
     });
 
     useEffect(() => {
@@ -45,37 +56,41 @@ const TotalContent = () => {
     const totalPages = Math.ceil((scheduleArray.length ?? 0) / itemsPerPage);
 
     return (
-        <Container>
-            <Vstack gap="xl">
-                <ArtistIconBar artistArray={artistArray} />
-                <GridContainer cols={2}>
-                    <ArtistCalendar isMedium={true} />
-                    <Vstack className={styles.dailyScheduleContainer}>
-                        {currentItems.map((schedule) => (
-                            <EventBox event={schedule} />
-                        ))}
+        <>
+            <Container>
+                <Vstack gap="xl">
+                    <ArtistIconBar artistArray={artistArray} />
+                    <GridContainer cols={2}>
+                        <ArtistCalendar isMedium={true} />
+                        <Vstack className={styles.dailyScheduleContainer}>
+                            {currentItems.map((schedule) => (
+                                <EventBox event={schedule} />
+                            ))}
 
-                        <div className={styles.btns}>
-                            <CustomButton
-                                onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                                disabled={page === 1}
-                            >
-                                이전
-                            </CustomButton>
-                            <span>
-                                {page} / {totalPages}
-                            </span>
-                            <CustomButton
-                                onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                                disabled={page === totalPages}
-                            >
-                                다음
-                            </CustomButton>
-                        </div>
-                    </Vstack>
-                </GridContainer>
-            </Vstack>
-        </Container>
+                            <div className={styles.btns}>
+                                <CustomButton
+                                    onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                                    disabled={page === 1}
+                                >
+                                    이전
+                                </CustomButton>
+                                <span>
+                                    {page} / {totalPages}
+                                </span>
+                                <CustomButton
+                                    onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                                    disabled={page === totalPages}
+                                >
+                                    다음
+                                </CustomButton>
+                            </div>
+                        </Vstack>
+                    </GridContainer>
+                    <FanPostGrid fanPostArray={fanPostArray ?? []} isBlurred={false} />
+                </Vstack>
+            </Container>
+            <MyFanPostModal />
+        </>
     );
 };
 
