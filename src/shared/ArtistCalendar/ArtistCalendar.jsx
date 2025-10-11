@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Calendar from "../../package/calendar/Calendar";
 import useLinkUpStore from "../store/store";
 import { BulkDownloadButton } from "./AdditionalCalendarButtons";
+import RoundBox from "../../package/RoundBox";
 
 const filterEventArray = (eventArray, selectedYear, selectedMonth) => {
     const filteredEventArray = eventArray.filter((event) => {
@@ -39,12 +40,14 @@ const ArtistCalendar = ({ isMedium = false }) => {
 
     return (
         <>
-            <Calendar
-                size={isMedium ? "md" : "lg"}
-                eventArray={eventArray}
-                onDateChange={handleDateChange}
-                additionalButtonArray={[<BulkDownloadButton />]}
-            />
+            <RoundBox padding="md">
+                <Calendar
+                    size={isMedium ? "md" : "lg"}
+                    eventArray={eventArray}
+                    onDateChange={handleDateChange}
+                    additionalButtonArray={[<BulkDownloadButton />]}
+                />
+            </RoundBox>
         </>
     );
 };
