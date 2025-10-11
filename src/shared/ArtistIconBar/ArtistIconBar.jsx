@@ -1,3 +1,4 @@
+import styles from "./ArtistIconBar.module.css";
 import { useNavigate } from "react-router";
 import { Hstack } from "../../package/layout";
 import CustomImageIcon from "../CustomImageIcon/CustomImageIcon";
@@ -10,7 +11,7 @@ const ArtistIconBar = ({ artistArray }) => {
     }
 
     return (
-        <Hstack>
+        <Hstack className={styles.container}>
             {artistArray.map((artist) => (
                 <CustomImageIcon
                     key={artist.artist_id ?? artist.id}

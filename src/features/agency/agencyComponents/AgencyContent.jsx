@@ -13,7 +13,7 @@ const AgencyContent = () => {
             <Hstack gap="none" className={styles.agencyScreen}>
                 <AgencySidebar />
                 <FlexOneContainer>
-                    <Vstack items="center" className={styles.fullHeight}>
+                    <Vstack items="center" className={styles.calendarSection}>
                         <AgencyCalendar />
                     </Vstack>
                 </FlexOneContainer>

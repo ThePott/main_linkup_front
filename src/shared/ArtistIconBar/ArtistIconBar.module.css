@@ -1,0 +1,6 @@
+.container {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scrollbar-color: hsl(0 0 50 / 0.5) transparent;
+}
