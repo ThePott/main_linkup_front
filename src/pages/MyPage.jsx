@@ -16,6 +16,15 @@ import CustomInput from "../package/CustomInput.jsx";
 import { useNavigate } from "react-router";
 import useAuth from "../shared/services/useAuth.js";
 import useRedirectIfNot from "../shared/utils/useRedirectIfNot.js";
+import CustomButton from "../package/customButton/CustomButton.jsx";
+import queryClient from "../shared/services/queryClient.js";
+
+const DebugButton = () => {
+    const handleClick = () => {
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+    };
+    return <CustomButton onClick={handleClick}>Invalidate Queries</CustomButton>;
+};
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -82,10 +91,18 @@ const MyPage = () => {
         axiosReturnsData("PUT", "/api/auth/me", body);
     };
 
+    const handleNicknameSubmit = (event) => {
+        event.preventDefault();
+        event.target.children[0].blur();
+    };
+
     const handleNicknameBlur = (event) => {
         const nickname = event.target.value;
         if (!nickname) {
             event.target.value = user?.nickname;
+            return;
+        }
+        if (nickname == user?.nickname) {
             return;
         }
         axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`);
@@ -111,7 +128,9 @@ const MyPage = () => {
                         </form>
                     </CustomImageContainer>
                     <div className={styles.userInfo}>
-                        <CustomInput defaultValue={user?.nickname} onBlur={handleNicknameBlur} />
+                        <form onSubmit={handleNicknameSubmit} onBlur={handleNicknameBlur}>
+                            <CustomInput defaultValue={user?.nickname} />
+                        </form>
                         <div className={styles.userStats}>
                             <span>구독: {subscriptionsCount}</span>
                             <span>포스트: {postsCount}</span>
@@ -119,6 +138,7 @@ const MyPage = () => {
                             {isPostsFetching && <small>갱신 중...</small>}
                         </div>
                     </div>
+                    <DebugButton />
                 </Hstack>
 
                 <Hstack gap="xl">
