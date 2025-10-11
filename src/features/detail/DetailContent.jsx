@@ -3,9 +3,7 @@ import { useEffect } from "react";
 import useLinkUpStore from "../../shared/store/store";
 import CustomButton from "../../package/customButton/CustomButton.jsx";
 import Modal from "../../package/modal/Modal.jsx";
-import RoundBox from "../../package/RoundBox.jsx";
 import styles from "./DetailContent.module.css";
-import { format } from "date-fns";
 import CustomImageBanner from "../../shared/CustomImageBanner/CustomImageBanner";
 import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FanPostGrid from "../../shared/FanPostGrid";
@@ -39,7 +37,8 @@ const DetailContent = () => {
 
     const { currentArtist } = useDetailContent(id);
 
-    const isSubscribed = artistArray.some((a) => a.artist_id === Number(id));
+    const isSubscribed =
+        user && artistArray.length !== 0 && artistArray.some((a) => a.artist_id === Number(id));
 
     const imageUrl = currentArtist?.banner_url;
 

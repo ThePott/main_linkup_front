@@ -8,6 +8,14 @@ import useAuth from "../../shared/services/useAuth";
 import useIdol from "../../shared/services/useIdol";
 import { useEffect } from "react";
 
+// const DebugButton = () => {
+//     const artistArray = useLinkUpStore((state) => state.artistArray);
+//     const user = useLinkUpStore((state) => state.user);
+//     const handleClick = () => {
+//         console.log({ artistArray, user });
+//     };
+//     return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
+// };
 const SideSection = ({ justify, children, ...props }) => (
     <Hstack justify={justify} className={styles.sideSection} {...props}>
         {children}

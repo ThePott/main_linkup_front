@@ -9,6 +9,7 @@ import { axiosReturnsData } from "../../shared/services/axiosInstance";
 import FlexOneContainer from "../../package/flexOneContainer/FlexOneContainer";
 
 const MyFanPostModal = () => {
+    const user = useLinkUpStore((state) => state.user);
     const selectedFanPost = useLinkUpStore((state) => state.selectedFanPost);
     const setModalKey = useLinkUpStore((state) => state.setModalKey);
     const modalKey = useLinkUpStore((state) => state.modalKey);
@@ -24,8 +25,9 @@ const MyFanPostModal = () => {
 
     if (!selectedFanPost) return null;
 
-    const artistName = selectedFanPost.artist.name || "이름 정보를 불러올 수 없습니다";
-    const authorName = selectedFanPost.user.nickname || "이름 정보를 불러올 수 없습니다";
+    const artistName = selectedFanPost.artist_name || "이름 정보를 불러올 수 없습니다";
+    const authorName =
+        selectedFanPost.user?.nickname || user?.nickname || "이름 정보를 불러올 수 없습니다";
     const content = selectedFanPost.content || "작성한 메시지가 없습니다.";
     const imageUrl = selectedFanPost.image_url || import.meta.env.VITE_PLACEHOLDER_IMAGE;
 
