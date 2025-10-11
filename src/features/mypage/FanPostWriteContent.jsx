@@ -117,7 +117,7 @@ const FanPostWriteContent = () => {
                     <select name="artist_id" ref={inputRef} className={styles.select} required>
                         {artistArray.map((artist) => (
                             <option key={artist.artist_id} value={artist.artist_id}>
-                                {artist.group_name || artist.stage_name}
+                                {artist.stage_name || artist.group_name}
                             </option>
                         ))}
                     </select>
