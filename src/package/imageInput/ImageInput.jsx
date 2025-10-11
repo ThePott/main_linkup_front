@@ -5,7 +5,7 @@ import RoundBox from "../RoundBox";
 const PLACEHOLDER_IMAGE =
     "https://plus.unsplash.com/premium_photo-1738592736106-a17b897c0ab1?q=80&w=1267&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-const ImageInput = ({ name, defaultSrc }) => {
+const ImageInput = ({ name, defaultSrc, className }) => {
     const defaultPreview = defaultSrc || PLACEHOLDER_IMAGE;
     const [file, setFile] = useState();
     const [preview, setPreview] = useState(defaultPreview);
@@ -43,7 +43,7 @@ const ImageInput = ({ name, defaultSrc }) => {
     }, [defaultSrc]);
 
     return (
-        <RoundBox>
+        <RoundBox className={`${className} ${styles.container}`}>
             <input hidden name={name} type="file" onChange={handleChange} ref={inputRef} />
             <img src={preview} className={styles.preview} onClick={handleClick} />
         </RoundBox>

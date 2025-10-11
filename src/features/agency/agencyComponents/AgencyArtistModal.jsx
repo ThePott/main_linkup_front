@@ -90,15 +90,27 @@ const AgencyArtistModal = () => {
             onBackgroundClick={dismiss}
         >
             <form ref={formRef} onSubmit={handleSubmit}>
-                <GridContainer gap="MD" cols={4}>
+                <GridContainer gap="MD" cols={4} rows={1}>
                     <Vstack>
                         {inputFieldInfoArray.map((info) => (
                             <ArtistInput key={info} selectedArtist={selectedArtist} info={info} />
                         ))}
                     </Vstack>
-                    <ImageInput name="face_image" defaultSrc={selectedArtist?.face_url} />
-                    <ImageInput name="torso_image" defaultSrc={selectedArtist?.torso_url} />
-                    <ImageInput name="banner_image" defaultSrc={selectedArtist?.banner_url} />
+                    <ImageInput
+                        className={styles.imageInput}
+                        name="face_image"
+                        defaultSrc={selectedArtist?.face_url}
+                    />
+                    <ImageInput
+                        className={styles.imageInput}
+                        name="torso_image"
+                        defaultSrc={selectedArtist?.torso_url}
+                    />
+                    <ImageInput
+                        className={styles.imageInput}
+                        name="banner_image"
+                        defaultSrc={selectedArtist?.banner_url}
+                    />
 
                     <CustomButton type="submit">{buttonLabel}</CustomButton>
                     {selectedArtist && (
