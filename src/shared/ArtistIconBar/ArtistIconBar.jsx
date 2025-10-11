@@ -13,7 +13,7 @@ const ArtistIconBar = ({ artistArray }) => {
         <Hstack>
             {artistArray.map((artist) => (
                 <CustomImageIcon
-                    key={artist.artist_id}
+                    key={artist.artist_id ?? artist.id}
                     url={artist.artist_image_url}
                     onClick={() => {
                         navigate(`/detail/artist/${artist.artist_id}`);
