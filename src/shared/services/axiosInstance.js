@@ -21,37 +21,48 @@ export default axiosInstance;
 
 /**
  * @param {"GET" | "POST" | "PUT" | "PATCH" | "DELETE"} method
+ * @param {string} url
  * @param {any} body
+ * @param {object} options
+ * @param {string} options.access_token
+ * @param {(...params: any[]) => void} options.callback
  */
-export const axiosReturnsData = async (method, url, body, access_token) => {
-    if (access_token) {
-        axiosInstance.headers = { Authorization: `Bearer ${access_token}` };
+export const axiosReturnsData = async (method, url, body, options) => {
+    if (options?.access_token) {
+        axiosInstance.headers = { Authorization: `Bearer ${options.access_token}` };
     }
 
+    let response;
     switch (method) {
         case "GET": {
-            const response = await axiosInstance.get(url);
-            return response.data;
+            response = await axiosInstance.get(url);
+            break;
         }
         case "POST": {
-            const response = await axiosInstance.post(url, body);
-            return response.data;
+            response = await axiosInstance.post(url, body);
+            break;
         }
         case "PUT": {
-            const response = await axiosInstance.put(url, body);
-            return response.data;
+            response = await axiosInstance.put(url, body);
+            break;
         }
         case "PATCH": {
-            const response = await axiosInstance.patch(url, body);
-            return response.data;
+            response = await axiosInstance.patch(url, body);
+            break;
         }
         case "DELETE": {
-            const response = await axiosInstance.delete(url);
-            return response.data;
+            response = await axiosInstance.delete(url);
+            break;
         }
         default:
             throw new Error("---- ERROR OCCURRED: 잘못된 메소드입니다");
     }
+
+    if (options?.callback) {
+        options.callback();
+    }
+
+    return response.data;
 };
 
 export const axiosDownloadFile = async (url) => {
