@@ -85,16 +85,16 @@ const DayCircle = ({ date, isHolyday, isToday, isDim }) => {
     );
 };
 
-const EventBoxMany = ({ eventArray }) => {
+const EventBoxMany = ({ eventArray, isDim }) => {
     return (
         <>
             {eventArray.map((event) => (
-                <EventBox key={event.id} event={event} />
+                <EventBox key={event.id} event={event} isDim={isDim} />
             ))}
         </>
     );
 };
-const EventDotMany = ({ eventArray }) => {
+const EventDotMany = ({ eventArray, isDim }) => {
     const isTooMuch = eventArray.length > 4;
     if (isTooMuch) {
         return <EventDot />;
@@ -102,7 +102,7 @@ const EventDotMany = ({ eventArray }) => {
     return (
         <Hstack gap="xs">
             {eventArray.map((event) => (
-                <EventDot key={event.id} />
+                <EventDot key={event.id} isDim={isDim} />
             ))}
         </Hstack>
     );
@@ -123,9 +123,9 @@ const DateCell = ({ date, eventArray, isDim, isToday }) => {
     return (
         <Vstack onDoubleClick={handleDoubleClick}>
             <DayCircle isDim={isDim} date={date} isHolyday={isHolyday} isToday={isToday} />
-            {size === "lg" && <EventBoxMany eventArray={eventArray} />}
+            {size === "lg" && <EventBoxMany isDim={isDim} eventArray={eventArray} />}
             <div className={styles.eventDotContainer}>
-                {size === "md" && <EventDotMany eventArray={eventArray} />}
+                {size === "md" && <EventDotMany isDim={isDim} eventArray={eventArray} />}
             </div>
         </Vstack>
     );
