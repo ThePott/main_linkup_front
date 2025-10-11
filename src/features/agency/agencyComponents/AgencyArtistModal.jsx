@@ -10,6 +10,14 @@ import ImageInput from "../../../package/imageInput/ImageInput";
 import useCompanies from "../../../shared/services/useCompanies";
 import { convertFormDataToArtist } from "../../../shared/utils/formUtils";
 
+const DebugButton = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const handleClick = () => {
+        console.log({ selectedArtist });
+    };
+    return <CustomButton onClick={handleClick}>DEBUG</CustomButton>;
+};
+
 const inputFieldInfoArray = [
     ["아티스트 명", "stage_name", "text"],
     ["그룹 이름", "group_name", "text"],
@@ -65,11 +73,11 @@ const AgencyArtistModal = () => {
         event.preventDefault();
 
         const formData = new FormData(event.target);
+        const artist_type = formData.get("group_name") ? "group" : "individual";
+        formData.append("artist_type", artist_type);
+
         const artist = convertFormDataToArtist(formData);
         const newOne = { id: Date.now(), ...artist };
-
-        const artist_type = formData.get("group_name") ? "group" : "individual";
-        newOne.artist_type = artist_type;
 
         if (selectedArtist) {
             formData.append("id", selectedArtist.id);
@@ -89,6 +97,7 @@ const AgencyArtistModal = () => {
             isOn={modalKey === "agencySidebar"}
             onBackgroundClick={dismiss}
         >
+            <DebugButton />
             <form ref={formRef} onSubmit={handleSubmit}>
                 <GridContainer gap="MD" cols={4} rows={1}>
                     <Vstack>
