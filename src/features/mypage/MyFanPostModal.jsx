@@ -25,7 +25,10 @@ const MyFanPostModal = () => {
 
     if (!selectedFanPost) return null;
 
-    const artistName = selectedFanPost.artist_name || "이름 정보를 불러올 수 없습니다";
+    const artistName =
+        selectedFanPost.artist?.name ||
+        selectedFanPost.artist_name ||
+        "이름 정보를 불러올 수 없습니다";
     const authorName =
         selectedFanPost.user?.nickname || user?.nickname || "이름 정보를 불러올 수 없습니다";
     const content = selectedFanPost.content || "작성한 메시지가 없습니다.";
