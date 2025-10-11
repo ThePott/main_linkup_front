@@ -21,9 +21,6 @@ const RecommendContent = () => {
         // stale time은 query client에서 5분으로 설정했습니다.
         // 만약 달리 사용하고 싶으시면 기존처럼 useQuery에 직접 세팅하셔도 됩니다.
         // staleTime: 1000 * 60 * 3,
-        onError: (error) => {
-            console.error(error);
-        },
     });
 
     useEffect(() => {

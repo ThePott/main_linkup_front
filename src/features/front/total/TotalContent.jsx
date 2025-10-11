@@ -1,4 +1,3 @@
-import RoundBox from "../../../package/RoundBox";
 import styles from "./TotalContent.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";

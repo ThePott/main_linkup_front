@@ -9,6 +9,7 @@ import SearchSubPage from "../features/front/search/SearchSubPage";
 const FrontPage = () => {
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get("query");
+    const user = useLinkUpStore((state) => state.user);
     const artistArray = useLinkUpStore((state) => state.artistArray);
 
     useFront();
@@ -16,7 +17,7 @@ const FrontPage = () => {
     if (queryParam) {
         return <SearchSubPage />;
     }
-    if (artistArray.length === 0) {
+    if (!user || artistArray.length === 0) {
         return <RecommendContent />;
     }
     return <TotalContent />;
