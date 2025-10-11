@@ -2,5 +2,6 @@
     max-width: var(--width);
     margin: auto;
     margin-top: var(--margin-top);
-    padding: 0 var(--spacing-md);
+    padding-left: var(--spacing-md);
+    scrollbar-gutter: stable both-edges;
 }
