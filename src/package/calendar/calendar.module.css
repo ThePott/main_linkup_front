@@ -7,16 +7,3 @@
 .bold {
     font-weight: var(--font-weight-semibold);
 }
-
-.eventBox {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--rounded-md);
-    background-color: var(--color-vivid);
-    color: var(--color-vivid-inverted);
-}
-
-.eventDot {
-    background-color: var(--color-vivid);
-    padding: var(--spacing-xs);
-    border-radius: var(--rounded-full);
-}

@@ -1,0 +1,12 @@
+.eventBox {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--rounded-md);
+    background-color: var(--bg);
+    color: var(--color-vivid-inverted);
+}
+
+.eventDot {
+    background-color: var(--bg);
+    padding: var(--spacing-xs);
+    border-radius: var(--rounded-full);
+}
