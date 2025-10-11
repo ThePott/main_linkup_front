@@ -11,7 +11,8 @@
 }
 
 .logo {
-    font-weight: bold;
+    font-weight: 900;
+    font-size: var(--text-xl);
     color: var(--color-vivid);
     text-decoration: none;
 }

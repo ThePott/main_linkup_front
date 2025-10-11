@@ -85,7 +85,7 @@ const Navbar = () => {
             <Hstack items="center" justify="space-between" className={styles.navbar}>
                 <SideSection justify="start">
                     <Link to="/" className={styles.logo}>
-                        Logo
+                        Link Up
                     </Link>
                 </SideSection>
 
