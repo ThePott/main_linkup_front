@@ -2,11 +2,14 @@ import styles from "./ArtistIconBar.module.css";
 import { useNavigate } from "react-router";
 import { Hstack } from "../../package/layout";
 import CustomImageIcon from "../CustomImageIcon/CustomImageIcon";
+import useLinkUpStore from "../store/store";
 
 const ArtistIconBar = ({ artistArray }) => {
+    const user = useLinkUpStore((state) => state.user);
+
     const navigate = useNavigate();
 
-    if (!artistArray || artistArray.length === 0) {
+    if (!user || !artistArray || artistArray.length === 0) {
         return null;
     }
 

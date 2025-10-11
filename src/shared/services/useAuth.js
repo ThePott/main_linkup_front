@@ -79,9 +79,10 @@ const useAuthLogout = () => {
     const logoutMutation = useMutation({
         mutationFn: () => axiosReturnsData("POST", "/api/auth/logout"),
         onMutate: () => {
-            queryClient.setQueryData(["/api/auth/me"], null);
-            queryClient.setQueryData(["/api/subscriptions"], []);
+            queryClient.removeQueries({ queryKey: ["/api/auth/me"] });
+            queryClient.removeQueries({ queryKey: ["/api/subscriptions"] });
 
+            setAccessToken(null);
             setUser(null);
             setArtistArray([]);
         },
