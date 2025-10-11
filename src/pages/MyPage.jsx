@@ -54,6 +54,10 @@ const fetchSubscriptions = async ({ queryKey }) => {
     return data.filter((sub) => sub.is_active);
 };
 
+const profileChangeCallback = () => {
+    queryClient.invalidateQueries(["/api/auth/me"]);
+};
+
 const MyPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const accessToken = useLinkUpStore((state) => state.access_token);
@@ -88,7 +92,7 @@ const MyPage = () => {
 
     const handleImageChange = (event) => {
         const body = new FormData(event.currentTarget);
-        axiosReturnsData("PUT", "/api/auth/me", body);
+        axiosReturnsData("PUT", "/api/auth/me", body, { callback: profileChangeCallback });
     };
 
     const handleNicknameSubmit = (event) => {
@@ -105,7 +109,9 @@ const MyPage = () => {
         if (nickname == user?.nickname) {
             return;
         }
-        axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`);
+        axiosReturnsData("PUT", `/api/auth/me?nickname=${nickname}`, undefined, {
+            callback: profileChangeCallback,
+        });
     };
 
     if (!isOkayToShow) {
