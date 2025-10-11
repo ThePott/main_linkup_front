@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import useLinkUpStore from "../store/store";
 import { axiosReturnsData } from "./axiosInstance";
 import { useSimpleMutation } from "../../package/commonServices/tanstackQueryVariants";
+import queryClient from "./queryClient";
 
 const useCompaniesArtistsQuery = () => {
     const setArtistArray = useLinkUpStore((state) => state.setArtistArray);
@@ -26,6 +27,41 @@ const useCompaniesArtistsQuery = () => {
     return {
         isPendingArtists,
         errorArtists,
+    };
+};
+
+const useCompaniesDetailArtistQuery = () => {
+    const selectedArtist = useLinkUpStore((state) => state.selectedArtist);
+    const setSelectedArtist = useLinkUpStore((state) => state.setSelectedArtist);
+
+    const artistId = selectedArtist?.id ?? -1;
+    const endpoint = `/api/companies/artists/${artistId}`;
+
+    const {
+        data,
+        isPending: isPendingDetailArtist,
+        error: errorDetailArtist,
+    } = useQuery({
+        queryKey: [endpoint],
+        queryFn: () => axiosReturnsData("GET", endpoint),
+        enabled: artistId !== -1,
+    });
+
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        setSelectedArtist(data);
+        const artistsEndpoint = "/api/companies/artists";
+        const previous = queryClient.getQueryData([artistsEndpoint]);
+        const newCache = previous.map((artist) => (artist.id === data.id ? data : artist));
+        queryClient.setQueryData([artistsEndpoint], newCache);
+        // eslint-d fsable-next-line react-hooks/exhaustive-deps
+    }, [data]);
+
+    return {
+        isPendingDetailArtist,
+        errorDetailArtist,
     };
 };
 
@@ -127,12 +163,14 @@ const useCompaniesEventsMutate = () => {
 const useCompanies = () => {
     const artistQueryReturn = useCompaniesArtistsQuery();
     const artistMutateReturn = useCompaniesArtistsMutate();
+    const detailArtistQueryRetrun = useCompaniesDetailArtistQuery();
     const eventsQueryReturn = useCompaniesEventsQuery();
     const eventsMutateReturn = useCompaniesEventsMutate();
 
     return {
         ...artistQueryReturn,
         ...artistMutateReturn,
+        ...detailArtistQueryRetrun,
         ...eventsQueryReturn,
         ...eventsMutateReturn,
     };

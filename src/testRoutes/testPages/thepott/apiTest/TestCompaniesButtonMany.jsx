@@ -12,6 +12,9 @@ const TestCompaniesButtonMany = ({ accessToken }) => {
     const getCompaniesArtists = () =>
         getThenLog(`${baseURL}/api/companies/artists`, undefined, accessToken);
 
+    const getCompaniesFirstArtistDetail = () =>
+        getThenLog(`${baseURL}/api/companies/artists/1`, undefined, accessToken);
+
     const getCompaniesEvents = () =>
         getThenLog(`${baseURL}/api/companies/events`, undefined, accessToken);
 
@@ -34,6 +37,10 @@ const TestCompaniesButtonMany = ({ accessToken }) => {
         <>
             <CustomButton onClick={getCompaniesArtists}>
                 <p>get companies artists</p>
+            </CustomButton>
+
+            <CustomButton onClick={getCompaniesFirstArtistDetail}>
+                <p>get companies first artist detail</p>
             </CustomButton>
 
             <CustomButton onClick={getCompaniesEvents}>
