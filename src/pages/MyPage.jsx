@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Sidebar from "../features/mypage/Sidebar.jsx";
 import DeleteAccountModal from "../features/mypage/DeleteAccountModal.jsx";
@@ -13,18 +13,9 @@ import ImageInput from "../package/imageInput/ImageInput.jsx";
 import CustomImageContainer from "../package/customImage/CustomImageContainer.jsx";
 import { axiosReturnsData } from "../shared/services/axiosInstance.js";
 import CustomInput from "../package/CustomInput.jsx";
-import { useNavigate } from "react-router";
 import useAuth from "../shared/services/useAuth.js";
 import useRedirectIfNot from "../shared/utils/useRedirectIfNot.js";
-import CustomButton from "../package/customButton/CustomButton.jsx";
 import queryClient from "../shared/services/queryClient.js";
-
-const DebugButton = () => {
-    const handleClick = () => {
-        queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-    };
-    return <CustomButton onClick={handleClick}>Invalidate Queries</CustomButton>;
-};
 
 // 내 포스트 API
 const fetchMyPosts = async ({ queryKey }) => {
@@ -144,7 +135,6 @@ const MyPage = () => {
                             {isPostsFetching && <small>갱신 중...</small>}
                         </div>
                     </div>
-                    <DebugButton />
                 </Hstack>
 
                 <Hstack gap="xl">
