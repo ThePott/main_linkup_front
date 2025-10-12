@@ -1,5 +1,5 @@
 import styles from "./LoginPage.module.css";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import SocialLoginButton from "../features/login/loginComponents/SocialLoginButton";
 import CustomButton from "../package/customButton/CustomButton";
 import { Hstack, Vstack } from "../package/layout";
@@ -13,14 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../shared/validations/zodSchema";
 import Container from "../package/layout/_Container";
 import useLinkUpStore from "../shared/store/store";
+import { checkHavingKorean } from "../shared/utils/stringUtils";
 
 const LoginPage = () => {
     const user = useLinkUpStore((state) => state.user);
-    const previousPathname = useLinkUpStore((state) => state.previousPathname);
 
     const { errorLogin, isPendingLogin, postLoginMutation, logout } = useAuth();
-
-    const navigate = useNavigate();
 
     const {
         register,
@@ -33,9 +31,12 @@ const LoginPage = () => {
         if (!errorLogin) {
             return;
         }
+        const message = errorLogin?.response?.data?.detail;
+        const hasKorean = checkHavingKorean(message);
+
         setError("password", {
             type: "server",
-            message: "이메일 또는 비밀번호가 잘못되었습니다",
+            message: hasKorean ? message : "이메일 또는 비밀번호가 잘못되었습니다",
         });
         console.error();
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -130,6 +130,7 @@ const useLinkUpStore = create()(
                 access_token: state.access_token,
                 user: state.user,
                 artistArray: state.artistArray,
+                selectedArtist: state.selectedArtist,
             }),
         },
     ),
