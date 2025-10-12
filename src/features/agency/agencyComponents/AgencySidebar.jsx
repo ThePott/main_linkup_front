@@ -4,7 +4,7 @@ import { Vstack } from "../../../package/layout";
 import useLinkUpStore from "../../../shared/store/store";
 import AgencyArtistModal from "./AgencyArtistModal";
 import RoundBox from "../../../package/RoundBox";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import PlusIcon from "../../../package/icons/PlusIcon";
 import FlexOneContainer from "../../../package/flexOneContainer/FlexOneContainer";
 
@@ -96,6 +96,16 @@ const AgencySidebar = () => {
         setSelectedArtist(null);
         setModalKey("agencySidebar");
     };
+
+    useEffect(() => {
+        if (selectedArtist) {
+            return;
+        }
+        if (artistArray.length === 0) {
+            return;
+        }
+        setSelectedArtist(artistArray[0]);
+    }, []);
 
     return (
         <>
